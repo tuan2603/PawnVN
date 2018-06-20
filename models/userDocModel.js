@@ -1,166 +1,67 @@
 'use strict';
 const mongoose = require('mongoose');
 const UserDocSchema = new mongoose.Schema({
-    accountID: {
+    accountID: { // user id
         type: String
     },
-    cityDrive: {
-        type: String
+    sex: { // giới tính
+        type: Number, // 0 nam, 1 nữ, 2 khác
     },
-    typeDrive: {
+    birthday: { // ngày sinh
+        type: Number,
+    },
+    identityCardFront: { // chứng minh nhân dân mặt trước
+        type: String,
+        lowercase: true,
+    },
+    identityCardBehind: { // chứng minh nhân dân mặt sau
+        type: String,
+        lowercase: true,
+    },
+    identityCardNumber: { // số chứng minh nhân dân
         type: Number
     },
-    address: {
+    identityCardDateIssued: { // ngày cấp
+        type: Date
+    },
+    products: { // phê duyệt
         type: String
     },
-    referral: {
+    accept: { // phê duyệt
+        type: Boolean,
+        default:false
+    },
+    city: { // tỉnh thành phố
         type: String
     },
-    referralCode: {
-        type: String
-    },
-    identityCardFront: {
-        type: String,
-        lowercase: true,
-    },
-    identityCardBehind: {
-        type: String,
-        lowercase: true,
-    },
-    identityCardNumber: {
+    companyName: { // Tên công ty, doanh nghiệp
         type: Number
     },
-    identityCardDateIssued: {
-        type: Date
+    address: { // địa chỉ công ty
+        type: String
     },
-    vehicleImage1: {
+    businessNumber: { //số đăng ký doanh nghiệp
+        type: String
+    },
+    businessDate: {  //ngày cấp
+        type: Number
+    },
+    licensee: { // nơi cấp
+        type: String
+    },
+    licenseeImage1: { // ảnh giấy phép kinh doanh mặt trước
         type: String,
         lowercase: true,
     },
-    vehicleImage2: {
+    licenseeImage2: { //ảnh giấy phép kinh doanh mặt sau
         type: String,
         lowercase: true,
     },
-    vehicleImage3: {
-        type: String,
-        lowercase: true,
+    representativeName: { //tên người đại diện
+        type: String
     },
-    vehicleImage4: {
-        type: String,
-        lowercase: true,
-    },
-    vehicleLogFront: {
-        type: String,
-        lowercase: true,
-    },
-    vehicleLogBehind: {
-        type: String,
-        lowercase: true,
-    },
-    vehicleLogSerialNumber: {
-        type: String,
-        lowercase: true,
-    },
-    vehicleLogRegistrationDate: {
-        type: Date
-    },
-    vehicleLogPlateNumber: {
-        type: String,
-        lowercase: true,
-    },
-    drivingLicenseFront: {
-        type: String,
-        lowercase: true,
-    },
-    drivingLicenseBehind: {
-        type: String,
-        lowercase: true,
-    },
-    drivingLicenseNumber: {
-        type: String,
-        lowercase: true,
-    },
-    drivingLicenseIssueDate: {
-        type: Date
-    },
-    drivingLicenseClass: {
-        type: String,
-        lowercase: true,
-    },
-    vehicleInsuranceFront: {
-        type: String,
-        lowercase: true,
-    },
-    vehicleInsuranceBehind: {
-        type: String,
-        lowercase: true,
-    },
-    vehicleInsuranceDate: {
-        type: Date
-    },
-    deviceInformationModel: {
-        type: String,
-        lowercase: true,
-    },
-    deviceInformationIMEI: {
-        type: String,
-        lowercase: true,
-    },
-    studentCardClearanceFront: {
-        type: String,
-        lowercase: true,
-    },
-    studentCardClearanceBehind: {
-        type: String,
-        lowercase: true,
-    },
-    registrationBookClearance1: {
-        type: String,
-        lowercase: true,
-    },
-    registrationBookClearance2: {
-        type: String,
-        lowercase: true,
-    },
-    registrationBookClearance3: {
-        type: String,
-        lowercase: true,
-    },
-    cvClearance1: {
-        type: String,
-        lowercase: true,
-    },
-    cvClearance2: {
-        type: String,
-        lowercase: true,
-    },
-    cvClearance3: {
-        type: String,
-        lowercase: true,
-    },
-    cvClearance4: {
-        type: String,
-        lowercase: true,
-    },
-    cvClearance5: {
-        type: String,
-        lowercase: true,
-    },
-    emergencyContactName: {
-        type: String,
-        lowercase: true,
-    },
-    emergencyContactRelationship: {
-        type: String,
-        lowercase: true,
-    },
-    emergencyContactPhone: {
-        type: String,
-        lowercase: true,
-    },
-    emergencyContactAddress: {
-        type: String,
-        lowercase: true,
+    title: { // chức danh
+        type: String
     },
     create_at: {
         type: Number,

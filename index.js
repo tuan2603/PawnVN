@@ -1,5 +1,4 @@
 'use strict';
-
 var express = require('express'),
     app = express(),
     cors = require('cors'),
@@ -59,7 +58,5 @@ app.use(function(req, res) {
 app.listen(port, function(){
 	console.log('todo list RESTful API server started on: ' + port);
 });
-
-
 
 module.exports = app;
