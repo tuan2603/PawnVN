@@ -24,8 +24,8 @@ const UserDocSchema = new mongoose.Schema({
     identityCardDateIssued: { // ngày cấp
         type: Date
     },
-    products: { // phê duyệt
-        type: String
+    products: { // loại cầm đồ
+        type: [],
     },
     accept: { // phê duyệt
         type: Boolean,
@@ -49,11 +49,11 @@ const UserDocSchema = new mongoose.Schema({
     licensee: { // nơi cấp
         type: String
     },
-    licenseeImage1: { // ảnh giấy phép kinh doanh mặt trước
+    licenseeImageFront: { // ảnh giấy phép kinh doanh mặt trước
         type: String,
         lowercase: true,
     },
-    licenseeImage2: { //ảnh giấy phép kinh doanh mặt sau
+    licenseeImageBehind: { //ảnh giấy phép kinh doanh mặt sau
         type: String,
         lowercase: true,
     },

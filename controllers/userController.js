@@ -161,7 +161,7 @@ let Register = (newUser, res) => {
     if (newUser.email !== undefined) {
         findUserEmail(newUser.email)
             .then(
-                useremail=>{
+                useremail => {
                     if (!useremail) {
                         newUser.save(function (err, user) {
                             if (err) {
@@ -182,7 +182,7 @@ let Register = (newUser, res) => {
                                 }
                             }
                         });
-                    }else{
+                    } else {
                         return res.send({
                             message: Messages,
                             value: 9
@@ -534,7 +534,7 @@ exports.verify_web = function (req, res) {
     findUserPhone(req.body.phone)
         .then(user => {
                 if (!user) {
-                   return res.status(401).json({
+                    return res.status(401).json({
                         value: 1,
                         message: mesVerify
                     })
@@ -676,7 +676,7 @@ exports.register_old = function (req, res) {
                                                     return res.send({
                                                         message: 'Đăng ký thành công',
                                                         value: 0,
-                                                        code:Verification
+                                                        code: Verification
                                                     });
 
                                                 }
@@ -911,7 +911,6 @@ var Storage = multer.diskStorage({
     }
 });
 
-
 var upload = multer({
     storage: Storage,
     fileFilter: function (req, file, callback) {
@@ -940,16 +939,38 @@ exports.update_avatar = function (req, res) {
             //console.log(req.file);
             if (req.file) {
                 if (req.body.id) {
-                    DelAndUpdateAvatar(req.body.id, req.file.filename, res);
+                    FindOneUserDoc(req.body.id)
+                        .then(
+                           UserDoc => {
+                               if (UserDoc.accept !== undefined) {
+                                   if (UserDoc.accept) {
+                                       return res.json({
+                                           "response": false,
+                                           "value": "bạn không thể thay đổi ảnh đại diện vì thông tin này không được thay đổi"
+                                       });
+                                   } else {
+                                       DelAndUpdateAvatar(req.body.id, req.file.filename, res);
+                                   }
+                               } else {
+                                   DelAndUpdateAvatar(req.body.id, req.file.filename, res);
+                               }
+                           },
+                            err => {
+                                return res.json({
+                                    "response": false,
+                                    "value": "Lỗi tìm thông tin phụ"
+                                });
+                            }
+                        );
                 } else {
                     deleteAvatar(req.body.id);
-                    return res.status(401).json({
+                    return res.json({
                         "response": false,
-                        "value": req.file.filename
+                        "value": "không có id làm sao update"
                     });
                 }
             } else {
-                return res.status(401).json({
+                return res.json({
                     "response": false,
                     "value": "not find id"
                 });
@@ -968,70 +989,16 @@ let deleteIdentityCardFront = (body) => {
                     case "identityCardFront":
                         fs.unlinkSync(uploadDir + body.folder + "/" + doc.identityCardFront);
                         break;
-
                     case "identityCardBehind":
                         fs.unlinkSync(uploadDir + body.folder + "/" + doc.identityCardBehind);
                         break;
-                    case "vehicleImage1":
-                        fs.unlinkSync(uploadDir + body.folder + "/" + doc.vehicleImage1);
+                    case "licenseeImageFront":
+                        fs.unlinkSync(uploadDir + body.folder + "/" + doc.licenseeImageFront);
                         break;
-                    case "vehicleImage2":
-                        fs.unlinkSync(uploadDir + body.folder + "/" + doc.vehicleImage2);
+                    case "licenseeImageBehind":
+                        fs.unlinkSync(uploadDir + body.folder + "/" + doc.licenseeImageBehind);
                         break;
-                    case "vehicleImage3":
-                        fs.unlinkSync(uploadDir + body.folder + "/" + doc.vehicleImage3);
-                        break;
-                    case "vehicleImage4":
-                        fs.unlinkSync(uploadDir + body.folder + "/" + doc.vehicleImage4);
-                        break;
-                    case "vehicleLogFront":
-                        fs.unlinkSync(uploadDir + body.folder + "/" + doc.vehicleLogFront);
-                        break;
-                    case "vehicleLogBehind":
-                        fs.unlinkSync(uploadDir + body.folder + "/" + doc.vehicleLogBehind);
-                        break;
-                    case "drivingLicenseFront":
-                        fs.unlinkSync(uploadDir + body.folder + "/" + doc.drivingLicenseFront);
-                        break;
-                    case "drivingLicenseBehind":
-                        fs.unlinkSync(uploadDir + body.folder + "/" + doc.drivingLicenseBehind);
-                        break;
-                    case "vehicleInsuranceFront":
-                        fs.unlinkSync(uploadDir + body.folder + "/" + doc.vehicleInsuranceFront);
-                        break;
-                    case "vehicleInsuranceBehind":
-                        fs.unlinkSync(uploadDir + body.folder + "/" + doc.vehicleInsuranceBehind);
-                        break;
-                    case "studentCardClearanceFront":
-                        fs.unlinkSync(uploadDir + body.folder + "/" + doc.studentCardClearanceFront);
-                        break;
-                    case "studentCardClearanceBehind":
-                        fs.unlinkSync(uploadDir + body.folder + "/" + doc.studentCardClearanceBehind);
-                        break;
-                    case "registrationBookClearance1":
-                        fs.unlinkSync(uploadDir + body.folder + "/" + doc.registrationBookClearance1);
-                        break;
-                    case "registrationBookClearance2":
-                        fs.unlinkSync(uploadDir + body.folder + "/" + doc.registrationBookClearance2);
-                        break;
-                    case "registrationBookClearance3":
-                        fs.unlinkSync(uploadDir + body.folder + "/" + doc.registrationBookClearance3);
-                        break;
-                    case "cvClearance1":
-                        fs.unlinkSync(uploadDir + body.folder + "/" + doc.cvClearance1);
-                        break;
-                    case "cvClearance2":
-                        fs.unlinkSync(uploadDir + body.folder + "/" + doc.cvClearance2);
-                        break;
-                    case "cvClearance3":
-                        fs.unlinkSync(uploadDir + body.folder + "/" + doc.cvClearance3);
-                        break;
-                    case "cvClearance4":
-                        fs.unlinkSync(uploadDir + body.folder + "/" + doc.cvClearance4);
-                        break;
-                    case "cvClearance5":
-                        fs.unlinkSync(uploadDir + body.folder + "/" + doc.cvClearance5);
-                        break;
+
                     default:
                 }
 
@@ -1044,19 +1011,43 @@ let deleteIdentityCardFront = (body) => {
 
 // dung để update thông tin user phụ
 exports.update_userdoc = (req, res) => {
-    return updateUserDoc(req.body, res);
+    FindOneUserDoc(req.body.id)
+        .then(
+            UserDoc => {
+                if (UserDoc.accept !== undefined) {
+                    if (UserDoc.accept) {
+                        return res.json({
+                            "response": false,
+                            "value": "bạn không thể thay đổi ảnh đại diện vì thông tin này không được thay đổi"
+                        });
+                    } else {
+                        return updateUserDoc(req.body, res);
+                    }
+                } else {
+                    return res.json({
+                        "response": false,
+                        "value": "Lỗi tìm thông tin phụ"
+                    });
+                }
+            },
+            err => {
+                return res.json({
+                    "response": false,
+                    "value": "Lỗi tìm thông tin phụ"
+                });
+            }
+        );
 }
 
 let updateUserDoc = (obj, res) => {
-    console.log(obj);
     UserDoc.findOneAndUpdate({accountID: obj.id}, obj, {new: true}, function (err, User) {
         if (err)
-            return res.status(400).send({
+            return res.send({
                 response: err,
                 value: false
             });
         if (!User) {
-            return res.status(400).send({
+            return res.send({
                 response: "khong tim thay",
                 value: false
             });
@@ -1070,13 +1061,13 @@ let updateUserDoc = (obj, res) => {
                             response: Object.assign(JSON.parse(JSON.stringify(User)), JSON.parse(JSON.stringify(Profile)))
                         });
                     } else {
-                        return res.status(400).send({
+                        return res.send({
                             response: "khong tim thay",
                             value: false
                         });
                     }
                 }, err => {
-                    return res.status(400).send({
+                    return res.send({
                         response: err,
                         value: false
                     });
@@ -1095,65 +1086,11 @@ let updateIdentityCardFront = (body, filename, res) => {
         case "identityCardBehind":
             body.identityCardBehind = filename;
             return updateUserDoc(body, res);
-        case "vehicleImage1":
-            body.vehicleImage1 = filename;
+        case "licenseeImageFront":
+            body.licenseeImageFront = filename;
             return updateUserDoc(body, res);
-        case "vehicleImage2":
-            body.vehicleImage2 = filename;
-            return updateUserDoc(body, res);
-        case "vehicleImage3":
-            body.vehicleImage3 = filename;
-            return updateUserDoc(body, res);
-        case "vehicleImage4":
-            body.vehicleImage4 = filename;
-            return updateUserDoc(body, res);
-        case "vehicleLogFront":
-            body.vehicleLogFront = filename;
-            return updateUserDoc(body, res);
-        case "vehicleLogBehind":
-            body.vehicleLogBehind = filename;
-            return updateUserDoc(body, res);
-        case "drivingLicenseFront":
-            body.drivingLicenseFront = filename;
-            return updateUserDoc(body, res);
-        case "drivingLicenseBehind":
-            body.drivingLicenseBehind = filename;
-            return updateUserDoc(body, res);
-        case "vehicleInsuranceFront":
-            body.vehicleInsuranceFront = filename;
-            return updateUserDoc(body, res);
-        case "vehicleInsuranceBehind":
-            body.vehicleInsuranceBehind = filename;
-            return updateUserDoc(body, res);
-        case "studentCardClearanceFront":
-            body.studentCardClearanceFront = filename;
-            return updateUserDoc(body, res);
-        case "studentCardClearanceBehind":
-            body.studentCardClearanceBehind = filename;
-            return updateUserDoc(body, res);
-        case "registrationBookClearance1":
-            body.registrationBookClearance1 = filename;
-            return updateUserDoc(body, res);
-        case "registrationBookClearance2":
-            body.registrationBookClearance2 = filename;
-            return updateUserDoc(body, res);
-        case "registrationBookClearance3":
-            body.registrationBookClearance3 = filename;
-            return updateUserDoc(body, res);
-        case "cvClearance1":
-            body.cvClearance1 = filename;
-            return updateUserDoc(body, res);
-        case "cvClearance2":
-            body.cvClearance2 = filename;
-            return updateUserDoc(body, res);
-        case "cvClearance3":
-            body.cvClearance3 = filename;
-            return updateUserDoc(body, res);
-        case "cvClearance4":
-            body.cvClearance4 = filename;
-            return updateUserDoc(body, res);
-        case "cvClearance5":
-            body.cvClearance5 = filename;
+        case "licenseeImageBehind":
+            body.licenseeImageBehind = filename;
             return updateUserDoc(body, res);
         default:
     }
@@ -1175,16 +1112,38 @@ exports.update_identityCardFront = function (req, res) {
             //console.log(req.file);
             if (req.file) {
                 if (req.body.id) {
-                    DelAndUpdateIdentityCardFront(req.body, req.file.filename, res);
+                    FindOneUserDoc(req.body.id)
+                        .then(
+                            UserDoc => {
+                                if (UserDoc.accept !== undefined) {
+                                    if (UserDoc.accept) {
+                                        return res.json({
+                                            "response": false,
+                                            "value": "bạn không thể thay đổi ảnh đại diện vì thông tin này không được thay đổi"
+                                        });
+                                    } else {
+                                        DelAndUpdateIdentityCardFront(req.body, req.file.filename, res);
+                                    }
+                                } else {
+                                    DelAndUpdateIdentityCardFront(req.body, req.file.filename, res);
+                                }
+                            },
+                            err => {
+                                return res.json({
+                                    "response": false,
+                                    "value": "Lỗi tìm thông tin phụ"
+                                });
+                            }
+                        );
                 } else {
                     deleteIdentityCardFront(req.body);
-                    return res.status(401).json({
+                    return res.json({
                         "response": false,
                         "value": req.file.filename
                     });
                 }
             } else {
-                return res.status(401).json({
+                return res.json({
                     "response": false,
                     "value": "not find id"
                 });
@@ -1207,8 +1166,7 @@ exports.sign_in = function (req, res) {
                 message: 'Lỗi tìm user',
                 value: 5,
             })
-        }else
-        if (!user) {
+        } else if (!user) {
             return res.json({
                 message: 'Tài khoản không tồn tại',
                 value: 2,
