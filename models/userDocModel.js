@@ -4,11 +4,9 @@ const UserDocSchema = new mongoose.Schema({
     accountID: { // user id
         type: String
     },
-    sex: { // giới tính
-        type: Number, // 0 nam, 1 nữ, 2 khác
-    },
-    birthday: { // ngày sinh
-        type: Number,
+    accept: { // phê duyệt
+        type: Boolean,
+        default:false
     },
     identityCardFront: { // chứng minh nhân dân mặt trước
         type: String,
@@ -27,9 +25,11 @@ const UserDocSchema = new mongoose.Schema({
     products: { // loại cầm đồ
         type: [],
     },
-    accept: { // phê duyệt
-        type: Boolean,
-        default:false
+    sex: { // giới tính
+        type: String, // 0 nam, 1 nữ, 2 khác
+    },
+    birthday: { // ngày sinh
+        type: Number,
     },
     city: { // tỉnh thành phố
         type: String

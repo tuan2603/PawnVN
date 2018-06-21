@@ -942,6 +942,7 @@ exports.update_avatar = function (req, res) {
                     FindOneUserDoc(req.body.id)
                         .then(
                            UserDoc => {
+                               console.log(UserDoc);
                                if (UserDoc.accept !== undefined) {
                                    if (UserDoc.accept) {
                                        return res.json({
