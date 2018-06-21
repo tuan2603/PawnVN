@@ -4,7 +4,7 @@ const UserDocSchema = new mongoose.Schema({
     accountID: { // user id
         type: String
     },
-    accept: { // phê duyệt
+    accept: { // phê duyệt, nếu là true là đã xác thực toàn bộ hồ sơ. business có quyền hoạt động, nếu false thì giống như người dùng thường
         type: Boolean,
         default:false
     },
