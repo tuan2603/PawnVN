@@ -31,24 +31,6 @@ const UserDocSchema = new mongoose.Schema({
     birthday: { // ngày sinh
         type: Number,
     },
-    city: { // tỉnh thành phố
-        type: String
-    },
-    companyName: { // Tên công ty, doanh nghiệp
-        type: Number
-    },
-    address: { // địa chỉ công ty
-        type: String
-    },
-    businessNumber: { //số đăng ký doanh nghiệp
-        type: String
-    },
-    businessDate: {  //ngày cấp
-        type: Number
-    },
-    licensee: { // nơi cấp
-        type: String
-    },
     licenseeImageFront: { // ảnh giấy phép kinh doanh mặt trước
         type: String,
         lowercase: true,
@@ -57,10 +39,28 @@ const UserDocSchema = new mongoose.Schema({
         type: String,
         lowercase: true,
     },
+    companyName: { // Tên công ty, doanh nghiệp
+        type: String
+    },
+    businessNumber: { //số đăng ký doanh nghiệp
+        type: String
+    },
     representativeName: { //tên người đại diện
         type: String
     },
     title: { // chức danh
+        type: String
+    },
+    businessDate: {  //ngày cấp
+        type: Number
+    },
+    licensee: { // nơi cấp
+        type: String
+    },
+    address: { // địa chỉ công ty
+        type: String
+    },
+    city: { // tỉnh thành phố
         type: String
     },
     create_at: {

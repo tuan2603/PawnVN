@@ -8,8 +8,15 @@ module.exports = function (app) {
     let referral = require('../controllers/referralController');
     let codeVerify = require('../controllers/codeController');
     let shipping = require('../controllers/shippingController');
+    let city = require('../controllers/cityController');
 
     // todoList Routes
+
+    //get, insert city
+    app.route('/api/city')
+        .get(city.list_city)
+        .post(userHandles.loginRequired,city.insert_many);
+
     app.route('/api/tasks')
         .get(todoList.list_all_tasks)
         .post(todoList.create_a_task);
