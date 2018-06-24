@@ -1,46 +1,105 @@
 'use strict';
-const Shipping = require('../models/shippingModel'),
+const Purchase = require('../models/purchaseModel'),
     User = require("../models/userModel"),
     config = require("../config"),
     path = require('path'),
     multer = require('multer'),
     fs = require('fs');
 
-
-let FindShipping = (id) => {
+/*
+* tìm và xuất ra tất cả các document bán đã được admin duyệt
+* $ne:1 - là tìm các doccument khác 1, ở trạng 1 là trạng tháy chưa được duyệt
+* */
+let FindPurchaseAll = () => {
     return new Promise((resolve, reject) => {
-        Shipping.find({accountID: id}, function (err, Shipping) {
+        Purchase.find({status:{'$ne':1}}, function (err, Purchase) {
             if (err) return reject(err);
-            resolve(Shipping);
+            resolve(Purchase);
+        });
+    });
+};
+
+
+/*
+*  function tìm và xuất ra tất cả các document bán đã được admin duyệt
+* Api: /api/purchase/list
+* method: get
+* */
+exports.get_list_all = function (req, res) {
+    FindPurchaseAll()
+        .then(
+            Purchase => {
+                if (Purchase) {
+                    return res.json({
+                        value: Purchase,
+                        response: true
+                    });
+                } else {
+                    return res.json({
+                        value: "Not find",
+                        response: false
+                    });
+                }
+            },
+            err => {
+                return res.json({
+                    value: err,
+                    response: false
+                });
+            }
+        );
+}
+
+/*
+*  function tìm và xuất ra tất cả các document bán của một người dùng,
+*  thông qua địa chỉ id của họ
+* */
+let FindPurchase = (id) => {
+    return new Promise((resolve, reject) => {
+        Purchase.find({accountID: id}, function (err, Purchase) {
+            if (err) return reject(err);
+            resolve(Purchase);
         });
     });
 }
 
-let FindOneShipping = (id) => {
+/*
+*  function tìm và xuất ra 1 document bán qua id của document,
+* */
+let FindOnePurchase = (id) => {
     return new Promise((resolve, reject) => {
-        Shipping.findOne({_id: id}, function (err, Shipping) {
+        Purchase.findOne({_id: id }, function (err, Purchase) {
             if (err) return reject(err);
-            resolve(Shipping);
+            resolve(Purchase);
         });
     });
 }
 
-let createShipping = (obj) => {
+/*
+*  function tạo mới 1 document bán,
+* */
+let createPurchase = (obj) => {
     return new Promise((resolve, reject) => {
-        Shipping.create(obj, function (err, Shipping) {
+        Purchase.create(obj, function (err, Purchase) {
             if (err) return reject(err);
-            resolve(Shipping);
+            resolve(Purchase);
         });
     });
 }
 
+/*
+*  function tìm và xuất ra tất cả các document bán của 1 người dùng
+* Api: /api/purchase/list
+* method: post
+* params:id <=> _id user
+* */
 exports.get_list = function (req, res) {
-    FindShipping(req.body.id)
+    FindPurchase(req.body.id)
         .then(
-            Shipping => {
-                if (Shipping) {
+            Purchase => {
+                if (Purchase) {
                     return res.json({
-                        value: Shipping,
+                        value: Purchase,
                         response: true
                     });
                 } else {
@@ -59,13 +118,19 @@ exports.get_list = function (req, res) {
         );
 }
 
+/*
+*  function tìm và xuất ra 1 document bán đúng với id mà người dùng càn tìm
+* Api: /api/purchase/one
+* method: post
+* params:id <=> _id pawn
+* */
 exports.get_one = function (req, res) {
-    FindOneShipping(req.body.id)
+    FindOnePurchase(req.body.id)
         .then(
-            Shipping => {
-                if (Shipping) {
+            Purchase => {
+                if (Purchase) {
                     return res.json({
-                        value: Shipping,
+                        value: Purchase,
                         response: true
                     });
                 } else {
@@ -83,17 +148,24 @@ exports.get_one = function (req, res) {
             }
         );
 }
-// xoa image cũ trước khi update
+
+/*
+*  function tìm và xóa image bán theo id mà người dùng truyền vào
+* vì các tập tin nằm trong cùng 1 thư mục người dùng có tên là số điện thoại
+* việc đầu tiên đi tìm thông tin user (số điện thoại )
+* tìm tên image trong document bán tương úng id truyền vào
+* dùng lệnh unlinkSync để xóa image
+* */
 let deleteImage = (body) => {
     return new Promise((resolve, reject) => {
         User.findOne({_id: body.accountID}, function (err, user) {
             if (err) console.log(err);
             if (user) {
-                Shipping.findOne({_id: body.id}, function (err, shipping) {
+                Purchase.findOne({_id: body.id}, function (err, shipping) {
                     if (err) reject(err);
                     if (shipping) {
                         try {
-                            fs.unlinkSync(uploadDir + user.phone + "/" + shipping.s_linkimage);
+                            fs.unlinkSync(uploadDir + user.phone + "/" + shipping.purchase_image);
                             resolve(shipping);
                         } catch (err) {
                             resolve(true);
@@ -105,7 +177,13 @@ let deleteImage = (body) => {
     })
 }
 
-//xóa image nếu cập nhật dữ liệu thất bại
+/*
+*  function tìm và xóa image nếu cập nhật dữ liệu thất bại
+* vì các tập tin nằm trong cùng 1 thư mục người dùng có tên là số điện thoại
+* việc đầu tiên đi tìm thông tin user (số điện thoại )
+* dựa và filename chúng ta có tên file cần xóa
+* dùng lệnh unlinkSync để xóa image
+* */
 let deleteImageNew = (body, filename) => {
     User.findOne({_id: body.accountID}, function (err, user) {
         if (err) console.log(err);
@@ -117,26 +195,33 @@ let deleteImageNew = (body, filename) => {
             }
         }
     })
-}
+};
 
-let updateShipping = (body, filename) => {
+/*
+*  function tìm và update tên image bán
+* dựa vào id và filename có sẳn
+* */
+let updatePurchase = (body, filename) => {
     return new Promise((resolve, reject) => {
-        Shipping.findOneAndUpdate({_id: body.id}, {s_linkimage: filename}, {new: true}, function (err, shipping) {
+        Purchase.findOneAndUpdate({_id: body.id}, {purchase_image: filename}, {new: true}, function (err, shipping) {
             if (err) reject(err);
             resolve(shipping);
         });
     });
 }
 
+/*
+*  function tìm xóa tên file cũ và update tên image bán mới
+* */
 let DelAndUpdateImange = (body, filename) => {
     return new Promise((resolve, reject) => {
         deleteImage(body)
             .then(
                 Del=> {
-                    updateShipping(body, filename).then(
-                        Shipping => {
-                            if (Shipping) {
-                                resolve(Shipping)
+                    updatePurchase(body, filename).then(
+                        Purchase => {
+                            if (Purchase) {
+                                resolve(Purchase)
                             } else {
                                 reject("update image shipping fail")
                             }
@@ -147,7 +232,10 @@ let DelAndUpdateImange = (body, filename) => {
 
     });
 }
-//function will check if a directory exists, and create it if it doesn't
+
+/*
+*  function tìm xem thư mục có tồn tại, không có tại thư mục mới
+* */
 let checkDirectory = (directory, callback) => {
     fs.stat(directory, function (err, stats) {
         //Check if error defined and the error code is "not exists"
@@ -161,7 +249,11 @@ let checkDirectory = (directory, callback) => {
     });
 }
 
-//upload file
+/*
+*  function upload ảnh
+*  kiểm tra thư mục có tồn tại, không thì tạo thư mục mới
+*  tên thư mục là tên số điện thoại
+* */
 let uploadDir = 'public/uploads/';
 let Storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -183,6 +275,10 @@ let Storage = multer.diskStorage({
     }
 });
 
+/*
+*  function upload ảnh kiểm tra ảnh định dạng đuôi có phải là png, jpg, hay jpeg
+*  dung lượng tối đa cho phép là 6 mb
+* */
 
 let upload = multer({
     storage: Storage,
@@ -199,8 +295,19 @@ let upload = multer({
     limits: {
         fileSize: 6000000
     }
-}).single('s_linkimage'); //Field name and max count
+}).single('purchase_image'); //Field name and max count
 
+/*
+*  function insert image và update image
+*  nếu có truyền id hiều là update vì document đã tồn tại
+*  nếu không có id thì sẽ phát sinh cái mới
+*  dung lượng tối đa cho phép là 6 mb
+*  api: /api/purchase/image
+*  method: post
+*  params: pawn_image định dạng file
+*  params: accountID _id user
+*  params: id _id bảng bán
+* */
 exports.insert_image = function (req, res) {
     upload(req, res, function (err) {
         if (err) {
@@ -214,11 +321,11 @@ exports.insert_image = function (req, res) {
                 if (req.body.accountID) {
                     if (req.body.id) {
                         DelAndUpdateImange(req.body, req.file.filename).then(
-                            Shipping => {
-                                if (Shipping) {
+                            Purchase => {
+                                if (Purchase) {
                                     return res.json({
                                         "response": true,
-                                        "value": Shipping
+                                        "value": Purchase
                                     });
                                 } else {
                                     deleteImageNew(req.body, req.file.filename);
@@ -236,16 +343,16 @@ exports.insert_image = function (req, res) {
                             }
                         )
                     } else {
-                        createShipping({
+                        createPurchase({
                             accountID: req.body.accountID,
-                            s_linkimage: req.file.filename,
+                            pawn_image: req.file.filename,
                         })
                             .then(
-                                Shipping => {
-                                    if (Shipping) {
+                                Purchase => {
+                                    if (Purchase) {
                                         return res.json({
                                             "response": true,
-                                            "value": Shipping
+                                            "value": Purchase
                                         });
                                     } else {
                                         deleteImageNew(req.body, req.file.filename);
@@ -281,18 +388,31 @@ exports.insert_image = function (req, res) {
     });
 };
 
+/*
+*  function insert bảng bán và update bán
+*  nếu có truyền id hiều là update vì document đã tồn tại
+*  nếu không có id thì sẽ phát sinh cái mới
+*  api: /api/purchase/doc
+*  method: post
+*  params: các thông tin khác trong bảng bán trừ status
+*  params: accountID _id user
+*  params: id _id bảng bán
+*/
+
 exports.insert_doc = function (req, res) {
+    req.body.status = undefined;
     if (req.body && req.body.accountID !== undefined) {
         if (req.body.id) {
-            Shipping.findOneAndUpdate({_id: req.body.id}, req.body, {new: true}, function (err, shipping) {
+            Purchase.findOneAndUpdate({_id: req.body.id}, req.body, {new: true}, function (err, pawn) {
                 if (err) return res.json({
                     "response": false,
                     "value": err
                 });
-                if (shipping) {
+                if (pawn) {
+                    pawn.status = undefined;
                     return res.json({
                         "response": true,
-                        "value": shipping
+                        "value": pawn
                     });
                 } else {
                     return res.json({
@@ -302,13 +422,14 @@ exports.insert_doc = function (req, res) {
                 }
             });
         } else {
-            createShipping(req.body)
+            createPurchase(req.body)
                 .then(
-                    Shipping => {
-                        if (Shipping) {
+                    pawn => {
+                        if (pawn) {
+                            pawn.status = undefined;
                             return res.json({
                                 "response": true,
-                                "value": Shipping
+                                "value": pawn
                             });
                         } else {
                             return res.json({
@@ -333,4 +454,4 @@ exports.insert_doc = function (req, res) {
         });
     }
 
-}
+};

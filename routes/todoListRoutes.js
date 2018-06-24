@@ -7,8 +7,12 @@ module.exports = function (app) {
     let typeDrive = require('../controllers/typeDriveController');
     let referral = require('../controllers/referralController');
     let codeVerify = require('../controllers/codeController');
-    let shipping = require('../controllers/shippingController');
+    let pawn = require('../controllers/pawnController');
     let city = require('../controllers/cityController');
+    let purchase = require('../controllers/purchaseController');
+    let pricelist = require('../controllers/pricelistController');
+    let pawnAuction = require('../controllers/pawnAuctionController');
+    let purchaseAuction = require('../controllers/purchaseAuctionController');
 
     // todoList Routes
 
@@ -77,14 +81,46 @@ module.exports = function (app) {
         .put(userHandles.loginRequired, userHandles.update_profile)
         .get(userHandles.loginRequired, userHandles.profile);
 
-    app.route('/api/shipping/image')
-        .post(userHandles.loginRequired,shipping.insert_image);
-    app.route('/api/shipping/doc')
-        .post(userHandles.loginRequired,shipping.insert_doc);
-    app.route('/api/shipping/list')
-        .post(userHandles.loginRequired,shipping.get_list);
-    app.route('/api/shipping/one')
-        .post(userHandles.loginRequired,shipping.get_one);
+    app.route('/api/pawn/image')
+        .post(userHandles.loginRequired,pawn.insert_image);
+    app.route('/api/pawn/doc')
+        .post(userHandles.loginRequired,pawn.insert_doc);
+    app.route('/api/pawn/list')
+        .post(userHandles.loginRequired,pawn.get_list)
+        .get(pawn.get_list_all);
+    app.route('/api/pawn/one')
+        .post(userHandles.loginRequired,pawn.get_one);
+
+    app.route('/api/purchase/image')
+        .post(userHandles.loginRequired,purchase.insert_image);
+    app.route('/api/purchase/doc')
+        .post(userHandles.loginRequired,purchase.insert_doc);
+    app.route('/api/purchase/list')
+        .post(userHandles.loginRequired,purchase.get_list)
+        .get(purchase.get_list_all);
+    app.route('/api/purchase/one')
+        .post(userHandles.loginRequired,purchase.get_one);
+
+    app.route('/api/pricelist')
+        .post(userHandles.loginRequired,pricelist.insert_pricelist);
+
+    //get list đấu giá cầm đồ
+    app.route('/api/pawn-auction/list')
+        .post(userHandles.loginRequired,pawnAuction.find_pawn_auction_pawn_id);
+    app.route('/api/pawn-auction')
+        .post(userHandles.loginRequired,pawnAuction.insert_pawn_auction);
+    app.route('/api/pawn-auction/:id')
+        .get(userHandles.loginRequired,pawnAuction.find_pawn_auction_id)
+        .put(userHandles.loginRequired,pawnAuction.update_pawn_auction_id);
+
+    //get list đấu giá mua đồ
+    app.route('/api/purchase-auction/list')
+        .post(userHandles.loginRequired,purchaseAuction.find_purchase_auction_purchase_id);
+    app.route('/api/purchase-auction')
+        .post(userHandles.loginRequired,purchaseAuction.insert_purchase_auction);
+    app.route('/api/purchase-auction/:id')
+        .get(userHandles.loginRequired,purchaseAuction.find_purchase_auction_id)
+        .put(userHandles.loginRequired,purchaseAuction.update_purchase_auction_id);
 
 
 };

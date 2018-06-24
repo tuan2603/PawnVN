@@ -130,7 +130,9 @@ let findUserPhone = (phone) => {
             resolve(user);
         });
     });
-}
+};
+// tìm kiếm người dùng qua số điện thoại
+exports.find_user_phone = findUserPhone;
 
 let findUserId = (id) => {
     return new Promise((resolve, reject) => {
@@ -398,7 +400,7 @@ let findCode = (id) => {
         Code.find({
             accountId: id
         }, function (err, code) {
-            console.log(code);
+            //console.log(code);
             if (err) reject(err);
             resolve(code[0]);
         })
@@ -765,7 +767,7 @@ exports.profile = function (req, res) {
             if (User) {
                 FindOneUserDoc(req.params.id)
                     .then(Profile => {
-                        console.log(Profile);
+                       // console.log(Profile);
                         User.password = undefined;
                         res.json({
                             value: true,
@@ -942,7 +944,7 @@ exports.update_avatar = function (req, res) {
                     FindOneUserDoc(req.body.id)
                         .then(
                            UserDoc => {
-                               console.log(UserDoc);
+                              // console.log(UserDoc);
                                if (UserDoc.accept !== undefined) {
                                    if (UserDoc.accept) {
                                        return res.json({

@@ -36,8 +36,11 @@ const UserSchema = new Schema({
         type: String,
         lowercase: true
     },
-    location: {
-        type: String
+    longitude:{ //kinh độ
+        type:Number,
+    },
+    latitude :{ //vĩ độ
+        type:Number,
     },
     onlineStatus: {
         type: Boolean
