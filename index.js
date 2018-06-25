@@ -1,5 +1,5 @@
 'use strict';
-var express = require('express'),
+const express = require('express'),
     app = express(),
     cors = require('cors'),
     mongoose = require('mongoose'),
@@ -13,6 +13,8 @@ var express = require('express'),
     path = require('path'),
     jsonwebtoken = require("jsonwebtoken");
 
+const http = require('http');
+const server = http.createServer(app);
 
 const config = require("./config");
 const port = config.AUrl;
@@ -38,14 +40,16 @@ app.use(function(req, res, next) {
         next();
     }
 });
-var routes = require('./routes/todoListRoutes');
+
+// routes api
+const routes = require('./routes/todoListRoutes');
 routes(app);
 
-app.use(express.static(path.join(__dirname, 'build')));
+// socket
+require('./routes/socket')(server);
 
-// app.get('/', function (req, res) {
-//     res.sendFile(path.join(__dirname, 'build', 'index.html'));
-// });
+
+app.use(express.static(path.join(__dirname, 'build')));
 
 app.get('/*', function (req, res) {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
@@ -55,8 +59,10 @@ app.use(function(req, res) {
     res.status(404).send({ url: req.originalUrl + ' not found' })
 });
 
-app.listen(port, function(){
-	console.log('todo list RESTful API server started on: ' + port);
-});
+// app.listen(port, function(){
+// 	console.log('todo list RESTful API server started on: ' + port);
+// });
+
+server.listen(port, () => console.log(`todo list RESTful API server started on: ${port}`));
 
 module.exports = app;
