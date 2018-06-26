@@ -9,6 +9,10 @@ const PurchasesSchema = new mongoose.Schema({
         type:String,
         lowercase:true,
     },
+    adress:{ // địa chỉ
+        type:String,
+        lowercase:true,
+    },
     price:{ // giá bán
         type:Number,
         default:0,

@@ -9,6 +9,18 @@ const PawnSchema = new mongoose.Schema({
         type:String,
         lowercase:true,
     },
+    adress:{ // địa chỉ
+        type:String,
+        lowercase:true,
+    },
+    pawn_image:{ //hình ảnh sản phẩm đấu giá
+        type:String,
+        lowercase:true,
+    },
+    categorizeID:{ // _id loại, nhóm sản phẩm
+        type:String,
+        lowercase:true,
+    },
     price:{ // giá đấu ban đầu
         type:Number,
         default:0,
@@ -36,14 +48,6 @@ const PawnSchema = new mongoose.Schema({
         type:Number,
     },
     descriptions:{ //mô tả sản phẩm đấu giá
-        type:String,
-        lowercase:true,
-    },
-    pawn_image:{ //hình ảnh sản phẩm đấu giá
-        type:String,
-        lowercase:true,
-    },
-    categorizeID:{ // _id loại, nhóm sản phẩm
         type:String,
         lowercase:true,
     },
