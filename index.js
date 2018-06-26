@@ -48,9 +48,15 @@ routes(app);
 // socket
 require('./routes/socket')(server);
 
+//swagger
+app.use(express.static('swagger-ui'));
+app.use(express.static(path.join(__dirname, 'swagger-ui')));
+app.get('/swaggers', function (req, res) {
+    res.sendFile(path.join(__dirname, 'swagger-ui','dist','index.html'));
+});
 
+//reactjs
 app.use(express.static(path.join(__dirname, 'build')));
-
 app.get('/*', function (req, res) {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });

@@ -15,7 +15,6 @@ module.exports = function (app) {
     let purchaseAuction = require('../controllers/purchaseAuctionController');
 
     // todoList Routes
-
     //get, insert city
     app.route('/api/city')
         .get(city.list_city)
@@ -30,19 +29,6 @@ module.exports = function (app) {
 
     app.route('/api/verify_code')
         .get(codeVerify.list_all_verify);
-
-    app.route('/api/type_drive')
-        .get(typeDrive.list_all_type_drive)
-        .post(typeDrive.create_a_type_drive);
-
-    app.route('/api/referral')
-        .get(referral.list_all_referral)
-        .post(referral.create_a_referral);
-
-    app.route('/api/tasks/:taskId')
-        .get(userHandles.loginRequired, todoList.read_a_task)
-        .put(userHandles.loginRequired, todoList.update_a_task)
-        .delete(userHandles.loginRequired, todoList.delete_a_task);
 
     app.route('/api/auth/register')
         .post(userHandles.register);

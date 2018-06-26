@@ -1,0 +1,20 @@
+properties:
+  Type:
+    type: integer
+    format: int64
+  SolrID:
+    type: string
+    format: int32
+  ID:
+    type: integer
+    format: int32
+  Title:
+    type: string
+  STT:
+    type: integer
+    format: int32
+  Created:
+     type: integer
+     format: date-time
+  Updated:
+    type: integer
