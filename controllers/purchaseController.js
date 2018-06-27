@@ -12,7 +12,7 @@ const Purchase = require('../models/purchaseModel'),
 * */
 let FindPurchaseAll = () => {
     return new Promise((resolve, reject) => {
-        Purchase.find({status:{'$ne':1}}, function (err, Purchase) {
+        Purchase.find({status: {'$ne': 1}}, function (err, Purchase) {
             if (err) return reject(err);
             resolve(Purchase);
         });
@@ -68,7 +68,7 @@ let FindPurchase = (id) => {
 * */
 let FindOnePurchase = (id) => {
     return new Promise((resolve, reject) => {
-        Purchase.findOne({_id: id }, function (err, Purchase) {
+        Purchase.findOne({_id: id}, function (err, Purchase) {
             if (err) return reject(err);
             resolve(Purchase);
         });
@@ -217,7 +217,7 @@ let DelAndUpdateImange = (body, filename) => {
     return new Promise((resolve, reject) => {
         deleteImage(body)
             .then(
-                Del=> {
+                Del => {
                     updatePurchase(body, filename).then(
                         Purchase => {
                             if (Purchase) {
@@ -227,11 +227,13 @@ let DelAndUpdateImange = (body, filename) => {
                             }
                         }, err => reject(err)
                     );
-                },err => {reject(err)}
+                }, err => {
+                    reject(err)
+                }
             );
 
     });
-}
+};
 
 /*
 *  function tìm xem thư mục có tồn tại, không có tại thư mục mới
@@ -320,57 +322,48 @@ exports.insert_image = function (req, res) {
             if (req.file) {
                 if (req.body.accountID) {
                     if (req.body.id) {
-                        DelAndUpdateImange(req.body, req.file.filename).then(
-                            Purchase => {
-                                if (Purchase) {
-                                    return res.json({
-                                        "response": true,
-                                        "value": Purchase
-                                    });
-                                } else {
-                                    deleteImageNew(req.body, req.file.filename);
-                                    return res.json({
-                                        "response": false,
-                                        "value": "Tạo lưu data không thành công"
-                                    });
-                                }
-                            },
-                            err => {
-                                return res.json({
-                                    "response": false,
-                                    "value": err
-                                });
-                            }
-                        )
-                    } else {
-                        createPurchase({
-                            accountID: req.body.accountID,
-                            pawn_image: req.file.filename,
-                        })
+                        FindOnePurchase(req.body.id)
                             .then(
-                                Purchase => {
-                                    if (Purchase) {
-                                        return res.json({
-                                            "response": true,
-                                            "value": Purchase
-                                        });
+                                purchase => {
+                                    if (purchase) {
+                                        DelAndUpdateImange(req.body, req.file.filename).then(
+                                            Purchase => {
+                                                if (Purchase) {
+                                                    return res.json({
+                                                        "response": true,
+                                                        "value": Purchase
+                                                    });
+                                                } else {
+                                                    deleteImageNew(req.body, req.file.filename);
+                                                    return res.json({
+                                                        "response": false,
+                                                        "value": "Tạo lưu data không thành công"
+                                                    });
+                                                }
+                                            },
+                                            err => {
+                                                return res.json({
+                                                    "response": false,
+                                                    "value": err
+                                                });
+                                            }
+                                        )
                                     } else {
-                                        deleteImageNew(req.body, req.file.filename);
-                                        return res.json({
-                                            "response": false,
-                                            "value": "Tạo lưu data không thành công"
-                                        });
+                                        return createNewPurchase(req.body, req.file.filename);
                                     }
                                 },
                                 err => {
+                                    deleteImageNew(req.body, req.file.filename);
                                     return res.json({
                                         "response": false,
                                         "value": err
                                     });
                                 }
-                            )
-                    }
+                            );
 
+                    } else {
+                        return createNewPurchase(req.body, req.file.filename);
+                    }
                 } else {
                     deleteImageNew(req.body, req.file.filename);
                     return res.json({
@@ -388,6 +381,35 @@ exports.insert_image = function (req, res) {
     });
 };
 
+let createNewPurchase = (obj, filename) => {
+    createPurchase({
+        accountID: obj.accountID,
+        pawn_image: filename,
+    })
+        .then(
+            Purchase => {
+                if (Purchase) {
+                    return res.json({
+                        "response": true,
+                        "value": Purchase
+                    });
+                } else {
+                    deleteImageNew(obj, filename);
+                    return res.json({
+                        "response": false,
+                        "value": "Tạo lưu data không thành công"
+                    });
+                }
+            },
+            err => {
+                return res.json({
+                    "response": false,
+                    "value": err
+                });
+            }
+        )
+};
+
 /*
 *  function insert bảng bán và update bán
 *  nếu có truyền id hiều là update vì document đã tồn tại
@@ -403,11 +425,56 @@ exports.insert_doc = function (req, res) {
     req.body.status = undefined;
     if (req.body && req.body.accountID !== undefined) {
         if (req.body.id) {
-            Purchase.findOneAndUpdate({_id: req.body.id}, req.body, {new: true}, function (err, pawn) {
-                if (err) return res.json({
-                    "response": false,
-                    "value": err
-                });
+            FindOnePurchase(req.body.id)
+                .then(
+                    purchase => {
+                        if (purchase) {
+                            Purchase.findOneAndUpdate({_id: req.body.id}, req.body, {new: true}, function (err, pawn) {
+                                if (err) return res.json({
+                                    "response": false,
+                                    "value": err
+                                });
+                                if (pawn) {
+                                    pawn.status = undefined;
+                                    return res.json({
+                                        "response": true,
+                                        "value": pawn
+                                    });
+                                } else {
+                                    return res.json({
+                                        "response": false,
+                                        "value": "Tạo lưu data không thành công"
+                                    });
+                                }
+                            });
+                        } else {
+                            return createNewPurchaseDoc(req.body);
+                        }
+                    },
+                    err => {
+                        return res.json({
+                            "response": false,
+                            "value": err
+                        });
+                    });
+
+        } else {
+            return createNewPurchaseDoc(req.body);
+        }
+
+    } else {
+        return res.json({
+            "response": false,
+            "value": "not find id"
+        });
+    }
+
+};
+
+let createNewPurchaseDoc = (obj) => {
+    createPurchase(obj)
+        .then(
+            pawn => {
                 if (pawn) {
                     pawn.status = undefined;
                     return res.json({
@@ -420,38 +487,12 @@ exports.insert_doc = function (req, res) {
                         "value": "Tạo lưu data không thành công"
                     });
                 }
-            });
-        } else {
-            createPurchase(req.body)
-                .then(
-                    pawn => {
-                        if (pawn) {
-                            pawn.status = undefined;
-                            return res.json({
-                                "response": true,
-                                "value": pawn
-                            });
-                        } else {
-                            return res.json({
-                                "response": false,
-                                "value": "Tạo lưu data không thành công"
-                            });
-                        }
-                    },
-                    err => {
-                        return res.json({
-                            "response": false,
-                            "value": err
-                        });
-                    }
-                )
-        }
-
-    } else {
-        return res.json({
-            "response": false,
-            "value": "not find id"
-        });
-    }
-
-};
+            },
+            err => {
+                return res.json({
+                    "response": false,
+                    "value": err
+                });
+            }
+        )
+}

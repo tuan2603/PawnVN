@@ -335,56 +335,47 @@ exports.insert_image = function (req, res) {
             if (req.file) {
                 if (req.body.accountID) {
                     if (req.body.id) {
-                        DelAndUpdateImange(req.body, req.file.filename).then(
-                            Pawn => {
-                                if (Pawn) {
-                                    return res.json({
-                                        "response": true,
-                                        "value": Pawn
-                                    });
-                                } else {
-                                    deleteImageNew(req.body, req.file.filename);
-                                    return res.json({
-                                        "response": false,
-                                        "value": "Tạo lưu data không thành công"
-                                    });
-                                }
-                            },
-                            err => {
-                                return res.json({
-                                    "response": false,
-                                    "value": err
-                                });
-                            }
-                        )
-                    } else {
-                        createPawn({
-                            accountID: req.body.accountID,
-                            pawn_image: req.file.filename,
-                        })
+                        FindOnePawn(req.body.id)
                             .then(
-                                Pawn => {
-                                    if (Pawn) {
-                                        return res.json({
-                                            "response": true,
-                                            "value": Pawn
-                                        });
+                                pawn => {
+                                    if (pawn){
+                                        DelAndUpdateImange(req.body, req.file.filename).then(
+                                            Pawn => {
+                                                if (Pawn) {
+                                                    return res.json({
+                                                        "response": true,
+                                                        "value": Pawn
+                                                    });
+                                                } else {
+                                                    deleteImageNew(req.body, req.file.filename);
+                                                    return res.json({
+                                                        "response": false,
+                                                        "value": "Tạo lưu data không thành công"
+                                                    });
+                                                }
+                                            },
+                                            err => {
+                                                deleteImageNew(req.body, req.file.filename);
+                                                return res.json({
+                                                    "response": false,
+                                                    "value":err
+                                                });
+                                            }
+                                        )
                                     } else {
-                                        deleteImageNew(req.body, req.file.filename);
-                                        return res.json({
-                                            "response": false,
-                                            "value": "Tạo lưu data không thành công"
-                                        });
+                                        return createNewPawn(req.body,req.file.filename);
                                     }
                                 },
                                 err => {
-                                    deleteImageNew(req.body, req.file.filename);
                                     return res.json({
                                         "response": false,
                                         "value": err
                                     });
                                 }
                             );
+
+                    } else {
+                       return createNewPawn(req.body,req.file.filename);
                     }
 
                 } else {
@@ -404,6 +395,36 @@ exports.insert_image = function (req, res) {
     });
 };
 
+let createNewPawn = (obj,filename) => {
+    createPawn({
+        accountID:obj.accountID,
+        pawn_image: filename,
+    })
+        .then(
+            Pawn => {
+                if (Pawn) {
+                    return res.json({
+                        "response": true,
+                        "value": Pawn
+                    });
+                } else {
+                    deleteImageNew(obj, filename);
+                    return res.json({
+                        "response": false,
+                        "value": "Tạo lưu data không thành công"
+                    });
+                }
+            },
+            err => {
+                deleteImageNew(obj, filename);
+                return res.json({
+                    "response": false,
+                    "value": err
+                });
+            }
+        );
+}
+
 /*
 *  function insert bảng cầm đồ và update cầm đồ
 *  nếu có truyền id hiều là update vì document đã tồn tại
@@ -419,11 +440,57 @@ exports.insert_doc = function (req, res) {
     req.body.status = undefined;
     if (req.body && req.body.accountID !== undefined) {
         if (req.body.id) {
-            Pawn.findOneAndUpdate({_id: req.body.id}, req.body, {new: true}, function (err, pawn) {
-                if (err) return res.json({
-                    "response": false,
-                    "value": err
-                });
+            FindOnePawn(req.body.id)
+                .then(
+                    pawn => {
+                        if (pawn){
+                            Pawn.findOneAndUpdate({_id: req.body.id}, req.body, {new: true}, function (err, pawn) {
+                                if (err) return res.json({
+                                    "response": false,
+                                    "value": err
+                                });
+                                if (pawn) {
+                                    pawn.status = undefined;
+                                    return res.json({
+                                        "response": true,
+                                        "value": pawn
+                                    });
+                                } else {
+                                    return res.json({
+                                        "response": false,
+                                        "value": "Tạo lưu data không thành công"
+                                    });
+                                }
+                            });
+                        } else {
+                            return createNewPawnDoc(req.body);
+                        }
+                    },
+                    err=>{
+                        return res.json({
+                            "response": false,
+                            "value": err
+                        });
+                    }
+                );
+
+        } else {
+            return createNewPawnDoc(req.body);
+        }
+
+    } else {
+        return res.json({
+            "response": false,
+            "value": "not find id"
+        });
+    }
+
+};
+
+let createNewPawnDoc = (obj) => {
+    createPawn(obj)
+        .then(
+            pawn => {
                 if (pawn) {
                     pawn.status = undefined;
                     return res.json({
@@ -436,38 +503,12 @@ exports.insert_doc = function (req, res) {
                         "value": "Tạo lưu data không thành công"
                     });
                 }
-            });
-        } else {
-            createPawn(req.body)
-                .then(
-                    pawn => {
-                        if (pawn) {
-                            pawn.status = undefined;
-                            return res.json({
-                                "response": true,
-                                "value": pawn
-                            });
-                        } else {
-                            return res.json({
-                                "response": false,
-                                "value": "Tạo lưu data không thành công"
-                            });
-                        }
-                    },
-                    err => {
-                        return res.json({
-                            "response": false,
-                            "value": err
-                        });
-                    }
-                )
-        }
-
-    } else {
-        return res.json({
-            "response": false,
-            "value": "not find id"
-        });
-    }
-
+            },
+            err => {
+                return res.json({
+                    "response": false,
+                    "value": err
+                });
+            }
+        )
 }
