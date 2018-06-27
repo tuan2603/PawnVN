@@ -27,12 +27,12 @@ paths:
           schema:
             $ref: 'model/city.yaml'
       responses:
+        '200':
+          description: success input
+          schema:
+            $ref: 'model/city.yaml'
         '405':
           description: Invalid input
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
     get:
       tags:
         - Cities

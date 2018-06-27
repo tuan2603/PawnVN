@@ -1,10 +1,9 @@
 properties:
   Type:
     type: integer
-    format: int64
+    format: int32
   SolrID:
     type: string
-    format: int32
   ID:
     type: integer
     format: int32
@@ -14,7 +13,7 @@ properties:
     type: integer
     format: int32
   Created:
-     type: integer
-     format: date-time
+     type: number
+     format: double
   Updated:
-    type: integer
+    type: double
