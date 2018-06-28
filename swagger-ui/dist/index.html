@@ -39,22 +39,21 @@
     <script>
     window.onload = function() {
 
-      // Build a system
-      const ui = SwaggerUIBundle({
-        url: "/doc-api/swagger.yaml",
-        dom_id: '#swagger-ui',
-        deepLinking: true,
-        presets: [
-          SwaggerUIBundle.presets.apis,
-          SwaggerUIStandalonePreset
-        ],
-        plugins: [
-          SwaggerUIBundle.plugins.DownloadUrl
-        ],
-        layout: "StandaloneLayout"
-      });
-
-      window.ui = ui
+        // Build a system
+        const ui = SwaggerUIBundle({
+            url: "/api_docs/swagger.yaml",
+            dom_id: '#swagger-ui',
+            deepLinking: true,
+            presets: [
+                SwaggerUIBundle.presets.apis,
+                SwaggerUIStandalonePreset
+            ],
+            plugins: [
+                SwaggerUIBundle.plugins.DownloadUrl
+            ],
+            layout: "StandaloneLayout"
+        });
+        window.ui = ui
     }
   </script>
   </body>

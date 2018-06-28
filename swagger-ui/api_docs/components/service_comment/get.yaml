@@ -1,0 +1,23 @@
+tags:
+  - service comment
+summary: Get all comment follow by service id
+description: ''
+operationId: getServiceCommentByServiceId
+produces:
+  - application/json
+parameters:
+  - name: service_id
+    in: path
+    description: 'The service_id that needs to be fetched. Use "5aa7826339cd5c11a02d76a8" for testing. '
+    required: true
+    type: string
+    example: 5aa7826339cd5c11a02d76a8
+responses:
+  '200':
+    description: successful operation
+    schema:
+      $ref: 'service_comment_model.yaml'
+  '400':
+    description: Invalid username supplied
+  '404':
+    description: User not found

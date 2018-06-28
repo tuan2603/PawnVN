@@ -1,0 +1,44 @@
+#../components/service_comment/create.yaml
+tags:
+  - Banner Ads Display
+summary: Add a new banner
+description: ''
+operationId: addNewBnaner
+consumes:
+  - application/json
+produces:
+  - application/json
+parameters:
+- name: "provider_id"
+  in: "formData"
+  description: "id of service provider"
+  required: false
+  type: "string"
+- name: "ads_id"
+  in: "formData"
+  description: "id of banner ads displays price"
+  required: false
+  type: "string"
+- name: "imagebanner"
+  in: "formData"
+  description: "file to upload"
+  required: false
+  type: "file"
+responses:
+  'true':
+    description: insert success
+    schema:
+      $ref: 'banner_model.yaml'
+  'false':
+    description: Create service banner fail
+    schema:
+      type: "array"
+      items:
+        type: string
+        example:
+        - "1. update wallet success, create data buy banner fail"
+        - "2. update wallet fail"
+        - "3. Not enough money"
+        - "4. Upload Image banner fail"
+
+

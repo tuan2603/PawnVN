@@ -1,0 +1,30 @@
+#../components/service_comment/create.yaml
+tags:
+  - service comment
+summary: Add a new comment
+description: ''
+operationId: addComment
+consumes:
+  - application/json
+produces:
+  - application/json
+parameters:
+  - in: body
+    name: body
+    description: service comment object that needs to be added to the store
+    required: true
+    schema:
+      $ref: 'service_comment_model.yaml'
+responses:
+  '200':
+    description: insert success
+    schema:
+      $ref: 'service_comment_model.yaml'
+  '400':
+    description: Create service comment fail
+    schema:
+      type: object
+      properties:
+        errors:
+          type: string
+          example: Some thing went wrong

@@ -1,8 +1,6 @@
 'use strict';
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-
-const UserSchema = new Schema({
+const mongoose = require('mongoose');
+const UserSchema = new mongoose.Schema({
     fullName: {
         type: String,
         trim: true,
@@ -42,11 +40,17 @@ const UserSchema = new Schema({
     latitude :{ //vĩ độ
         type:Number,
     },
-    onlineStatus: {
-        type: Boolean
+    device_token: { //token dien thoai
+        type: String,
+        lowercase: true
     },
-    offlineTime: {
-        type: Number
+    isPlatform:{ //thiết bị sử dụng. 0 ios, 1 android
+        type:Number,
+        default: 0,
+    },
+    offlineTime: { // = 0  là ofline,  > 1530197907824 là online
+        type: Number,
+        default: 0,
     },
     create_at: {
         type: Number,

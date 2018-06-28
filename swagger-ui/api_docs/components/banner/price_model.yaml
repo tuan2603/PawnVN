@@ -1,0 +1,19 @@
+properties:
+  _id:
+    type: string
+  name:
+    type: string
+  date:
+    type: integer
+    format: int32
+  price:
+    type: integer
+    format: int32
+  description:
+    type: string
+  created_at:
+    type: number
+    format: double
+  updated_at:
+    type: number
+    format: double

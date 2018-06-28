@@ -1,0 +1,52 @@
+#../components/service_comment/create.yaml
+tags:
+- Category Pawn
+security:
+- Bearer: []
+summary: Add a new Category Pawn
+description: ''
+operationId: addNewCategoryPawn
+consumes:
+#- application/json
+- application/x-www-form-urlencoded
+produces:
+- application/json
+- application/x-www-form-urlencoded
+parameters:
+- name: "value"
+  type: string
+  in: formData
+- name: "label"
+  type: string
+  in: formData
+#- in: body
+#  name: body
+#  description: The value/label
+#  required: true
+#  schema:
+#    $ref: '#/definitions/Login'
+responses:
+  'true':
+    description: insert success
+    schema:
+      $ref: 'category_model.yaml'
+  'false':
+    description: Create service banner fail
+    schema:
+      type: "array"
+      items:
+        type: string
+        example:
+        - "1. update wallet success, create data buy banner fail"
+        - "2. update wallet fail"
+        - "3. Not enough money"
+        - "4. Upload Image banner fail"
+definitions:
+ Login:
+  type: object
+  properties:
+   value:
+    type: string
+   label:
+    type: string
+

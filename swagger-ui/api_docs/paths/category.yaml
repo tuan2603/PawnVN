@@ -1,0 +1,6 @@
+# /paths/category.yaml
+post:
+  $ref: '../components/category/create.yaml'
+# gỉa sử trong UsersController có thêm action khác ví dụ như index thì mình sẽ khai báo thêm ở đây
+get:
+  $ref: '../components/category/get.yaml'

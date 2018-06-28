@@ -13,8 +13,14 @@ module.exports = function (app) {
     let pricelist = require('../controllers/pricelistController');
     let pawnAuction = require('../controllers/pawnAuctionController');
     let purchaseAuction = require('../controllers/purchaseAuctionController');
+    let category = require('../controllers/categoryController');
 
     // todoList Routes
+    //get, insert city
+    app.route('/api/category')
+        .get(category.list_categories)
+        .post(userHandles.loginRequired,category.insert_one);
+
     //get, insert city
     app.route('/api/city')
         .get(city.list_city)

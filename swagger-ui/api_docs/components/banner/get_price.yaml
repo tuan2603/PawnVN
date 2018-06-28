@@ -1,0 +1,14 @@
+tags:
+  - Banner Ads Display
+summary: Get all Banner Ads Display
+description: ''
+operationId: get all banner ads display
+produces:
+  - application/json
+responses:
+  'true':
+    description: successful return array value
+    schema:
+      $ref: 'price_model.yaml'
+  'false':
+    description: Invalid price supplied

@@ -1,0 +1,14 @@
+tags:
+  - Category Pawn
+summary: Get all Category Pawn
+description: ''
+operationId: get all Category Pawn
+produces:
+  - application/json
+responses:
+  'true':
+    description: successful return array value
+    schema:
+      $ref: 'category_model.yaml'
+  'false':
+    description: Invalid price supplied

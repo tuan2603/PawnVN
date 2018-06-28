@@ -1,0 +1,4 @@
+# /paths/service_comment_params.yaml
+get:
+  $ref: '../components/service_comment/get.yaml'
+# gỉa sử trong UsersController có thêm action khác ví dụ như index thì mình sẽ khai báo thêm ở đây

@@ -1,4 +1,12 @@
 'use strict';
+/*
+* danh sach các món đồ mới status là 1 và sánh thời gian đấu giá > thời gian hiện tại,
+* các món đồ đã đấu giá là 2 và có id của chủ tiệm cầm đồcác món đồ hết hạn status  =2, id chủ tiệm cầm đồ ,  date_time < date now
+* 1/ Lúc k.h chọn chủ tiệm cầm đồ là trừ tiền của chủ tiệm.
+* 2/ Lúc k.h gia hạn thêm thời gian cho món đồ hết hạn (trừ tiền của k.h
+* -> Sau đó mình tính lãi từ số tiền đó và trừ ra
+* -> Số tiền còn lại chuyển wa cho chủ tiệm).
+*/
 const Pawn = require('../models/pawnModel'),
     User = require("../models/userModel"),
     path = require('path'),
@@ -74,7 +82,7 @@ let FindPawn = (id) => {
             resolve(Pawn);
         });
     });
-}
+};
 
 /*
 *  function tìm và xuất ra 1 document cầm đồ qua id của document,
@@ -129,7 +137,7 @@ exports.get_list = function (req, res) {
                 });
             }
         );
-}
+};
 
 /*
 *  function tìm và xuất ra 1 document cầm đồ đúng với id mà người dùng càn tìm

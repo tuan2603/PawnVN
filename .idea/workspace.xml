@@ -2,8 +2,33 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c76d89b5-0984-4f1a-87c1-813aa64b54b2" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/swagger-ui/doc-api/model/city.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/swagger-ui/doc-api/model/city.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/swagger-ui/doc-api/swagger.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/swagger-ui/doc-api/swagger.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/controllers/categoryController.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/models/categoryModel.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/swagger-ui/api_docs/components/banner/banner_model.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/swagger-ui/api_docs/components/banner/create.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/swagger-ui/api_docs/components/banner/get_price.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/swagger-ui/api_docs/components/banner/price_model.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/swagger-ui/api_docs/components/category/category_model.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/swagger-ui/api_docs/components/category/create.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/swagger-ui/api_docs/components/category/get.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/swagger-ui/api_docs/components/service_comment/create.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/swagger-ui/api_docs/components/service_comment/get.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/swagger-ui/api_docs/components/service_comment/service_comment_model.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/swagger-ui/api_docs/paths/banner.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/swagger-ui/api_docs/paths/category.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/swagger-ui/api_docs/paths/service_comment.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/swagger-ui/api_docs/paths/service_comment_params.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/swagger-ui/api_docs/swagger.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controllers/pawnController.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/pawnController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/userModel.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/userModel.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/todoListRoutes.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/todoListRoutes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/swagger-ui/dist/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/swagger-ui/dist/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/swagger-ui/dist/oauth2-redirect.html" beforeDir="false" afterPath="$PROJECT_DIR$/swagger-ui/dist/oauth2-redirect.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/swagger-ui/doc-api/model/city.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/swagger-ui/doc-api/model/user.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/swagger-ui/doc-api/path/city.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/swagger-ui/doc-api/swagger.yaml" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -20,68 +45,74 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="swagger.yaml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/swagger-ui/api_docs/swagger.yaml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="96">
+              <caret line="8" column="8" selection-start-line="8" selection-start-column="8" selection-end-line="8" selection-end-column="8" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="create.yaml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/swagger-ui/api_docs/components/category/create.yaml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="187">
+              <caret line="20" column="14" lean-forward="true" selection-start-line="20" selection-start-column="14" selection-end-line="20" selection-end-column="14" />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/swagger-ui/dist/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="724">
-              <caret line="43" column="35" selection-start-line="43" selection-start-column="35" selection-end-line="43" selection-end-column="35" />
+            <state relative-caret-position="-104">
+              <caret line="39" column="32" lean-forward="true" selection-start-line="39" selection-start-column="32" selection-end-line="39" selection-end-column="32" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="swagger.yaml" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/swagger-ui/doc-api/swagger.yaml">
+      <file leaf-file-name="category.yaml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/swagger-ui/api_docs/paths/category.yaml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="32" column="12" selection-start-line="32" selection-start-column="12" selection-end-line="32" selection-end-column="12" />
+            <state relative-caret-position="34">
+              <caret line="2" column="44" selection-start-line="2" selection-start-column="44" selection-end-line="2" selection-end-column="44" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/index.js">
+      <file leaf-file-name="get.yaml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/swagger-ui/api_docs/components/category/get.yaml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-74">
-              <caret line="53" column="18" selection-start-line="53" selection-start-column="10" selection-end-line="53" selection-end-column="18" />
+            <state relative-caret-position="85">
+              <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pawnController.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/controllers/pawnController.js">
+      <file leaf-file-name="categoryModel.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/models/categoryModel.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="62">
-              <caret line="438" column="42" selection-start-line="438" selection-start-column="42" selection-end-line="438" selection-end-column="42" />
-              <folding>
-                <element signature="e#13456#13464#0" />
-              </folding>
+            <state relative-caret-position="170">
+              <caret line="10" column="3" lean-forward="true" selection-start-line="10" selection-start-column="3" selection-end-line="10" selection-end-column="3" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="city.yaml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/swagger-ui/doc-api/model/city.yaml">
+      <file leaf-file-name="categoryController.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/controllers/categoryController.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="18" column="16" selection-start-line="18" selection-start-column="16" selection-end-line="18" selection-end-column="16" />
+            <state relative-caret-position="-85">
+              <caret line="4" column="21" selection-start-line="4" selection-start-column="21" selection-end-line="4" selection-end-column="21" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="purchaseController.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/controllers/purchaseController.js">
+      <file leaf-file-name="todoListRoutes.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/routes/todoListRoutes.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="130">
-              <caret line="470" selection-start-line="470" selection-end-line="470" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="package.json" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/package.json">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="6" column="57" selection-start-line="6" selection-start-column="57" selection-end-line="6" selection-end-column="57" />
+            <state relative-caret-position="158">
+              <caret line="21" column="51" lean-forward="true" selection-start-line="21" selection-start-column="51" selection-end-line="21" selection-end-column="51" />
             </state>
           </provider>
         </entry>
@@ -142,8 +173,6 @@
         <option value="$PROJECT_DIR$/controllers/tradeHistoryController.js" />
         <option value="$PROJECT_DIR$/controllers/walletsController.js" />
         <option value="$PROJECT_DIR$/controllers/pricelistController.js" />
-        <option value="$PROJECT_DIR$/controllers/pawnController.js" />
-        <option value="$PROJECT_DIR$/models/userModel.js" />
         <option value="$PROJECT_DIR$/ultils/distance.js" />
         <option value="$PROJECT_DIR$/models/pawnModel.js" />
         <option value="$PROJECT_DIR$/models/purchaseModel.js" />
@@ -154,13 +183,21 @@
         <option value="$PROJECT_DIR$/routes/socket.js" />
         <option value="$PROJECT_DIR$/build/index.html" />
         <option value="$PROJECT_DIR$/index.js" />
-        <option value="$PROJECT_DIR$/routes/todoListRoutes.js" />
         <option value="$PROJECT_DIR$/swagger-ui/doc-api/swagger.json" />
-        <option value="$PROJECT_DIR$/swagger-ui/dist/index.html" />
         <option value="$PROJECT_DIR$/swagger-ui/doc-api/user.yaml" />
         <option value="$PROJECT_DIR$/swagger-ui/doc-api/model/user.yaml" />
         <option value="$PROJECT_DIR$/swagger-ui/doc-api/model/city.yaml" />
         <option value="$PROJECT_DIR$/swagger-ui/doc-api/swagger.yaml" />
+        <option value="$PROJECT_DIR$/controllers/pawnController.js" />
+        <option value="$PROJECT_DIR$/models/userModel.js" />
+        <option value="$PROJECT_DIR$/models/categoryModel.js" />
+        <option value="$PROJECT_DIR$/swagger-ui/api_docs/components/category/get.yaml" />
+        <option value="$PROJECT_DIR$/routes/todoListRoutes.js" />
+        <option value="$PROJECT_DIR$/swagger-ui/api_docs/paths/category.yaml" />
+        <option value="$PROJECT_DIR$/swagger-ui/dist/index.html" />
+        <option value="$PROJECT_DIR$/controllers/categoryController.js" />
+        <option value="$PROJECT_DIR$/swagger-ui/api_docs/swagger.yaml" />
+        <option value="$PROJECT_DIR$/swagger-ui/api_docs/components/category/create.yaml" />
       </list>
     </option>
   </component>
@@ -180,9 +217,8 @@
       <path value="$PROJECT_DIR$/package.json" />
     </packageJsonPaths>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
-    <option name="x" value="657" />
-    <option name="y" value="56" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="676" />
     <option name="width" value="697" />
     <option name="height" value="735" />
   </component>
@@ -205,11 +241,6 @@
             <path>
               <item name="PawnVN" type="b2602c69:ProjectViewProjectNode" />
               <item name="PawnVN" type="462c0819:PsiDirectoryNode" />
-              <item name="controllers" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="PawnVN" type="b2602c69:ProjectViewProjectNode" />
-              <item name="PawnVN" type="462c0819:PsiDirectoryNode" />
               <item name="routes" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -221,19 +252,35 @@
               <item name="PawnVN" type="b2602c69:ProjectViewProjectNode" />
               <item name="PawnVN" type="462c0819:PsiDirectoryNode" />
               <item name="swagger-ui" type="462c0819:PsiDirectoryNode" />
-              <item name="doc-api" type="462c0819:PsiDirectoryNode" />
+              <item name="api_docs" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="PawnVN" type="b2602c69:ProjectViewProjectNode" />
               <item name="PawnVN" type="462c0819:PsiDirectoryNode" />
               <item name="swagger-ui" type="462c0819:PsiDirectoryNode" />
-              <item name="doc-api" type="462c0819:PsiDirectoryNode" />
-              <item name="model" type="462c0819:PsiDirectoryNode" />
+              <item name="api_docs" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="PawnVN" type="b2602c69:ProjectViewProjectNode" />
               <item name="PawnVN" type="462c0819:PsiDirectoryNode" />
-              <item name="ultils" type="462c0819:PsiDirectoryNode" />
+              <item name="swagger-ui" type="462c0819:PsiDirectoryNode" />
+              <item name="api_docs" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
+              <item name="category" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="PawnVN" type="b2602c69:ProjectViewProjectNode" />
+              <item name="PawnVN" type="462c0819:PsiDirectoryNode" />
+              <item name="swagger-ui" type="462c0819:PsiDirectoryNode" />
+              <item name="api_docs" type="462c0819:PsiDirectoryNode" />
+              <item name="paths" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="PawnVN" type="b2602c69:ProjectViewProjectNode" />
+              <item name="PawnVN" type="462c0819:PsiDirectoryNode" />
+              <item name="swagger-ui" type="462c0819:PsiDirectoryNode" />
+              <item name="dist" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -253,15 +300,15 @@
     <property name="nodejs_package_manager_path" value="npm" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\GITHUP\PawnVN\swagger-ui\doc-api\model" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\GITHUP\PawnVN\public\uploads" />
+      <recent name="D:\GITHUP\PawnVN\swagger-ui\api_docs\components" />
+      <recent name="D:\GITHUP\PawnVN\swagger-ui\api_docs\paths" />
       <recent name="D:\GITHUP\PawnVN\controllers" />
       <recent name="D:\GITHUP\PawnVN\models" />
       <recent name="D:\GITHUP\PawnVN" />
-      <recent name="D:\nodeproject\ortrans\controllers" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\GITHUP\PawnVN\swagger-ui\doc-api\model" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -301,46 +348,34 @@
       <workItem from="1529774065361" duration="24848000" />
       <workItem from="1529933457735" duration="7173000" />
       <workItem from="1530027701761" duration="9930000" />
+      <workItem from="1530193028659" duration="16391000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="117091000" />
+    <option name="totallyTimeSpent" value="133767000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49791956" visible="true" weight="0.24032739" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49791956" visible="true" weight="0.24032739" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.50070524" side_tool="true" weight="0.2926491" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.53989816" />
-      <window_info anchor="bottom" id="Version Control" order="7" weight="0.3293718" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.6315789" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info id="npm" order="1" sideWeight="0.50208044" side_tool="true" weight="0.219323" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.6315789" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.4992948" visible="true" weight="0.2665535" />
+      <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.4992948" weight="0.44312394" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info id="npm" order="1" sideWeight="0.50208044" side_tool="true" weight="0.219323" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49791956" visible="true" weight="0.24032739" />
-      <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.6315789" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.50070524" side_tool="true" weight="0.2926491" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3293718" />
-      <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.4992948" weight="0.18845502" />
-      <window_info id="Favorites" order="3" side_tool="true" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -355,76 +390,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/swagger-ui/doc-api/swagger.yaml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="299">
-          <caret line="27" column="19" selection-start-line="27" selection-start-column="19" selection-end-line="27" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/controllers/captchaController.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="23" column="14" selection-start-line="23" selection-start-column="14" selection-end-line="23" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="714">
-          <caret line="42" column="3" selection-start-line="42" selection-end-line="43" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/routes/todoListRoutes.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="19" column="37" selection-start-line="19" selection-start-column="37" selection-end-line="19" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/controllers/codeController.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="8" selection-start-line="6" selection-start-column="8" selection-end-line="6" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/controllers/userController.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5508">
-          <caret line="324" column="49" selection-start-line="324" selection-start-column="49" selection-end-line="324" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/controllers/captchaController.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="23" column="14" selection-start-line="23" selection-start-column="14" selection-end-line="23" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="714">
-          <caret line="42" column="3" selection-start-line="42" selection-end-line="43" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/controllers/captchaController.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="23" column="14" selection-start-line="23" selection-start-column="14" selection-end-line="23" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/controllers/captchaController.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="23" column="14" selection-start-line="23" selection-start-column="14" selection-end-line="23" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/controllers/codeController.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
@@ -503,13 +468,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/controllers/purchaseController.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="130">
-          <caret line="470" selection-start-line="470" selection-end-line="470" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/models/auctionPawnModel.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="336">
@@ -552,30 +510,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/controllers/pawnController.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="62">
-          <caret line="438" column="42" selection-start-line="438" selection-start-column="42" selection-end-line="438" selection-end-column="42" />
-          <folding>
-            <element signature="e#13456#13464#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/models/pawnModel.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="884">
-          <caret line="52" column="6" selection-start-line="52" selection-start-column="6" selection-end-line="52" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/models/purchaseModel.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="4" selection-start-line="3" selection-start-column="4" selection-end-line="55" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/models/tradeHistoryModel.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
@@ -611,20 +545,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/models/userModel.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="30" column="14" selection-start-line="30" selection-start-column="4" selection-end-line="30" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/controllers/userController.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="370">
-          <caret line="451" column="41" lean-forward="true" selection-start-line="451" selection-start-column="41" selection-end-line="451" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
@@ -653,27 +573,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/todoListRoutes.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="20" column="52" selection-start-line="20" selection-start-column="52" selection-end-line="20" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-74">
-          <caret line="53" column="18" selection-start-line="53" selection-start-column="10" selection-end-line="53" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/swagger-ui/dist/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="724">
-          <caret line="43" column="35" selection-start-line="43" selection-start-column="35" selection-end-line="43" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/swagger-ui/doc-api/swagger.json" />
     <entry file="file://$PROJECT_DIR$/models/cityModel.js">
       <provider selected="true" editor-type-id="text-editor">
@@ -696,10 +595,139 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/controllers/purchaseController.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="44" selection-start-line="1" selection-start-column="44" selection-end-line="1" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/purchaseModel.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="16" column="20" selection-start-line="16" selection-start-column="20" selection-end-line="16" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/pawnModel.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="27" column="41" selection-start-line="27" selection-start-column="41" selection-end-line="27" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/swagger-ui/doc-api/swagger.yaml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
+        <state relative-caret-position="544">
           <caret line="32" column="12" selection-start-line="32" selection-start-column="12" selection-end-line="32" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="79">
+          <caret line="53" column="18" selection-start-line="53" selection-start-column="10" selection-end-line="53" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/controllers/userController.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="179">
+          <caret line="411" column="1" selection-start-line="411" selection-start-column="1" selection-end-line="411" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/userModel.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="371">
+          <caret line="35" column="6" lean-forward="true" selection-start-line="35" selection-start-column="6" selection-end-line="35" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/swagger-ui/api_docs/paths/banner.yaml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/categoryModel.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="3" lean-forward="true" selection-start-line="10" selection-start-column="3" selection-end-line="10" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/controllers/pawnController.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="578">
+          <caret line="49" column="17" selection-start-line="49" selection-start-column="17" selection-end-line="49" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/body-parser/lib/types/json.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="100">
+          <caret line="82" column="14" selection-start-line="82" selection-start-column="14" selection-end-line="82" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/body-parser/lib/read.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="100">
+          <caret line="120" column="17" selection-start-line="120" selection-start-column="17" selection-end-line="120" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/raw-body/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="92">
+          <caret line="223" column="15" selection-start-line="223" selection-start-column="15" selection-end-line="223" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/swagger-ui/api_docs/paths/category.yaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="44" selection-start-line="2" selection-start-column="44" selection-end-line="2" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/swagger-ui/api_docs/components/category/get.yaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/swagger-ui/dist/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-104">
+          <caret line="39" column="32" lean-forward="true" selection-start-line="39" selection-start-column="32" selection-end-line="39" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/todoListRoutes.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="158">
+          <caret line="21" column="51" lean-forward="true" selection-start-line="21" selection-start-column="51" selection-end-line="21" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/controllers/categoryController.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-85">
+          <caret line="4" column="21" selection-start-line="4" selection-start-column="21" selection-end-line="4" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/swagger-ui/api_docs/swagger.yaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="96">
+          <caret line="8" column="8" selection-start-line="8" selection-start-column="8" selection-end-line="8" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/swagger-ui/api_docs/components/category/create.yaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="20" column="14" lean-forward="true" selection-start-line="20" selection-start-column="14" selection-end-line="20" selection-end-column="14" />
         </state>
       </provider>
     </entry>

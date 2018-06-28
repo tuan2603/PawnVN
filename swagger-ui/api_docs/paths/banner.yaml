@@ -1,0 +1,6 @@
+# /paths/service_comment.yaml
+post:
+  $ref: '../components/banner/create.yaml'
+# gỉa sử trong UsersController có thêm action khác ví dụ như index thì mình sẽ khai báo thêm ở đây
+get:
+  $ref: '../components/banner/get_price.yaml'

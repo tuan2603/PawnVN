@@ -1,0 +1,13 @@
+properties:
+  _id:
+    type: string
+  provider_id:
+    type: string
+  ads_id:
+    type: string
+  created_at:
+    type: number
+    format: double
+  updated_at:
+    type: number
+    format: double

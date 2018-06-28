@@ -1,0 +1,30 @@
+properties:
+  _id:
+    type: string
+  consumer_id:
+    type: string
+  name:
+    type: string
+  title_comment:
+    type: string
+  services_id:
+    type: string
+  provider_id:
+    type: string
+  comment:
+    type: string
+  rate_services:
+    type: integer
+    format: int32
+  rate_attitude:
+    type: integer
+    format: int32
+  rate_price:
+    type: integer
+    format: int32
+  rate_friendliness:
+    type: integer
+    format: int32
+  recommenrded:
+    type: integer
+    format: int32
