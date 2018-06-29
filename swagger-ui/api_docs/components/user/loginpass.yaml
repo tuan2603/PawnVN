@@ -1,0 +1,34 @@
+#../components/service_comment/create.yaml
+tags:
+- User
+summary: Login
+description: ''
+operationId: loginPassword
+consumes:
+#- application/json
+- application/x-www-form-urlencoded
+produces:
+- application/json
+parameters:
+- name: "phone"
+  type: string
+  in: formData
+- name: "password"
+  type: string
+  format: password
+  in: formData
+responses:
+  'true':
+    description: insert success
+  'false':
+    description: login fail
+    schema:
+      type: "array"
+      items:
+        type: string
+        example:
+        - "1. Tài khoản chưa được xác thực"
+        - "2. Tài khoản không tồn tại"
+        - "3. Mật khẩu không đúng."
+        - "4. Tài khoản mật khẩu không tồn tại"
+        - "5. Lỗi tìm user"

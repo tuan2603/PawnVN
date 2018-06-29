@@ -20,6 +20,8 @@ securityDefinitions:
   name: Authorization
   in: header
 tags:
+- name: User
+  description: Everything about User
 - name: Category Pawn
   description: Everything about category pawn
 - name: Banner Ads Display
@@ -27,3 +29,5 @@ tags:
 paths:
   '/api/category':
     $ref: 'paths/category.yaml'
+  '/api/auth/sign-in-pass-word':
+    $ref: 'paths/login.yaml'

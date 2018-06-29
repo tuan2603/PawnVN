@@ -1,0 +1,4 @@
+# /paths/category.yaml
+post:
+  $ref: '../components/user/loginpass.yaml'
+

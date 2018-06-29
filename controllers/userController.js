@@ -1182,7 +1182,7 @@ exports.sign_in = function (req, res) {
         } else if (user.password !== undefined) {
             if (!comparePassword(req.body.password, user)) {
                 return res.json({
-                    message: 'Mật khẩu đúng.',
+                    message: 'Mật khẩu không đúng.',
                     value: 3,
                 })
             } else {
