@@ -22,7 +22,7 @@ const UserDocSchema = new mongoose.Schema({
     identityCardDateIssued: { // ngày cấp
         type: Date
     },
-    products: { // loại cầm đồ
+    categories: { // loại cầm đồ
         type: [],
     },
     sex: { // giới tính

@@ -61,6 +61,8 @@ module.exports = function (app) {
         .post(userHandles.loginRequired, userHandles.update_identityCardFront);
     app.route('/api/auth/doccument')
         .post(userHandles.loginRequired, userHandles.update_userdoc);
+    app.route('/api/auth/doccumentboth')
+        .post(userHandles.loginRequired, userHandles.update_userboth);
 
     app.route('/api/auth/password/:id')
         .put(userHandles.loginRequired, userHandles.update_password);

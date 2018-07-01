@@ -1042,26 +1042,59 @@ exports.update_userdoc = (req, res) => {
         );
 }
 
+// dung để update thông tin user cả 2
+exports.update_userboth = (req, res) => {
+    FindOneUserDoc(req.body.id)
+        .then(
+            UserDoc => {
+                if (UserDoc) {
+                        return updateUserDoc(req.body, res);
+                } else {
+                    return res.json({
+                        "response": false,
+                        "value": "Lỗi tìm thông tin phụ"
+                    });
+                }
+            },
+            err => {
+                return res.json({
+                    "response": false,
+                    "value": "Lỗi tìm thông tin phụ"
+                });
+            }
+        );
+}
+
 let updateUserDoc = (obj, res) => {
-    UserDoc.findOneAndUpdate({accountID: obj.id}, obj, {new: true}, function (err, User) {
+    UserDoc.findOneAndUpdate({accountID: obj.id}, obj, {new: true}, function (err, UserD) {
         if (err)
             return res.send({
                 response: err,
                 value: false
             });
-        if (!User) {
+        if (!UserD) {
             return res.send({
                 response: "khong tim thay",
                 value: false
             });
         } else {
-            findUserId(User.accountID)
+            findUserId(UserD.accountID)
                 .then(Profile => {
                     if (Profile) {
-                        Profile.password = undefined;
-                        return res.json({
-                            value: true,
-                            response: Object.assign(JSON.parse(JSON.stringify(User)), JSON.parse(JSON.stringify(Profile)))
+                        User.findOneAndUpdate({_id: UserD.accountID}, obj, {new: true}, function (err, UserC) {
+                            if (UserC) {
+                                UserC.password = undefined;
+                                return res.json({
+                                    value: true,
+                                    response: Object.assign(JSON.parse(JSON.stringify(UserD)), JSON.parse(JSON.stringify(UserC)))
+                                });
+                            } else {
+                                Profile.password = undefined;
+                                return res.json({
+                                    value: true,
+                                    response: Object.assign(JSON.parse(JSON.stringify(UserD)), JSON.parse(JSON.stringify(Profile)))
+                                });
+                            }
                         });
                     } else {
                         return res.send({
@@ -1077,7 +1110,6 @@ let updateUserDoc = (obj, res) => {
                 });
         }
     });
-
 }
 
 let updateIdentityCardFront = (body, filename, res) => {
