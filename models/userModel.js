@@ -36,13 +36,21 @@ const UserSchema = new mongoose.Schema({
     },
     longitude:{ //kinh độ
         type:Number,
+        default:106.698944,
     },
     latitude :{ //vĩ độ
         type:Number,
+        default:10.779807,
+    },
+    socket_id: { //id socket
+        type: String,
+        lowercase: true,
+        default:"",
     },
     device_token: { //token dien thoai
         type: String,
-        lowercase: true
+        lowercase: true,
+        default:"",
     },
     isPlatform:{ //thiết bị sử dụng. 0 ios, 1 android
         type:Number,

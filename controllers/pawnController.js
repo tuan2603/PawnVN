@@ -9,9 +9,13 @@
 */
 const Pawn = require('../models/pawnModel'),
     User = require("../models/userModel"),
+    UserCrt = require("../controllers/userController"),
+    Ios = require("../controllers/notifyIOSController"),
+    Distance = require("../ultils/distance"),
     path = require('path'),
     multer = require('multer'),
-    fs = require('fs');
+    fs = require('fs'),
+    Async = require('async');
 
 /*
 * update Pawn dựa theo chính id của pawn đó
@@ -346,7 +350,7 @@ exports.insert_image = function (req, res) {
                         FindOnePawn(req.body.id)
                             .then(
                                 pawn => {
-                                    if (pawn){
+                                    if (pawn) {
                                         DelAndUpdateImange(req.body, req.file.filename).then(
                                             Pawn => {
                                                 if (Pawn) {
@@ -366,12 +370,12 @@ exports.insert_image = function (req, res) {
                                                 deleteImageNew(req.body, req.file.filename);
                                                 return res.json({
                                                     "response": false,
-                                                    "value":err
+                                                    "value": err
                                                 });
                                             }
                                         )
                                     } else {
-                                        return createNewPawn(req.body,req.file.filename);
+                                        return createNewPawn(req.body, req.file.filename);
                                     }
                                 },
                                 err => {
@@ -383,7 +387,7 @@ exports.insert_image = function (req, res) {
                             );
 
                     } else {
-                       return createNewPawn(req.body,req.file.filename);
+                        return createNewPawn(req.body, req.file.filename);
                     }
 
                 } else {
@@ -403,9 +407,9 @@ exports.insert_image = function (req, res) {
     });
 };
 
-let createNewPawn = (obj,filename) => {
+let createNewPawn = (obj, filename) => {
     createPawn({
-        accountID:obj.accountID,
+        accountID: obj.accountID,
         pawn_image: filename,
     })
         .then(
@@ -451,7 +455,7 @@ exports.insert_doc = function (req, res) {
             FindOnePawn(req.body.id)
                 .then(
                     pawn => {
-                        if (pawn){
+                        if (pawn) {
                             Pawn.findOneAndUpdate({_id: req.body.id}, req.body, {new: true}, function (err, pawn) {
                                 if (err) return res.json({
                                     "response": false,
@@ -474,7 +478,7 @@ exports.insert_doc = function (req, res) {
                             return createNewPawnDoc(req.body);
                         }
                     },
-                    err=>{
+                    err => {
                         return res.json({
                             "response": false,
                             "value": err
@@ -519,4 +523,70 @@ let createNewPawnDoc = (obj) => {
                 });
             }
         )
-}
+};
+
+exports.notify = (io, socket, obj) => {
+    UserCrt.FindUserSocketID({socket_id: socket.id, _id: obj.accountID})
+        .then(
+            user => {
+                if (user) {
+                    FindOnePawn(obj._id)
+                        .then(
+                            pawn => {
+                                if (pawn) {
+                                    UserCrt.findAllUser()
+                                        .then(
+                                            users => {
+                                                if (users) {
+                                                    Async.forEachOf(users, function (usk, key, callback) {
+                                                        let distan = Distance.distance(usk.latitude, usk.longitude, user.latitude, user.longitude);
+                                                        console.log(distan);
+                                                        if (distan <= 10) {
+                                                            // người dùng đang online
+                                                            if (usk.socket_id !== "" && usk.offlineTime > 0) {
+                                                                io.to(usk.socket_id).emit("notify-pawn-c-b", pawn._id);
+                                                            } else if(usk.isPlatform === 0 && usk.device_token !== "") {
+                                                               // người dùng offline, kiểm tra người dùng có dùng ios không
+                                                                Ios.sendNotifyIOS({
+                                                                    device_token:usk.device_token,
+                                                                    countMes:1,
+                                                                    content_text:"Có tin người đăng đấu giá "+pawn._id,
+                                                                });
+                                                            }
+                                                        }
+                                                        callback();
+                                                    }, function (err) {
+                                                        if (err) {
+                                                            socket.emit("notifited", false);
+                                                        } else {
+                                                            socket.emit("notifited", true);
+                                                        }
+                                                    });
+                                                } else {
+                                                    // không tìm thấy người dùng, tin ảo
+                                                    socket.emit("notifited", false);
+                                                }
+                                            },
+                                            err => {
+                                                console.log(err);
+                                            }
+                                        );
+                                } else {
+                                    // không tìm thấy người dùng, tin ảo
+                                    socket.emit("notifited", false);
+                                }
+                            },
+                            err => {
+                                console.log(err);
+                            }
+                        );
+                } else {
+                    // không tìm thấy người dùng, tin ảo
+                    socket.emit("notifited", false);
+                }
+            },
+            err => {
+                console.log(err);
+            }
+        );
+};

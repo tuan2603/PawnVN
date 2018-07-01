@@ -142,6 +142,17 @@ let findUserId = (id) => {
         });
     });
 }
+exports.findUserId = findUserId;
+
+let findAllUser = () => {
+    return new Promise((resolve, reject) => {
+        User.find({}, function (err, user) {
+            if (err) reject(err);
+            resolve(user);
+        });
+    });
+}
+exports.findAllUser = findAllUser;
 
 let findUserEmail = (email) => {
     return new Promise((resolve, reject) => {
@@ -767,7 +778,7 @@ exports.profile = function (req, res) {
             if (User) {
                 FindOneUserDoc(req.params.id)
                     .then(Profile => {
-                       // console.log(Profile);
+                        // console.log(Profile);
                         User.password = undefined;
                         res.json({
                             value: true,
@@ -943,21 +954,21 @@ exports.update_avatar = function (req, res) {
                 if (req.body.id) {
                     FindOneUserDoc(req.body.id)
                         .then(
-                           UserDoc => {
-                              // console.log(UserDoc);
-                               if (UserDoc.accept !== undefined) {
-                                   if (UserDoc.accept) {
-                                       return res.json({
-                                           "response": false,
-                                           "value": "bạn không thể thay đổi ảnh đại diện vì thông tin này không được thay đổi"
-                                       });
-                                   } else {
-                                       DelAndUpdateAvatar(req.body.id, req.file.filename, res);
-                                   }
-                               } else {
-                                   DelAndUpdateAvatar(req.body.id, req.file.filename, res);
-                               }
-                           },
+                            UserDoc => {
+                                // console.log(UserDoc);
+                                if (UserDoc.accept !== undefined) {
+                                    if (UserDoc.accept) {
+                                        return res.json({
+                                            "response": false,
+                                            "value": "bạn không thể thay đổi ảnh đại diện vì thông tin này không được thay đổi"
+                                        });
+                                    } else {
+                                        DelAndUpdateAvatar(req.body.id, req.file.filename, res);
+                                    }
+                                } else {
+                                    DelAndUpdateAvatar(req.body.id, req.file.filename, res);
+                                }
+                            },
                             err => {
                                 return res.json({
                                     "response": false,
@@ -1048,7 +1059,7 @@ exports.update_userboth = (req, res) => {
         .then(
             UserDoc => {
                 if (UserDoc) {
-                        return updateUserDoc(req.body, res);
+                    return updateUserDoc(req.body, res);
                 } else {
                     return res.json({
                         "response": false,
@@ -1245,4 +1256,93 @@ exports.loginRequired = function (req, res, next) {
     } else {
         return res.status(401).json({message: 'Unauthorized user!'});
     }
+};
+
+let UpdateUserID = (obj) => {
+    return new Promise((resolve, reject) => {
+        User.findOneAndUpdate({_id: obj._id}, obj, {new: true}, function (err, User) {
+            if (err) return reject(err);
+            User.password = undefined;
+            resolve(User);
+        });
+    });
+}
+
+let UpdateUserSocketID = (obj) => {
+    return new Promise((resolve, reject) => {
+        User.findOneAndUpdate({socket_id: obj.socket_id}, obj, {new: true}, function (err, User) {
+            if (err) return reject(err);
+            User.password = undefined;
+            resolve(User);
+        });
+    });
+}
+
+let FindUserSocketID = (obj) => {
+    return new Promise((resolve, reject) => {
+        User.findOne({socket_id: socket_id, _id:obj._id }, function (err, User) {
+            if (err) return reject(err);
+            User.password = undefined;
+            resolve(User);
+        });
+    });
+}
+exports.FindUserSocketID = FindUserSocketID;
+
+exports.connect = function (io, socket, obj) {
+    console.log("user: ", obj);
+    // _id, device_token, isPlatform, offlineTime // không truyền lên
+    findUserId(obj._id)
+        .then(
+            user => {
+                if (user) {
+                    if (user.offlineTime > 0) {
+                        // người dùng đang online
+                        // gửi lệnh kit out người dùng hiện tại
+                        let socket_id_old = user.socket_id;
+                        if (socket_id_old !== "") {
+                            io.to(socket_id_old).emit("kit-out-user-connecting", user._id);
+                        }
+                        // update lại thông tin người dùng mới
+                        UpdateUserID(Object.assign(obj, {offlineTime: Date.now(),socket_id:socket.id }))
+                            .then(user => {
+                                if (user) {
+                                    socket.emit("connected", user._id);
+                                }
+                            }, err => console.log(err));
+                    } else {
+                        // người dùng đang offline, hoặc chưa có thiết bị nào kết nối
+                        // update thông tin người dùng mới
+                        UpdateUserID(Object.assign(obj, {offlineTime: Date.now()}))
+                            .then(user => {
+                                if (user) {
+                                    socket.broadcast.emit("new-user-connect", user._id);
+                                }
+                            }, err => console.log(err));
+                    }
+                } else {
+                    console.log("không tìm thấy user");
+                }
+            },
+            err => {
+                console.log(err);
+            }
+        )
+};
+
+exports.disconnect = function (socket) {
+    UpdateUserSocketID({
+        socket_id: socket.id,
+        offlineTime: 0,
+    }).then(
+        user => {
+            if (user) {
+            } else {
+                console.log("không tìm thấy user");
+            }
+        },
+        err => {
+            console.log(err);
+        }
+    )
 };
