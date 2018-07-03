@@ -1,0 +1,41 @@
+properties:
+  _id:
+    type: string
+  fullName:
+    type: string
+  countryCode:
+    type: integer
+  phone:
+    type: string
+  email:
+    type: string
+  password:
+    type: string
+  activeType:
+    type: integer
+  roleType:
+    type: integer
+  verifyType:
+    type: integer
+  avatarLink:
+    type: string
+  longitude:
+    type: number
+    format: double
+  latitude:
+    type: number
+    format: double
+  socket_id:
+    type: string
+  device_token:
+    type: string
+  isPlatform:
+    type: integer
+  offlineTime:
+    type: integer
+  create_at:
+    type: number
+    format: double
+  updated_at:
+    type: number
+    format: double

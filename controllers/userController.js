@@ -171,7 +171,7 @@ let SaveCoseVerify = (newCode) => {
 
 
 let Register = (newUser, res) => {
-    if (newUser.email !== undefined) {
+    if (newUser.email !== "") {
         findUserEmail(newUser.email)
             .then(
                 useremail => {
@@ -210,9 +210,24 @@ let Register = (newUser, res) => {
                 }
             )
     } else {
-        return res.send({
-            message: Messages,
-            value: 9
+        newUser.save(function (err, user) {
+            if (err) {
+                console.log(Messages, err);
+                return res.send({
+                    message: Messages,
+                    value: 3
+                });
+            } else {
+                if (user) {
+                    return SingIN(user, res);
+                }
+                else {
+                    return res.send({
+                        message: Messages,
+                        value: 2
+                    });
+                }
+            }
         });
     }
 }
@@ -352,7 +367,6 @@ exports.register = function (req, res) {
             .then(
                 user => {
                     if (user) {
-
                         if (user.activeType === 0) {
                             return res.json({
                                 value: 5,
@@ -374,7 +388,7 @@ exports.register = function (req, res) {
                 });
     }
 
-}
+};
 // gui lai code
 exports.send_code_again = function (req, res) {
     //lưu thông tin người dùng bảng chính

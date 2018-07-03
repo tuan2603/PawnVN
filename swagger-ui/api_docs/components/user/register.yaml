@@ -1,0 +1,74 @@
+#../components/service_comment/create.yaml
+tags:
+- User
+summary: tạo mới một tài khoảng cho người dùng
+description: ''
+operationId: addNewUser
+consumes:
+#- application/json
+- application/x-www-form-urlencoded
+produces:
+- application/json
+- application/x-www-form-urlencoded
+parameters:
+- name: "phone"
+  type: string
+  in: formData
+  description: "số điện thoại"
+  example: 0975227856
+  require: true
+- name: "countryCode"
+  type: integer
+  in: formData
+  description: "mã số điện thoại"
+  example: 84
+  require: true
+- name: "verifyType"
+  type: integer
+  description: "0: mail, 1 phone, 2 password"
+  in: formData
+  example: 1
+  require: true
+- name: "roleType"
+  type: integer
+  description: "1 user, 2 business , 0 admin"
+  in: formData
+  example: 1
+  require: true
+responses:
+  'true':
+    description: Đăng ký tài khoản thành công
+    schema:
+      $ref: 'register_true.yaml'
+  'false':
+    description: đăng ký tài khoản thất bại
+    schema:
+      type: object
+      properties:
+        1:
+          type: string
+          example: "Send mail or message code vefrify fail"
+        2:
+          type: string
+          example: "Register user error"
+        3:
+          type: string
+          example: "Find user fail"
+        4:
+          type: string
+          example: "User exits but not active"
+        5:
+          type: string
+          example: "Check mail code verify"
+        6:
+          type: string
+          example: "Check message code verify"
+        7:
+          type: string
+          example: "Send mail or message code vefrify fail"
+        8:
+          type: string
+          example: "Type password to sign in"
+        9:
+          type: string
+          example: "Email exists"

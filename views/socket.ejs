@@ -1,0 +1,51 @@
+<!-- views/profile.ejs -->
+<!doctype html>
+<html>
+<head>
+    <title>Node Authentication</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <style>
+        body {
+            padding-top: 80px;
+            word-wrap: break-word;
+        }
+
+        .borderbox {
+            border-top: 1px #3b465e solid;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="text-center">
+        <h1><span class="fa fa-anchor"></span> Socket Document</h1>
+        <a href="/swaggers" class="btn btn-default btn-sm">Api document</a>
+        <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+        <hr />
+    </div>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Method</th>
+            <th>Address</th>
+            <th>Params</th>
+            <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% sockets.forEach(function(socket,index) { %>
+        <tr class="active">
+            <td><%= index+1 %></td>
+            <td><%= socket.method %></td>
+            <td><%= socket.address %></td>
+            <td><%= socket.params %></td>
+            <td><%= socket.description %></td>
+        </tr>
+        <% }); %>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

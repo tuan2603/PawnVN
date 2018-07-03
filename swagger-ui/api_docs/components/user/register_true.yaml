@@ -1,0 +1,9 @@
+properties:
+  value:
+    type: integer
+    example: 7
+  message:
+    type: object
+  code:
+    type: integer
+    example: 1234

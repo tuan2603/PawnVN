@@ -1,0 +1,74 @@
+#../components/service_comment/create.yaml
+tags:
+- User
+summary: xác nhận tài khoản người dùng
+description: ''
+operationId: verifyUser
+consumes:
+#- application/json
+- application/x-www-form-urlencoded
+produces:
+- application/json
+- application/x-www-form-urlencoded
+parameters:
+- name: "phone"
+  type: string
+  in: formData
+  description: "số điện thoại"
+  example: 0975227856
+  require: true
+- name: "code"
+  type: integer
+  in: formData
+  description: "code xác nhận"
+  example: 1234
+  require: true
+- name: "verifyType"
+  type: integer
+  description: "0: mail, 1 phone, 2 password"
+  in: formData
+  example: 1
+  require: true
+- name: "roleType"
+  type: integer
+  description: "1 user, 2 business , 0 admin"
+  in: formData
+  example: 1
+  require: true
+responses:
+  'true':
+    description: xác nhận tài khoản thành công
+    schema:
+      $ref: "#/definitions/verify"
+  'false':
+    description: xác nhận tài khoản thất bại
+    schema:
+      type: object
+      properties:
+        1:
+          type: string
+          example: "Authentication failed. User not found."
+        2:
+          type: string
+          example: "Authentication failed. code not right."
+        3:
+          type: string
+          example: "Authentication failed. paramas not enought."
+        4:
+          type: string
+          example: "Authentication failed. User not active."
+        5:
+          type: string
+          example: "Authentication failed. password not right."
+definitions:
+  verify:
+    type: "object"
+    properties:
+      id:
+        type: "message"
+        example: 5b3bab15cf8bd01a8c9c6ac6
+      value:
+        type: "integer"
+      message:
+        type: "message"
+        example: "token beare"

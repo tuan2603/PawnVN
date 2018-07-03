@@ -539,7 +539,7 @@ exports.notify = (io, socket, obj) => {
                                             users => {
                                                 if (users) {
                                                     Async.forEachOf(users, function (usk, key, callback) {
-                                                        let distan = Distance.distance(usk.latitude, usk.longitude, user.latitude, user.longitude);
+                                                        let distan = Distance.distance(usk.latitude, usk.longitude, user.latitude, user.longitude,"K");
                                                         console.log(distan);
                                                         if (distan <= 10) {
                                                             // người dùng đang online

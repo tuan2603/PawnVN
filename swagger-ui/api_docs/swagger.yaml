@@ -31,3 +31,7 @@ paths:
     $ref: 'paths/category.yaml'
   '/api/auth/sign-in-pass-word':
     $ref: 'paths/login.yaml'
+  '/api/auth/register':
+    $ref: 'paths/register.yaml'
+  '/api/auth/verify':
+    $ref: 'paths/verify.yaml'
