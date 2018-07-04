@@ -43,6 +43,9 @@ module.exports = function (app) {
     app.route('/api/auth/register-web')
         .post(userHandles.register_old);
 
+    app.route('/api/auth/register-user-pass')
+        .post(userHandles.register_user_pass);
+
     app.route('/api/auth/sendsms')
         .post(userHandles.send_code_again);
 

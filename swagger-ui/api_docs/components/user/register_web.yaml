@@ -1,0 +1,75 @@
+#../components/service_comment/create.yaml
+tags:
+- User
+summary: tạo mới một tài khoản cho doanh nghiệp đăng nhập bằng password
+description: ''
+operationId: addNewBusinessPassword
+consumes:
+#- application/json
+- application/x-www-form-urlencoded
+produces:
+- application/json
+- application/x-www-form-urlencoded
+parameters:
+- name: "phone"
+  type: string
+  in: formData
+  description: "số điện thoại, bắt buộc nhập"
+  example: 0975227856
+  require: true
+- name: "countryCode"
+  type: integer
+  in: formData
+  description: " bắt buộc nhập"
+  example: 84
+  require: true
+- name: "email"
+  type: string
+  in: formData
+  description: " bắt buộc nhập"
+  example: a@gmail.com
+- name: "password"
+  type: string
+  in: formData
+  description: 'Minimum length 8,
+    Maximum length 100,
+    Must have uppercase letters,
+     Must have lowercase letters,
+     Must have digits,
+     Must have symbols, Should not have spaces'
+  require: true
+responses:
+  'true':
+    description: Đăng ký tài khoản thành công
+    schema:
+      $ref: '#/definitions/Order'
+  'false':
+    description: đăng ký tài khoản thất bại
+    schema:
+      type: object
+      properties:
+        1:
+          type: string
+          example: "password không đúng định dạng"
+        2:
+          type: string
+          example: "Email đã tồn tại"
+        3:
+          type: string
+          example: "Số điện thoại đã tồn tại"
+        4:
+          type: string
+          example: "Lối đăng ký"
+definitions:
+  Order:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+        example: 'Đăng ký thành công'
+      value:
+        type: "integer"
+        example: 0
+      code:
+        type: "integer"
+        example: 1234

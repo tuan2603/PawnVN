@@ -24,8 +24,6 @@ tags:
   description: Everything about User
 - name: Category Pawn
   description: Everything about category pawn
-- name: Banner Ads Display
-  description: Everything about Banner Ads Display
 paths:
   '/api/category':
     $ref: 'paths/category.yaml'
@@ -33,5 +31,9 @@ paths:
     $ref: 'paths/login.yaml'
   '/api/auth/register':
     $ref: 'paths/register.yaml'
+  '/api/auth/register-web':
+    $ref: 'paths/register_web.yaml'
+  '/api/auth/register-user-pass':
+    $ref: 'paths/register_user_pass.yaml'
   '/api/auth/verify':
     $ref: 'paths/verify.yaml'

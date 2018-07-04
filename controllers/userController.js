@@ -757,6 +757,92 @@ exports.register_old = function (req, res) {
     }
 }
 
+exports.register_user_pass = function (req, res) {
+    if (checkPass.validate(req.body.password)) {
+        findUserPhone(req.body.phone)
+            .then(
+                userphone => {
+                    if (!userphone) {
+                        let newUser = new User(req.body);
+                        newUser.verifyType = 1;
+                        newUser.roleType = 1;
+                        newUser.password = bcrypt.hashSync(req.body.password, saltRounds);
+                        newUser.save(function (err, user) {
+                            if (err) {
+                                console.log(err);
+                                return res.send({
+                                    message: 'Lối đăng ký',
+                                    value: 4
+                                });
+                            } else {
+                                if (user) {
+                                    let Verification = rn(options);
+                                    let newCode = new Code({
+                                        accountId: user._id,
+                                        phone: user.phone,
+                                        code: Verification,
+                                    });
+                                    SaveCoseVerify(newCode);
+                                    //gửi tin nhắn
+                                    // SendMessageVN(user.phoneb, Verification)
+                                    //     .then((repos) => {
+                                    //         return res.json({
+                                    //             value: 7,
+                                    //             message: Messages,
+                                    //             code: Verification
+                                    //         });
+                                    //     })
+                                    //     .catch(function (err) {
+                                    //         return res.json({
+                                    //             value: 1,
+                                    //             "message": Messages
+                                    //         });
+                                    //     });
+                                    //đăng ks thêm thông tin phụ
+                                    return res.send({
+                                        message: 'Đăng ký thành công',
+                                        value: 0,
+                                        code: Verification
+                                    });
+
+                                }
+                                else {
+                                    return res.send({
+                                        message: 'Lối đăng ký',
+                                        value: 4,
+                                    });
+                                }
+                            }
+                        });
+                    } else {
+                        return res.send({
+                            message: 'Số điện thoại đã tồn tại',
+                            value: 3
+                        });
+                    }
+                },
+                err => {
+                    return res.send({
+                        message: 'Số điện thoại đã tồn tại',
+                        value: 3
+                    });
+                }
+            );
+
+    } else {
+        return res.send({
+            value: 1,
+            message: 'Minimum length 8, ' +
+            'Maximum length 100, ' +
+            'Must have uppercase letters, ' +
+            'Must have lowercase letters, ' +
+            'Must have digits, ' +
+            'Must have symbols, ' +
+            'Should not have spaces'
+        });
+    }
+}
+
 exports.update_active = function (req, res) {
     User.findOneAndUpdate({email: req.params.email}, req.body, {new: true}, function (err, User) {
         if (err)
@@ -1231,7 +1317,7 @@ exports.sign_in = function (req, res) {
                 message: 'Tài khoản không tồn tại',
                 value: 2,
             })
-        } else if (user.activeType !== 2) {
+        } else if (user.activeType < 1) {
             return res.json({
                 message: 'Tài khoản chưa được xác thực',
                 value: 1,
@@ -1294,7 +1380,7 @@ let UpdateUserSocketID = (obj) => {
 
 let FindUserSocketID = (obj) => {
     return new Promise((resolve, reject) => {
-        User.findOne({socket_id: socket_id, _id:obj._id }, function (err, User) {
+        User.findOne({socket_id: socket_id, _id: obj._id}, function (err, User) {
             if (err) return reject(err);
             User.password = undefined;
             resolve(User);
@@ -1318,7 +1404,7 @@ exports.connect = function (io, socket, obj) {
                             io.to(socket_id_old).emit("kit-out-user-connecting", user._id);
                         }
                         // update lại thông tin người dùng mới
-                        UpdateUserID(Object.assign(obj, {offlineTime: Date.now(),socket_id:socket.id }))
+                        UpdateUserID(Object.assign(obj, {offlineTime: Date.now(), socket_id: socket.id}))
                             .then(user => {
                                 if (user) {
                                     socket.emit("connected", user._id);
