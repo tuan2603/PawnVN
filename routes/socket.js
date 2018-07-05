@@ -1,5 +1,6 @@
 'use strict';
-const socketIO = require('socket.io')
+const socketIO = require('socket.io');
+let sequenceNumberByClient = new Map();
 module.exports = function (server) {
     // function
     let User = require('../controllers/userController');
@@ -10,11 +11,14 @@ module.exports = function (server) {
     io.on('connection', socket => {
         // DANG KY NGUOI DUNG
         socket.on("register", function (data) {
-            let obj = JSON.parse(data);
+            sequenceNumberByClient.set(socket, socket.id);
+            console.log(data);
+            let obj = JSON.parse(JSON.stringify(data));
             if (obj) { User.connect(io, socket, obj);}
         });
         //nguoi dung offline
         socket.on("disconnect", function () {
+            sequenceNumberByClient.delete(socket);
             //khi nguoi dung ngat ket noi server
             User.disconnect(socket);
         });
@@ -25,3 +29,12 @@ module.exports = function (server) {
         });
     });
 };
+// sends each client its current sequence number
+setTimeout(() => {
+    for (const [client, sequenceNumber] of sequenceNumberByClient.entries()) {
+        console.dir(client);
+        client.emit("seq-num", sequenceNumber);
+    }
+    return;
+},1000);
+exports.sequenceNumberByClient = sequenceNumberByClient;

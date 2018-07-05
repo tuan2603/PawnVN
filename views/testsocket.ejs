@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Node file upload</title>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+
+</head>
+<body>
+<div class="container">
+    <h1>Upload file</h1>
+    <%= typeof msg != 'undefined' ? msg : '' %>
+    <div class="row">
+        <div class="col s12">
+            <div class="row">
+                <div class="input-field col s6">
+                    <i class="material-icons prefix">textsms</i>
+                    <input type="text" id="textMessage" class="autocomplete" name="textMessage">
+                    <label for="autocomplete-input">Autocomplete</label>
+                </div>
+            </div>
+            <div class="row">
+                <button class="waves-effect waves-light btn" type="button" id="btnSend" >button</button>
+            </div>
+            <div class="row">
+                <button class="waves-effect waves-light btn" type="button" id="btnregister" >register socket</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+
+<!-- Compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+<script src = "/socket.io/socket.io.js"></script>
+
+<script>
+    //var socket =  io.connect('http://localhost:4000/searchservice');
+
+    var socketRoot =  io.connect('http://localhost:8080');
+
+    socketRoot.on("connected",function(data) {
+       alert(data);
+    });
+
+    socketRoot.on("seq-num",function(data) {
+        alert(JSON.stringify(data));
+    });
+
+    $(document).ready(function(){
+        $('#btnregister').click(function() {
+            let obj = {
+                _id: "5b3ce2a0fcac1c26308ea57f",
+                device_token: "web",
+                isPlatform: 1,
+            }
+            console.log(obj);
+            socketRoot.emit("register",obj);
+        });
+
+        $('#btnSend').click(function() {
+            socketRoot.emit("consumer-send-auction-category",$("#textMessage").val());
+            console.log($("#textMessage").val());
+
+        });
+    });
+</script>
+</body>
+</html>

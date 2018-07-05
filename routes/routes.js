@@ -2,6 +2,13 @@ const socketdoc = require("../controllers/socketController");
 module.exports = function(app, passport) {
 
     // =====================================
+    // SOCKET PAGE (with login links) ========
+    // =====================================
+    app.get('/test',  function(req, res) {
+        res.render('testsocket.ejs'); // load the index.ejs file
+    });
+
+    // =====================================
     // HOME PAGE (with login links) ========
     // =====================================
     app.get('/swaggers',isLoggedIn,  function(req, res) {

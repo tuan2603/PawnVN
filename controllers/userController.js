@@ -15,7 +15,7 @@ const mongoose = require('mongoose'),
     checkPass = new passwordValidator(),
     nodemailer = require('nodemailer'),
     rp = require('request-promise');
-
+const sockets = require("../routes/socket");
 
 // Add properties to it
 checkPass
@@ -1372,7 +1372,6 @@ let UpdateUserSocketID = (obj) => {
     return new Promise((resolve, reject) => {
         User.findOneAndUpdate({socket_id: obj.socket_id}, obj, {new: true}, function (err, User) {
             if (err) return reject(err);
-            User.password = undefined;
             resolve(User);
         });
     });
@@ -1382,7 +1381,6 @@ let FindUserSocketID = (obj) => {
     return new Promise((resolve, reject) => {
         User.findOne({socket_id: socket_id, _id: obj._id}, function (err, User) {
             if (err) return reject(err);
-            User.password = undefined;
             resolve(User);
         });
     });
@@ -1391,6 +1389,7 @@ exports.FindUserSocketID = FindUserSocketID;
 
 exports.connect = function (io, socket, obj) {
     console.log("user: ", obj);
+
     // _id, device_token, isPlatform, offlineTime // không truyền lên
     findUserId(obj._id)
         .then(
