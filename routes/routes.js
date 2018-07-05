@@ -4,8 +4,14 @@ module.exports = function(app, passport) {
     // =====================================
     // SOCKET PAGE (with login links) ========
     // =====================================
-    app.get('/test',  function(req, res) {
+    app.get('/testclient',  function(req, res) {
         res.render('testsocket.ejs'); // load the index.ejs file
+    });
+    // =====================================
+    // SOCKET PAGE (with login links) ========
+    // =====================================
+    app.get('/testbusiness',  function(req, res) {
+        res.render('testbusiness.ejs'); // load the index.ejs file
     });
 
     // =====================================

@@ -11,11 +11,13 @@ const Pawn = require('../models/pawnModel'),
     User = require("../models/userModel"),
     UserCrt = require("../controllers/userController"),
     Ios = require("../controllers/notifyIOSController"),
+    clients = require("../controllers/clientController"),
     Distance = require("../ultils/distance"),
     path = require('path'),
     multer = require('multer'),
     fs = require('fs'),
     Async = require('async');
+
 
 /*
 * update Pawn dựa theo chính id của pawn đó
@@ -505,6 +507,7 @@ let createNewPawnDoc = (obj) => {
             pawn => {
                 if (pawn) {
                     pawn.status = undefined;
+                    send_notify_bussiness(pawn);
                     return res.json({
                         "response": true,
                         "value": pawn
@@ -525,6 +528,56 @@ let createNewPawnDoc = (obj) => {
         )
 };
 
+let send_notify_bussiness = (pawn)=>{
+    UserCrt.findUserId(pawn.accountID)
+        .then(
+            user => {
+                if (user) {
+                UserCrt.findAllBusiness()
+                    .then(
+                        users => {
+                            if (users.length>0) {
+                                users.forEach((usk, index) => {
+                                    let distan = Distance.distance(usk.latitude, usk.longitude, pawn.latitude, pawn.longitude,"K");
+                                    console.log(distan);
+                                    if (distan <= 10) {
+                                        // người dùng đang online
+                                        if (usk.socket_id !== "" && usk.offlineTime > 0) {
+                                            clients.find_one_socket_id(usk.socket_id)
+                                                .then(client=>{
+                                                    client.emit("notify-pawn-c-b", pawn._id);
+                                                },err=>{console.log(err)});
+                                        } else if(usk.isPlatform === 0 && usk.device_token !== "") {
+                                            // người dùng offline, kiểm tra người dùng có dùng ios không
+                                            Ios.sendNotifyIOS({
+                                                device_token:usk.device_token,
+                                                countMes:1,
+                                                content_text:"Có tin người đăng đấu giá "+pawn._id,
+                                            });
+                                        }
+                                    }
+                                });
+                            } else {
+                                // không tìm thấy người dùng, tin ảo
+                                clients.find_one_socket_id(user.socket_id)
+                                    .then(client=>{
+                                        client.emit("notifited", false);
+                                    },err=>{console.log(err)});
+                            }
+                        },
+                        err => {
+                            console.log(err);
+                        }
+                    );
+                }
+            },
+            err => {
+                console.log(err);
+            }
+        );
+
+}
+
 exports.notify = (io, socket, obj) => {
     UserCrt.FindUserSocketID({socket_id: socket.id, _id: obj.accountID})
         .then(
@@ -534,10 +587,10 @@ exports.notify = (io, socket, obj) => {
                         .then(
                             pawn => {
                                 if (pawn) {
-                                    UserCrt.findAllUser()
+                                    UserCrt.findAllBusiness()
                                         .then(
                                             users => {
-                                                if (users) {
+                                                if (users.length>0) {
                                                     Async.forEachOf(users, function (usk, key, callback) {
                                                         let distan = Distance.distance(usk.latitude, usk.longitude, user.latitude, user.longitude,"K");
                                                         console.log(distan);

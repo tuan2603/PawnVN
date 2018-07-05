@@ -15,7 +15,6 @@ const mongoose = require('mongoose'),
     checkPass = new passwordValidator(),
     nodemailer = require('nodemailer'),
     rp = require('request-promise');
-const sockets = require("../routes/socket");
 
 // Add properties to it
 checkPass
@@ -153,6 +152,16 @@ let findAllUser = () => {
     });
 }
 exports.findAllUser = findAllUser;
+
+let findAllBusiness = () => {
+    return new Promise((resolve, reject) => {
+        User.find({roleType:2}, function (err, user) {
+            if (err) reject(err);
+            resolve(user);
+        });
+    });
+}
+exports.findAllBusiness = findAllBusiness;
 
 let findUserEmail = (email) => {
     return new Promise((resolve, reject) => {
@@ -1388,8 +1397,7 @@ let FindUserSocketID = (obj) => {
 exports.FindUserSocketID = FindUserSocketID;
 
 exports.connect = function (io, socket, obj) {
-    console.log("user: ", obj);
-
+    //console.log("user: ", obj);
     // _id, device_token, isPlatform, offlineTime // không truyền lên
     findUserId(obj._id)
         .then(

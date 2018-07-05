@@ -1,17 +1,17 @@
 'use strict';
 const socketIO = require('socket.io');
+const User = require('../controllers/userController');
+const Pawn = require('../controllers/pawnController');
 let sequenceNumberByClient = new Map();
 module.exports = function (server) {
     // function
-    let User = require('../controllers/userController');
-    let Pawn = require('../controllers/pawnController');
     // This creates our socket using the instance of the server
     const io = socketIO(server);
     // This is what the socket.io syntax is like, we will work this later
     io.on('connection', socket => {
+        sequenceNumberByClient.set(socket, socket.id);
         // DANG KY NGUOI DUNG
         socket.on("register", function (data) {
-            sequenceNumberByClient.set(socket, socket.id);
             console.log(data);
             let obj = JSON.parse(JSON.stringify(data));
             if (obj) { User.connect(io, socket, obj);}
