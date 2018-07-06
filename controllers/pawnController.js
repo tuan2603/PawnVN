@@ -11,14 +11,12 @@ const Pawn = require('../models/pawnModel'),
     User = require("../models/userModel"),
     UserCrt = require("../controllers/userController"),
     Ios = require("../controllers/notifyIOSController"),
-    clients = require("../controllers/clientController"),
     Distance = require("../ultils/distance"),
     path = require('path'),
     multer = require('multer'),
     fs = require('fs'),
     Async = require('async');
-
-
+var sockets = require('socket.io-client')('http://localhost:8080');
 /*
 * update Pawn dựa theo chính id của pawn đó
 * */
@@ -377,7 +375,7 @@ exports.insert_image = function (req, res) {
                                             }
                                         )
                                     } else {
-                                        return createNewPawn(req.body, req.file.filename);
+                                        return createNewPawn(req.body, req.file.filename,res);
                                     }
                                 },
                                 err => {
@@ -389,7 +387,7 @@ exports.insert_image = function (req, res) {
                             );
 
                     } else {
-                        return createNewPawn(req.body, req.file.filename);
+                        return createNewPawn(req.body, req.file.filename,res);
                     }
 
                 } else {
@@ -409,7 +407,7 @@ exports.insert_image = function (req, res) {
     });
 };
 
-let createNewPawn = (obj, filename) => {
+let createNewPawn = (obj, filename,res) => {
     createPawn({
         accountID: obj.accountID,
         pawn_image: filename,
@@ -477,7 +475,7 @@ exports.insert_doc = function (req, res) {
                                 }
                             });
                         } else {
-                            return createNewPawnDoc(req.body);
+                            return createNewPawnDoc(req.body,res);
                         }
                     },
                     err => {
@@ -489,7 +487,7 @@ exports.insert_doc = function (req, res) {
                 );
 
         } else {
-            return createNewPawnDoc(req.body);
+            return createNewPawnDoc(req.body,res);
         }
 
     } else {
@@ -501,7 +499,7 @@ exports.insert_doc = function (req, res) {
 
 };
 
-let createNewPawnDoc = (obj) => {
+let createNewPawnDoc = (obj,res) => {
     createPawn(obj)
         .then(
             pawn => {
@@ -529,53 +527,7 @@ let createNewPawnDoc = (obj) => {
 };
 
 let send_notify_bussiness = (pawn)=>{
-    UserCrt.findUserId(pawn.accountID)
-        .then(
-            user => {
-                if (user) {
-                UserCrt.findAllBusiness()
-                    .then(
-                        users => {
-                            if (users.length>0) {
-                                users.forEach((usk, index) => {
-                                    let distan = Distance.distance(usk.latitude, usk.longitude, pawn.latitude, pawn.longitude,"K");
-                                    console.log(distan);
-                                    if (distan <= 10) {
-                                        // người dùng đang online
-                                        if (usk.socket_id !== "" && usk.offlineTime > 0) {
-                                            clients.find_one_socket_id(usk.socket_id)
-                                                .then(client=>{
-                                                    client.emit("notify-pawn-c-b", pawn._id);
-                                                },err=>{console.log(err)});
-                                        } else if(usk.isPlatform === 0 && usk.device_token !== "") {
-                                            // người dùng offline, kiểm tra người dùng có dùng ios không
-                                            Ios.sendNotifyIOS({
-                                                device_token:usk.device_token,
-                                                countMes:1,
-                                                content_text:"Có tin người đăng đấu giá "+pawn._id,
-                                            });
-                                        }
-                                    }
-                                });
-                            } else {
-                                // không tìm thấy người dùng, tin ảo
-                                clients.find_one_socket_id(user.socket_id)
-                                    .then(client=>{
-                                        client.emit("notifited", false);
-                                    },err=>{console.log(err)});
-                            }
-                        },
-                        err => {
-                            console.log(err);
-                        }
-                    );
-                }
-            },
-            err => {
-                console.log(err);
-            }
-        );
-
+    sockets.emit("notify-pawn-c-b", pawn);
 }
 
 exports.notify = (io, socket, obj) => {
@@ -596,6 +548,7 @@ exports.notify = (io, socket, obj) => {
                                                         console.log(distan);
                                                         if (distan <= 10) {
                                                             // người dùng đang online
+                                                            console.log(usk);
                                                             if (usk.socket_id !== "" && usk.offlineTime > 0) {
                                                                 io.to(usk.socket_id).emit("notify-pawn-c-b", pawn._id);
                                                             } else if(usk.isPlatform === 0 && usk.device_token !== "") {

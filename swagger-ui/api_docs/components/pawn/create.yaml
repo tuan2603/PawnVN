@@ -1,0 +1,87 @@
+#../components/service_comment/create.yaml
+tags:
+- Pawnvn
+security:
+- Bearer: []
+summary: Add a new Pawn info or update
+description: ''
+operationId: addNewPawnDoc
+consumes:
+#- application/json
+- application/x-www-form-urlencoded
+produces:
+- application/json
+parameters:
+- name: "accountID"
+  type: string
+  description: id người đăng tin
+  required: true
+  in: formData
+- name: "id"
+  type: string
+  in: formData
+  description: id người đăng tin, có id là update thông tin, không có là đăng tin mới
+- name: "name"
+  type: string
+  description: name
+  required: true
+  in: formData
+- name: "adress"
+  type: string
+  in: formData
+  required: true
+  description: địa chỉ
+- name: "price"
+  type: number
+  description: giá đấu ban đầu
+  required: true
+  in: formData
+- name: "time_out"
+  type: number
+  in: formData
+  required: true
+  description: thời gian hết hạn đấu giá
+- name: "date_time"
+  type: number
+  description: thời hạn
+  required: true
+  in: formData
+- name: "timer"
+  type: number
+  in: formData
+  required: true
+  description: thời gian hẹn gặp
+- name: "longitude"
+  type: number
+  in: formData
+  required: true
+  description: kinh độ
+- name: "latitude"
+  type: number
+  in: formData
+  required: true
+  description: vĩ độ
+- name: "descriptions"
+  type: number
+  in: formData
+  required: true
+  description: mô tả sản phẩm đấu giá
+responses:
+  'true':
+    description: insert success
+    schema:
+      $ref: 'pawn_model.yaml'
+  'false':
+    description: Create service banner fail
+    schema:
+      type: "string"
+      example: "value: ...."
+definitions:
+ Login:
+  type: object
+  properties:
+   value:
+    type: string
+   label:
+    type: string
+

@@ -15,7 +15,6 @@ const mongoose = require('mongoose'),
     checkPass = new passwordValidator(),
     nodemailer = require('nodemailer'),
     rp = require('request-promise');
-
 // Add properties to it
 checkPass
     .is().min(8)                                    // Minimum length 8

@@ -22,11 +22,11 @@ securityDefinitions:
 tags:
 - name: User
   description: Everything about User
+- name: Pawnvn
+  description: Everything about Pawnvn
 - name: Category Pawn
   description: Everything about category pawn
 paths:
-  '/api/category':
-    $ref: 'paths/category.yaml'
   '/api/auth/sign-in-pass-word':
     $ref: 'paths/login.yaml'
   '/api/auth/register':
@@ -37,3 +37,9 @@ paths:
     $ref: 'paths/register_user_pass.yaml'
   '/api/auth/verify':
     $ref: 'paths/verify.yaml'
+  '/api/pawn/image':
+    $ref: 'paths/pawn_image.yaml'
+  '/api/pawn/doc':
+    $ref: 'paths/pawn.yaml'
+  '/api/category':
+      $ref: 'paths/category.yaml'

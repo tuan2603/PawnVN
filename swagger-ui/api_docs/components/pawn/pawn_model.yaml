@@ -1,0 +1,48 @@
+properties:
+  _id:
+    type: string
+  accountID:
+    type: string
+    example: _id người đăng
+  name:
+    type: string
+    example: // tên đồ vật đấu giá
+  adress:
+    type: string
+    example: // địa chỉ
+  pawn_image:
+    type: string
+    example: //hình ảnh sản phẩm đấu giá
+  categorizeID:
+    type: string
+    example: // _id loại, nhóm sản phẩm
+  price:
+    type: number
+    example: // giá đấu ban đầu
+  status:
+    type: string
+    example: //1 chờ dđấu giá, 2 đã đấu giá
+  time_out:
+    type: string
+    example: //thời gian hết hạn đấu giá
+  date_time:
+    type: string
+    example: // thời hạn
+  timer:
+    type: string
+    example: //thời gian hẹn gặp
+  longitude:
+    type: string
+    example: //kinh độ
+  latitude:
+    type: string
+    example: //vĩ độ
+  examples:
+    type: string
+    example: //mô tả sản phẩm đấu giá
+  created_at:
+    type: number
+    format: double
+  updated_at:
+    type: number
+    format: double
