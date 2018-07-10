@@ -1,0 +1,41 @@
+#../components/service_comment/create.yaml
+tags:
+- User
+summary: get lại code nếu chưa nhận được code
+description: ''
+operationId: getCodeUser
+consumes:
+#- application/json
+- application/x-www-form-urlencoded
+produces:
+- application/json
+- application/x-www-form-urlencoded
+parameters:
+- name: "phone"
+  type: string
+  in: formData
+  description: "số điện thoại"
+  example: 0975227856
+  require: true
+responses:
+  'true':
+    description: xác nhận tài khoản thành công
+    schema:
+      $ref: "#/definitions/code"
+  'false':
+    description: xác nhận tài khoản thất bại
+    schema:
+      type: string
+      example: "..."
+definitions:
+  code:
+    type: "object"
+    properties:
+      code:
+        type: "string"
+        example: 1234
+      value:
+        type: "integer"
+      message:
+        type: "string"
+        example: "...."

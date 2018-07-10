@@ -1,0 +1,23 @@
+tags:
+- "User"
+security:
+- Bearer: []
+summary: "get user info follow by id"
+description: "trả về thông tin của một người dùng"
+operationId: "getUserById"
+produces:
+- "application/xml"
+- "application/json"
+parameters:
+- name: "id"
+  in: "path"
+  description: "ID of user"
+  required: true
+  type: "string"
+responses:
+  true:
+    description: "successful operation"
+    schema:
+      $ref: "user_model.yaml"
+  false:
+    description: "Invalid ID supplied"

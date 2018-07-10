@@ -157,23 +157,16 @@ exports.get_one = function (req, res) {
 * dùng lệnh unlinkSync để xóa image
 * */
 let deleteImage = (body) => {
-    return new Promise((resolve, reject) => {
-        User.findOne({_id: body.accountID}, function (err, user) {
-            if (err) console.log(err);
-            if (user) {
-                Purchase.findOne({_id: body.id}, function (err, shipping) {
-                    if (err) reject(err);
-                    if (shipping) {
-                        try {
-                            fs.unlinkSync(uploadDir + user.phone + "/" + shipping.purchase_image);
-                            resolve(shipping);
-                        } catch (err) {
-                            resolve(true);
-                        }
-                    }
-                })
+    Purchase.findOne({_id: body.id}, function (err, shipping) {
+        if (err) reject(err);
+        if (shipping) {
+            try {
+                fs.unlinkSync(uploadDir + "/" + shipping.purchase_image);
+                resolve(shipping);
+            } catch (err) {
+                resolve(true);
             }
-        })
+        }
     })
 }
 
@@ -184,17 +177,12 @@ let deleteImage = (body) => {
 * dựa và filename chúng ta có tên file cần xóa
 * dùng lệnh unlinkSync để xóa image
 * */
-let deleteImageNew = (body, filename) => {
-    User.findOne({_id: body.accountID}, function (err, user) {
-        if (err) console.log(err);
-        if (user) {
-            try {
-                fs.unlinkSync(uploadDir + user.phone + "/" + filename);
-            } catch (err) {
-                console.log(err);
-            }
-        }
-    })
+let deleteImageNew = (filename) => {
+    try {
+        fs.unlinkSync(uploadDir + filename);
+    } catch (err) {
+        console.log(err);
+    }
 };
 
 /*
@@ -320,13 +308,14 @@ exports.insert_image = function (req, res) {
         } else {
             //console.log(req.file);
             if (req.file) {
+                let url_image = req.user.phone + "/" + req.file.filename;
                 if (req.body.accountID) {
                     if (req.body.id) {
                         FindOnePurchase(req.body.id)
                             .then(
                                 purchase => {
                                     if (purchase) {
-                                        DelAndUpdateImange(req.body, req.file.filename).then(
+                                        DelAndUpdateImange(req.body, url_image).then(
                                             Purchase => {
                                                 if (Purchase) {
                                                     return res.json({
@@ -334,7 +323,7 @@ exports.insert_image = function (req, res) {
                                                         "value": Purchase
                                                     });
                                                 } else {
-                                                    deleteImageNew(req.body, req.file.filename);
+                                                    deleteImageNew(url_image);
                                                     return res.json({
                                                         "response": false,
                                                         "value": "Tạo lưu data không thành công"
@@ -349,11 +338,11 @@ exports.insert_image = function (req, res) {
                                             }
                                         )
                                     } else {
-                                        return createNewPurchase(req.body, req.file.filename);
+                                        return createNewPurchase(req.body, url_image);
                                     }
                                 },
                                 err => {
-                                    deleteImageNew(req.body, req.file.filename);
+                                    deleteImageNew(url_image);
                                     return res.json({
                                         "response": false,
                                         "value": err
@@ -362,10 +351,10 @@ exports.insert_image = function (req, res) {
                             );
 
                     } else {
-                        return createNewPurchase(req.body, req.file.filename);
+                        return createNewPurchase(req.body, url_image);
                     }
                 } else {
-                    deleteImageNew(req.body, req.file.filename);
+                    deleteImageNew( url_image);
                     return res.json({
                         "response": false,
                         "value": "Tạo lưu data không thành công"
@@ -394,7 +383,7 @@ let createNewPurchase = (obj, filename) => {
                         "value": Purchase
                     });
                 } else {
-                    deleteImageNew(obj, filename);
+                    deleteImageNew( filename);
                     return res.json({
                         "response": false,
                         "value": "Tạo lưu data không thành công"

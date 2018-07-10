@@ -4,6 +4,7 @@ const UserSchema = new mongoose.Schema({
     fullName: {
         type: String,
         trim: true,
+        default: "",
     },
     countryCode: {
         type: Number,
@@ -44,7 +45,6 @@ const UserSchema = new mongoose.Schema({
     },
     socket_id: { //id socket
         type: String,
-        lowercase: true,
         default:"",
     },
     device_token: { //token dien thoai

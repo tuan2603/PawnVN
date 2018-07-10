@@ -62,7 +62,7 @@ parameters:
   required: true
   description: vĩ độ
 - name: "descriptions"
-  type: number
+  type: string
   in: formData
   required: true
   description: mô tả sản phẩm đấu giá

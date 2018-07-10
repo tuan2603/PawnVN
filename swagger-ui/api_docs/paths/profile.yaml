@@ -1,0 +1,3 @@
+# /paths/category.yaml
+get:
+  $ref: '../components/user/profile.yaml'

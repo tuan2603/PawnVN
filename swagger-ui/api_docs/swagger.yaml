@@ -29,17 +29,23 @@ tags:
 paths:
   '/api/auth/sign-in-pass-word':
     $ref: 'paths/login.yaml'
-  '/api/auth/register':
-    $ref: 'paths/register.yaml'
   '/api/auth/register-web':
     $ref: 'paths/register_web.yaml'
   '/api/auth/register-user-pass':
     $ref: 'paths/register_user_pass.yaml'
+  '/api/auth/sendsms':
+    $ref: 'paths/get_code.yaml'
   '/api/auth/verify':
     $ref: 'paths/verify.yaml'
+  '/api/auth/profile/{id}':
+    $ref: 'paths/profile.yaml'
+  '/api/auth/doccumentboth':
+    $ref: 'paths/update_user.yaml'
   '/api/pawn/image':
     $ref: 'paths/pawn_image.yaml'
   '/api/pawn/doc':
     $ref: 'paths/pawn.yaml'
+  '/api/pawn/list':
+    $ref: 'paths/pawn_list.yaml'
   '/api/category':
       $ref: 'paths/category.yaml'

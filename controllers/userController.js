@@ -1,6 +1,7 @@
 'use strict';
 const mongoose = require('mongoose'),
     bcrypt = require('bcryptjs'),
+    async = require('async'),
     saltRounds = 10,
     jwt = require('jsonwebtoken'),
     User = mongoose.model('User'),
@@ -32,7 +33,7 @@ const options = {
     min: 1000,
     max: 9999
     , integer: true
-}
+};
 
 const Nexmo = require('nexmo');
 const nexmo = new Nexmo({
@@ -154,7 +155,7 @@ exports.findAllUser = findAllUser;
 
 let findAllBusiness = () => {
     return new Promise((resolve, reject) => {
-        User.find({roleType:2}, function (err, user) {
+        User.find({roleType: 2}, function (err, user) {
             if (err) reject(err);
             resolve(user);
         });
@@ -174,6 +175,24 @@ let findUserEmail = (email) => {
 let SaveCoseVerify = (newCode) => {
     newCode.save(function (err, user) {
         if (err) console.log(err);
+    });
+};
+
+let find_one_user_doc_id = (accountID) => {
+    return new Promise((resolve, reject) => {
+        UserDoc.findOne({accountID: accountID}, function (err, user) {
+            if (err) reject(err);
+            resolve(user);
+        });
+    });
+}
+
+let createUserDoc = (userDoc) => {
+    return new Promise((resolve, reject) => {
+        userDoc.save(function (err, user) {
+            if (err) return reject(err);
+            resolve(user);
+        });
     });
 }
 
@@ -351,52 +370,7 @@ let Messages = {
     9: "Email exists",
 };
 
-exports.register = function (req, res) {
-    //lưu thông tin người dùng bảng chính
-    let newUser = new User(req.body);
-    if (req.body.roleType === 2) {
-        findUserPhone(req.body.phone)
-            .then(
-                user => {
-                    if (user) {
-                        return SingIN(newUser, res);
-                    } else {
-                        return RegisterWeb(newUser, res, req);
-                    }
-                },
-                err => {
-                    return res.status(400).send({
-                        message: Messages,
-                        value: 4
-                    });
-                });
-    } else {
-        findUserBody(req.body)
-            .then(
-                user => {
-                    if (user) {
-                        if (user.activeType === 0) {
-                            return res.json({
-                                value: 5,
-                                "message": Messages
-                            });
-                        } else {
-                            SingIN(user, res);
-                        }
 
-                    } else {
-                        return Register(newUser, res);
-                    }
-                },
-                err => {
-                    return res.status(400).send({
-                        message: Messages,
-                        value: 4
-                    });
-                });
-    }
-
-};
 // gui lai code
 exports.send_code_again = function (req, res) {
     //lưu thông tin người dùng bảng chính
@@ -472,6 +446,7 @@ exports.verify = function (req, res) {
                                             phone: user.phone,
                                             create_at: user.create_at,
                                             email: user.email,
+                                            fullName: user.fullName,
                                             _id: user._id
                                         },
                                         config.secret),
@@ -519,6 +494,7 @@ exports.verify = function (req, res) {
                                                         phone: user.phone,
                                                         create_at: user.create_at,
                                                         email: user.email,
+                                                        fullName: user.fullName,
                                                         _id: user._id
                                                     }, config.secret),
                                                     value: 0,
@@ -595,6 +571,7 @@ exports.verify_web = function (req, res) {
                                                             phone: useOne.phone,
                                                             create_at: useOne.create_at,
                                                             email: useOne.email,
+                                                            fullName: user.fullName,
                                                             _id: useOne._id
                                                         }, config.secret),
                                                         value: 0,
@@ -609,6 +586,7 @@ exports.verify_web = function (req, res) {
                                                     phone: user.phone,
                                                     create_at: user.create_at,
                                                     email: user.email,
+                                                    fullName: user.fullName,
                                                     _id: user._id
                                                 }, config.secret),
                                                 value: 0,
@@ -766,6 +744,15 @@ exports.register_old = function (req, res) {
 }
 
 exports.register_user_pass = function (req, res) {
+    if (req.body.phone === undefined ||
+        req.body.password === undefined ||
+        req.body.countryCode === undefined ||
+        req.body.fullName === undefined) {
+        return res.send({
+            message: 'Truyền thiếu biến',
+            value: 5
+        });
+    }
     if (checkPass.validate(req.body.password)) {
         findUserPhone(req.body.phone)
             .then(
@@ -1140,7 +1127,7 @@ exports.update_userdoc = (req, res) => {
                     if (UserDoc.accept) {
                         return res.json({
                             "response": false,
-                            "value": "bạn không thể thay đổi ảnh đại diện vì thông tin này không được thay đổi"
+                            "value": "Thông tin đã được duyệt bạn không được thay đổi"
                         });
                     } else {
                         return updateUserDoc(req.body, res);
@@ -1165,14 +1152,25 @@ exports.update_userdoc = (req, res) => {
 exports.update_userboth = (req, res) => {
     FindOneUserDoc(req.body.id)
         .then(
-            UserDoc => {
-                if (UserDoc) {
+            User => {
+                if (User) {
                     return updateUserDoc(req.body, res);
                 } else {
-                    return res.json({
-                        "response": false,
-                        "value": "Lỗi tìm thông tin phụ"
-                    });
+                    //không có user phụ, tạo mới
+                    let user = new UserDoc(req.body);
+                    user.accountID = req.body.id;
+                    createUserDoc(user)
+                        .then(
+                            userdoc =>{
+                                return updateUserDoc(req.body, res);
+                            },
+                            err=>{
+                                return res.json({
+                                    "response": false,
+                                    "value": err,
+                                });
+                            }
+                        );
                 }
             },
             err => {
@@ -1192,15 +1190,49 @@ let updateUserDoc = (obj, res) => {
                 value: false
             });
         if (!UserD) {
-            return res.send({
-                response: "khong tim thay",
-                value: false
-            });
+            findUserId(obj.id)
+                .then(Profile => {
+                    if (Profile) {
+                        User.findOneAndUpdate({_id: obj.id}, obj, {new: true}, function (err, UserC) {
+                            if (err)  return res.json({
+                                value: false,
+                                response: err,
+                            });
+                            if (UserC) {
+                                UserC.password = undefined;
+                                return res.json({
+                                    value: true,
+                                    response: UserC
+                                });
+                            } else {
+                                Profile.password = undefined;
+                                return res.json({
+                                    value: true,
+                                    response:Profile
+                                });
+                            }
+                        });
+                    } else {
+                        return res.send({
+                            response: "khong tim thay",
+                            value: false
+                        });
+                    }
+                }, err => {
+                    return res.send({
+                        response: err,
+                        value: false
+                    });
+                });
         } else {
             findUserId(UserD.accountID)
                 .then(Profile => {
                     if (Profile) {
                         User.findOneAndUpdate({_id: UserD.accountID}, obj, {new: true}, function (err, UserC) {
+                            if (err)  return res.json({
+                                value: false,
+                                response:err,
+                            });
                             if (UserC) {
                                 UserC.password = undefined;
                                 return res.json({
@@ -1308,12 +1340,15 @@ exports.update_identityCardFront = function (req, res) {
 
 
 exports.sign_in = function (req, res) {
+    if (req.body.phone === undefined ||
+        req.body.password === undefined) {
+        return res.send({
+            message: 'Truyền thiếu biến',
+            value: 6
+        });
+    }
     User.findOne({
-        $or: [{
-            phone: req.body.phone
-        }, {
-            email: req.body.email
-        }]
+        phone: req.body.phone
     }, function (err, user) {
         if (err) {
             return res.json({
@@ -1325,16 +1360,16 @@ exports.sign_in = function (req, res) {
                 message: 'Tài khoản không tồn tại',
                 value: 2,
             })
-        } else if (user.activeType < 1) {
-            return res.json({
-                message: 'Tài khoản chưa được xác thực',
-                value: 1,
-            })
         } else if (user.password !== undefined) {
             if (!comparePassword(req.body.password, user)) {
                 return res.json({
                     message: 'Mật khẩu không đúng.',
                     value: 3,
+                })
+            } else if (user.activeType < 1) {
+                return res.json({
+                    message: 'Tài khoản chưa được xác thực',
+                    value: 1,
                 })
             } else {
                 return res.json({
@@ -1342,6 +1377,7 @@ exports.sign_in = function (req, res) {
                         phone: user.phone,
                         create_at: user.create_at,
                         email: user.email,
+                        fullName: user.fullName,
                         _id: user._id
                     }, config.secret),
                     value: 0,
@@ -1451,4 +1487,36 @@ exports.disconnect = function (socket) {
             console.log(err);
         }
     )
+};
+
+exports.get_all_business = function (req, res) {
+    findAllBusiness()
+        .then(users => {
+            let alluser = [];
+            async.forEachOf(users, function (user, key, callback) {
+                find_one_user_doc_id(user._id)
+                    .then(doc => {
+                            alluser.push(Object.assign(JSON.parse(JSON.stringify(user)), JSON.parse(JSON.stringify(doc))));
+                            callback();
+                        },
+                        err => {
+                            callback(err);
+                        }
+                    );
+            }, function (err) {
+                if (err) return res.json({
+                    response: false,
+                    value: err,
+                });
+                return res.json({
+                    response: true,
+                    value: alluser,
+                })
+            });
+        }, err => {
+            return res.json({
+                response: false,
+                value: err,
+            })
+        })
 };

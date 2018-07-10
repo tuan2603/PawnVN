@@ -16,7 +16,7 @@ const Pawn = require('../models/pawnModel'),
     multer = require('multer'),
     fs = require('fs'),
     Async = require('async');
-var sockets = require('socket.io-client')('http://localhost:8080');
+
 /*
 * update Pawn dựa theo chính id của pawn đó
 * */
@@ -37,7 +37,9 @@ exports.update_pawn_obj = UpdatePawnObj;
 * */
 let FindPawnAll = () => {
     return new Promise((resolve, reject) => {
-        Pawn.find({status: {'$ne': 1}}, function (err, Pawn) {
+        Pawn.find({
+            //status: {'$ne': 1}
+        }, function (err, Pawn) {
             if (err) return reject(err);
             resolve(Pawn);
         });
@@ -119,6 +121,12 @@ let createPawn = (obj) => {
 * params:id <=> _id user
 * */
 exports.get_list = function (req, res) {
+    if (req.body.id === undefined) {
+        return res.json({
+            value: "Not find id",
+            response: false
+        });
+    }
     FindPawn(req.body.id)
         .then(
             Pawn => {
@@ -183,20 +191,15 @@ exports.get_one = function (req, res) {
 * */
 let deleteImage = (body) => {
     return new Promise((resolve, reject) => {
-        User.findOne({_id: body.accountID}, function (err, user) {
-            if (err) console.log(err);
-            if (user) {
-                Pawn.findOne({_id: body.id}, function (err, shipping) {
-                    if (err) reject(err);
-                    if (shipping) {
-                        try {
-                            fs.unlinkSync(uploadDir + user.phone + "/" + shipping.pawn_image);
-                            resolve(shipping);
-                        } catch (err) {
-                            resolve(true);
-                        }
-                    }
-                })
+        Pawn.findOne({_id: body.id}, function (err, pawn) {
+            if (err) reject(err);
+            if (pawn) {
+                try {
+                    fs.unlinkSync(uploadDir+"/"+pawn.pawn_image);
+                    resolve(pawn);
+                } catch (err) {
+                    resolve(true);
+                }
             }
         })
     })
@@ -209,17 +212,12 @@ let deleteImage = (body) => {
 * dựa và filename chúng ta có tên file cần xóa
 * dùng lệnh unlinkSync để xóa image
 * */
-let deleteImageNew = (body, filename) => {
-    User.findOne({_id: body.accountID}, function (err, user) {
-        if (err) console.log(err);
-        if (user) {
-            try {
-                fs.unlinkSync(uploadDir + user.phone + "/" + filename);
-            } catch (err) {
-                console.log(err);
-            }
-        }
-    })
+let deleteImageNew = (filename) => {
+    try {
+        fs.unlinkSync(uploadDir+"/"+filename);
+    } catch (err) {
+        console.log(err);
+    }
 };
 
 /*
@@ -345,13 +343,14 @@ exports.insert_image = function (req, res) {
             });
         } else {
             if (req.file) {
+                let url_image = req.user.phone + "/" + req.file.filename;
                 if (req.body.accountID) {
                     if (req.body.id) {
                         FindOnePawn(req.body.id)
                             .then(
                                 pawn => {
                                     if (pawn) {
-                                        DelAndUpdateImange(req.body, req.file.filename).then(
+                                        DelAndUpdateImange(req.body, url_image).then(
                                             Pawn => {
                                                 if (Pawn) {
                                                     return res.json({
@@ -359,7 +358,7 @@ exports.insert_image = function (req, res) {
                                                         "value": Pawn
                                                     });
                                                 } else {
-                                                    deleteImageNew(req.body, req.file.filename);
+                                                    deleteImageNew(url_image);
                                                     return res.json({
                                                         "response": false,
                                                         "value": "Tạo lưu data không thành công"
@@ -367,7 +366,7 @@ exports.insert_image = function (req, res) {
                                                 }
                                             },
                                             err => {
-                                                deleteImageNew(req.body, req.file.filename);
+                                                deleteImageNew(url_image);
                                                 return res.json({
                                                     "response": false,
                                                     "value": err
@@ -375,7 +374,7 @@ exports.insert_image = function (req, res) {
                                             }
                                         )
                                     } else {
-                                        return createNewPawn(req.body, req.file.filename,res);
+                                        return createNewPawn(req.body, url_image, res);
                                     }
                                 },
                                 err => {
@@ -387,11 +386,11 @@ exports.insert_image = function (req, res) {
                             );
 
                     } else {
-                        return createNewPawn(req.body, req.file.filename,res);
+                        return createNewPawn(req.body, url_image, res);
                     }
 
                 } else {
-                    deleteImageNew(req.body, req.file.filename);
+                    deleteImageNew(url_image);
                     return res.json({
                         "response": false,
                         "value": "Tạo lưu data không thành công"
@@ -400,14 +399,14 @@ exports.insert_image = function (req, res) {
             } else {
                 return res.json({
                     "response": false,
-                    "value": "not find id"
+                    "value": "lưu image thất bại"
                 });
             }
         }
     });
 };
 
-let createNewPawn = (obj, filename,res) => {
+let createNewPawn = (obj, filename, res) => {
     createPawn({
         accountID: obj.accountID,
         pawn_image: filename,
@@ -420,7 +419,7 @@ let createNewPawn = (obj, filename,res) => {
                         "value": Pawn
                     });
                 } else {
-                    deleteImageNew(obj, filename);
+                    deleteImageNew( filename);
                     return res.json({
                         "response": false,
                         "value": "Tạo lưu data không thành công"
@@ -428,7 +427,7 @@ let createNewPawn = (obj, filename,res) => {
                 }
             },
             err => {
-                deleteImageNew(obj, filename);
+                deleteImageNew( filename);
                 return res.json({
                     "response": false,
                     "value": err
@@ -449,7 +448,6 @@ let createNewPawn = (obj, filename,res) => {
 */
 
 exports.insert_doc = function (req, res) {
-    req.body.status = undefined;
     if (req.body && req.body.accountID !== undefined) {
         if (req.body.id) {
             FindOnePawn(req.body.id)
@@ -462,7 +460,7 @@ exports.insert_doc = function (req, res) {
                                     "value": err
                                 });
                                 if (pawn) {
-                                    pawn.status = undefined;
+                                    //pawn.status = undefined;
                                     return res.json({
                                         "response": true,
                                         "value": pawn
@@ -475,7 +473,7 @@ exports.insert_doc = function (req, res) {
                                 }
                             });
                         } else {
-                            return createNewPawnDoc(req.body,res);
+                            return createNewPawnDoc(req.body, res);
                         }
                     },
                     err => {
@@ -487,7 +485,7 @@ exports.insert_doc = function (req, res) {
                 );
 
         } else {
-            return createNewPawnDoc(req.body,res);
+            return createNewPawnDoc(req.body, res);
         }
 
     } else {
@@ -499,12 +497,15 @@ exports.insert_doc = function (req, res) {
 
 };
 
-let createNewPawnDoc = (obj,res) => {
+let createNewPawnDoc = (obj, res) => {
+    if ( obj.status !== undefined) {
+        obj.status = undefined;
+    }
     createPawn(obj)
         .then(
             pawn => {
                 if (pawn) {
-                    pawn.status = undefined;
+                   // pawn.status = undefined;
                     send_notify_bussiness(pawn);
                     return res.json({
                         "response": true,
@@ -526,8 +527,9 @@ let createNewPawnDoc = (obj,res) => {
         )
 };
 
-let send_notify_bussiness = (pawn)=>{
-    sockets.emit("notify-pawn-c-b", pawn);
+let send_notify_bussiness = (pawn) => {
+    let sockets = require('socket.io-client')('http://localhost:8080');
+    sockets.emit("notify-pawn-c-b", JSON.stringify(pawn));
 }
 
 exports.notify = (io, socket, obj) => {
@@ -542,21 +544,21 @@ exports.notify = (io, socket, obj) => {
                                     UserCrt.findAllBusiness()
                                         .then(
                                             users => {
-                                                if (users.length>0) {
+                                                if (users.length > 0) {
                                                     Async.forEachOf(users, function (usk, key, callback) {
-                                                        let distan = Distance.distance(usk.latitude, usk.longitude, user.latitude, user.longitude,"K");
+                                                        let distan = Distance.distance(usk.latitude, usk.longitude, user.latitude, user.longitude, "K");
                                                         console.log(distan);
                                                         if (distan <= 10) {
                                                             // người dùng đang online
                                                             console.log(usk);
                                                             if (usk.socket_id !== "" && usk.offlineTime > 0) {
                                                                 io.to(usk.socket_id).emit("notify-pawn-c-b", pawn._id);
-                                                            } else if(usk.isPlatform === 0 && usk.device_token !== "") {
-                                                               // người dùng offline, kiểm tra người dùng có dùng ios không
+                                                            } else if (usk.isPlatform === 0 && usk.device_token !== "") {
+                                                                // người dùng offline, kiểm tra người dùng có dùng ios không
                                                                 Ios.sendNotifyIOS({
-                                                                    device_token:usk.device_token,
-                                                                    countMes:1,
-                                                                    content_text:"Có tin người đăng đấu giá "+pawn._id,
+                                                                    device_token: usk.device_token,
+                                                                    countMes: 1,
+                                                                    content_text: "Có tin người đăng đấu giá " + pawn._id,
                                                                 });
                                                             }
                                                         }

@@ -1,0 +1,30 @@
+#../components/service_comment/create.yaml
+tags:
+- Pawnvn
+security:
+- Bearer: []
+summary: get all list pawn of user
+description: ''
+operationId: getListPawnUser
+consumes:
+#- application/json
+- application/x-www-form-urlencoded
+produces:
+- application/json
+parameters:
+- name: "id"
+  type: string
+  description: id người đăng tin
+  required: true
+  in: formData
+responses:
+  'true':
+    description: insert success
+    schema:
+      $ref: 'pawn_model.yaml'
+  'false':
+    description: Create service banner fail
+    schema:
+      type: "string"
+      example: "value: ...."
+

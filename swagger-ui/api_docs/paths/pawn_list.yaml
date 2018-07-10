@@ -1,0 +1,4 @@
+get:
+  $ref: '../components/pawn/get.yaml'
+post:
+  $ref: '../components/pawn/get_list_id.yaml'

@@ -1,0 +1,44 @@
+#../components/service_comment/create.yaml
+tags:
+- "User"
+security:
+- Bearer: []
+summary: Update info user, not update file avatar
+description: 'đó là các trường cơ bản, có thể update thêm các trường nếu nằm trong danh sách model'
+operationId: updateUserInfo
+consumes:
+- application/x-www-form-urlencoded
+produces:
+- application/json
+- application/x-www-form-urlencoded
+parameters:
+- name: "id"
+  type: string
+  description: "id user cần cập nhật"
+  in: formData
+- name: "identityCardNumber"
+  type: string
+  description: "số chứng minh nhân dân"
+  in: formData
+- name: "identityCardDateIssued"
+  type: number
+  description: "ngày cấp"
+  in: formData
+- name: "sex"
+  type: string
+  description: " giới tính //male, female, other"
+  in: formData
+- name: "birthday"
+  type: number
+  description: " ngày sinh "
+  in: formData
+responses:
+  'true':
+    description: insert success
+    schema:
+      $ref: 'category_model.yaml'
+  'false':
+    description: Create service banner fail
+    schema:
+      type: "string"
+      example: "thất bại "

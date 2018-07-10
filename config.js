@@ -2,7 +2,7 @@ require('dotenv').config();
 module.exports = {
     'secret': process.env.SECRET,
     'bearer': process.env.BEARER,
-    'database': process.env.MONGO_URL,
+    'database': process.env.MONGO_URL_PAWN,
     'AUrl': process.env.port || 8080,
     'API_KEY': process.env.NEXMO_API_KEY,
     'API_SECRET': process.env.NEXMO_API_SECRET,
