@@ -1,0 +1,33 @@
+#../components/service_comment/create.yaml
+tags:
+- "User"
+security:
+- Bearer: []
+summary: update avatar only user not apply business
+description: ''
+operationId: updateAvatarUser
+consumes:
+  - application/json
+produces:
+  - application/json
+parameters:
+- name: "id"
+  type: string
+  in: formData
+  description: "id người người dùng"
+  required: true
+- name: "avatar"
+  in: "formData"
+  description: "file to upload"
+  required: false
+  type: "file"
+responses:
+  'true':
+    description: insert success
+    schema:
+      $ref: 'user_model.yaml'
+  'false':
+    description: Create service banner fail
+    schema:
+      type: "string"
+      example: "value: ...."
