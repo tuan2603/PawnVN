@@ -29,6 +29,8 @@ tags:
 paths:
   '/api/auth/sign-in-pass-word':
     $ref: 'paths/login.yaml'
+  '/api/auth/change-password':
+    $ref: 'paths/change_password.yaml'
   '/api/auth/register-web':
     $ref: 'paths/register_web.yaml'
   '/api/auth/register-user-pass':

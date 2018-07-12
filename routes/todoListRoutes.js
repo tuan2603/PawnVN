@@ -63,8 +63,8 @@ module.exports = function (app) {
     app.route('/api/auth/doccumentboth')
         .post(userHandles.loginRequired, userHandles.update_userboth);
 
-    app.route('/api/auth/password/:id')
-        .put(userHandles.loginRequired, userHandles.update_password);
+    app.route('/api/auth/change-password')
+        .post(userHandles.loginRequired, userHandles.update_password);
 
     app.route('/api/auth/:email')
         .put(userHandles.update_active);

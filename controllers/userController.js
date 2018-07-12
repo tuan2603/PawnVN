@@ -8,6 +8,7 @@ const mongoose = require('mongoose'),
     Code = mongoose.model('VerifyCode'),
     UserDoc = mongoose.model('userdocs'),
     config = require("../config"),
+    codecrt = require("../controllers/codeController"),
     passwordValidator = require('password-validator'),
     path = require('path'),
     multer = require('multer'),
@@ -368,30 +369,56 @@ let Messages = {
     7: "Check message code verify",
     8: "Type password to sign in",
     9: "Email exists",
+    10: "phone undefined",
+    11: "Error find code",
+    12: "Check the phone number, send code more than 5 times will be blocked",
 };
 
 
 // gui lai code
 exports.send_code_again = function (req, res) {
     //lưu thông tin người dùng bảng chính
-    findUserPhone(req.body.phone)
-        .then(
-            user => {
-                if (user) {
-                    return SingIN(user, res);
-                } else {
-                    return res.status(400).send({
-                        message: Messages,
-                        value: 4
-                    });
-                }
-            },
-            err => {
-                return res.status(400).send({
+    let {phone} = req.body;
+    if (phone === undefined) {
+        return res.send({
+            message: Messages,
+            value: 10,
+        });
+    }
+    codecrt.findAllFollowPhone(Number(phone)).then(
+        codes => {
+            if(codes.length > 5) {
+                return res.send({
                     message: Messages,
-                    value: 4
+                    value: 12,
                 });
+            }
+            findUserPhone(req.body.phone)
+                .then(
+                    user => {
+                        if (user) {
+                            return SingIN(user, res);
+                        } else {
+                            return res.send({
+                                message: Messages,
+                                value: 4
+                            });
+                        }
+                    },
+                    err => {
+                        return res.send({
+                            message: Messages,
+                            value: 4
+                        });
+                    });
+        },
+        err => {
+            return res.send({
+                message: Messages,
+                value: 11,
             });
+        }
+    );
 
 }
 
@@ -402,6 +429,7 @@ let mesVerify = {
     4: 'Authentication failed. User not active.',
     5: 'Authentication failed. password not right.',
 };
+
 let findCode = (id) => {
     return new Promise((resolve, reject) => {
         Code.find({
@@ -913,36 +941,50 @@ exports.update_profile = function (req, res) {
 }
 
 exports.update_password = function (req, res) {
-    if (checkPass.validate(req.body.password)) {
-        let password = bcrypt.hashSync(req.body.password, saltRounds);
-        User.findOneAndUpdate({_id: req.params.id}, {
-            password: password,
-            verifyType: 2
+    let {password, id} = req.body;
+    if (password === undefined || id === undefined) {
+        return res.send({
+            value: 'not found params',
+            response: false
+        });
+    }
+    if (checkPass.validate(password)) {
+        let passwordh = bcrypt.hashSync(password, saltRounds);
+        User.findOneAndUpdate({_id: id}, {
+            password: passwordh
         }, {new: true}, function (err, User) {
             if (err)
-                return res.status(400).send({
-                    response: 'Update fail',
-                    value: false
+                return res.send({
+                    value: 'Update fail',
+                    response: false
                 });
-            User.password = undefined;
-            User.activeType = undefined;
-            User.verifyType = undefined;
-            res.json({
-                value: true,
-                response: User
-            });
+            FindOneUserDoc(id)
+                .then(Profile => {
+                    // console.log(Profile);
+                    User.password = undefined;
+                    res.json({
+                        response: true,
+                        value: Object.assign(JSON.parse(JSON.stringify(User)), JSON.parse(JSON.stringify(Profile)))
+                    });
+                }, err => {
+                    console.log(err);
+                    User.password = undefined;
+                    res.json({
+                        response: true,
+                        value: User
+                    });
+                });
         });
     } else {
-        return res.status(400).send({
-            message: 'Minimum length 8, ' +
+        return res.send({
+            value: 'Minimum length 8, ' +
             'Maximum length 100, ' +
             'Must have uppercase letters, ' +
             'Must have lowercase letters, ' +
             'Must have digits, ' +
             'Must have symbols, ' +
             'Should not have spaces',
-            value: false
-
+            response: false,
         });
     }
 }
@@ -1161,10 +1203,10 @@ exports.update_userboth = (req, res) => {
                     user.accountID = req.body.id;
                     createUserDoc(user)
                         .then(
-                            userdoc =>{
+                            userdoc => {
                                 return updateUserDoc(req.body, res);
                             },
-                            err=>{
+                            err => {
                                 return res.json({
                                     "response": false,
                                     "value": err,
@@ -1194,7 +1236,7 @@ let updateUserDoc = (obj, res) => {
                 .then(Profile => {
                     if (Profile) {
                         User.findOneAndUpdate({_id: obj.id}, obj, {new: true}, function (err, UserC) {
-                            if (err)  return res.json({
+                            if (err) return res.json({
                                 value: false,
                                 response: err,
                             });
@@ -1208,7 +1250,7 @@ let updateUserDoc = (obj, res) => {
                                 Profile.password = undefined;
                                 return res.json({
                                     value: true,
-                                    response:Profile
+                                    response: Profile
                                 });
                             }
                         });
@@ -1229,9 +1271,9 @@ let updateUserDoc = (obj, res) => {
                 .then(Profile => {
                     if (Profile) {
                         User.findOneAndUpdate({_id: UserD.accountID}, obj, {new: true}, function (err, UserC) {
-                            if (err)  return res.json({
+                            if (err) return res.json({
                                 value: false,
-                                response:err,
+                                response: err,
                             });
                             if (UserC) {
                                 UserC.password = undefined;

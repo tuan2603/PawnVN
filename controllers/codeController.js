@@ -1,6 +1,6 @@
 'use strict';
 
-var mongoose = require('mongoose'),
+const mongoose = require('mongoose'),
     Code = mongoose.model('VerifyCode');
 
 exports.list_all_verify = function (req, res) {
@@ -11,3 +11,12 @@ exports.list_all_verify = function (req, res) {
     });
 };
 
+let findAllFollowPhone = (phone) => {
+    return new Promise((resolve, reject) => {
+        Code.find({phone: phone}, function (err, codes) {
+            if (err) reject(err);
+            resolve(codes);
+        });
+    });
+}
+exports.findAllFollowPhone = findAllFollowPhone;
