@@ -114,5 +114,10 @@ module.exports = function (app) {
         .get(userHandles.loginRequired, purchaseAuction.find_purchase_auction_id)
         .put(userHandles.loginRequired, purchaseAuction.update_purchase_auction_id);
 
+    //api get all user business follow and following
+    app.route('/api/user-business-follow')
+        .get(userHandles.loginRequired, userHandles.get_all_user_business_follow);
+    app.route('/api/user-business-following')
+        .get(userHandles.loginRequired, userHandles.get_all_user_business_following);
 
 };

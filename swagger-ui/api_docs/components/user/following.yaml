@@ -1,0 +1,35 @@
+#../components/user/following.yaml
+tags:
+- "User"
+security:
+- Bearer: []
+summary: get user business following
+description: ''
+operationId: getuserbusinessfollowing
+consumes:
+- application/x-www-form-urlencoded
+produces:
+- application/json
+#parameters:
+#- name: "id"
+#  type: string
+#  in: formData
+#  description: "id user"
+#  required: true
+#- name: "password"
+#  type: string
+#  in: formData
+#  required: true
+#  description: "new password"
+responses:
+  'true':
+    description: insert success
+    schema:
+      $ref: 'user_model.yaml'
+  'false':
+    description: Create service banner fail
+    schema:
+      type: "string"
+      example: "err...."
+
+

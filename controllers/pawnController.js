@@ -89,6 +89,16 @@ let FindPawn = (id) => {
         });
     });
 };
+let FindPawnDdeleted = (obj) => {
+    return new Promise((resolve, reject) => {
+        Pawn.find(obj, function (err, Pawn) {
+            if (err) return reject(err);
+            resolve(Pawn);
+        });
+    });
+};
+
+
 
 /*
 *  function tìm và xuất ra 1 document cầm đồ qua id của document,
@@ -127,7 +137,7 @@ exports.get_list = function (req, res) {
             response: false
         });
     }
-    FindPawn(req.body.id)
+    FindPawnDdeleted({accountID: req.body.id, deleted: false})
         .then(
             Pawn => {
                 if (Pawn) {
@@ -461,6 +471,9 @@ exports.insert_doc = function (req, res) {
                                 });
                                 if (pawn) {
                                     //pawn.status = undefined;
+                                    Pawn.findOneAndUpdate({_id: req.body.id},{deleted: false}, {new: true}, function (err){
+                                        console.log(err);
+                                    });
                                     return res.json({
                                         "response": true,
                                         "value": pawn
@@ -533,7 +546,7 @@ let send_notify_bussiness = (pawn) => {
 }
 
 exports.notify = (io, socket, obj) => {
-    UserCrt.FindUserSocketID({socket_id: socket.id, _id: obj.accountID})
+    UserCrt.findUserId(obj.accountID)
         .then(
             user => {
                 if (user) {

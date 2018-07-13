@@ -1,4 +1,3 @@
-#../components/service_comment/create.yaml
 tags:
 - Category Pawn
 security:
@@ -19,12 +18,6 @@ parameters:
 - name: "label"
   type: string
   in: formData
-#- in: body
-#  name: body
-#  description: The value/label
-#  required: true
-#  schema:
-#    $ref: '#/definitions/Login'
 responses:
   'true':
     description: insert success

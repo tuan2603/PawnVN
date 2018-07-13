@@ -123,6 +123,15 @@ let findUserBody = (body) => {
     });
 }
 
+let findManyUserObj = (obj) => {
+    return new Promise((resolve, reject) => {
+        User.find(obj, function (err, users) {
+            if (err) reject(err);
+            resolve(users);
+        });
+    });
+}
+
 let findUserPhone = (phone) => {
     return new Promise((resolve, reject) => {
         User.findOne({phone: phone}, function (err, user) {
@@ -153,7 +162,6 @@ let findAllUser = () => {
     });
 }
 exports.findAllUser = findAllUser;
-
 let findAllBusiness = () => {
     return new Promise((resolve, reject) => {
         User.find({roleType: 2}, function (err, user) {
@@ -163,7 +171,6 @@ let findAllBusiness = () => {
     });
 }
 exports.findAllBusiness = findAllBusiness;
-
 let findUserEmail = (email) => {
     return new Promise((resolve, reject) => {
         User.findOne({email: email}, function (err, user) {
@@ -172,13 +179,11 @@ let findUserEmail = (email) => {
         });
     });
 }
-
 let SaveCoseVerify = (newCode) => {
     newCode.save(function (err, user) {
         if (err) console.log(err);
     });
 };
-
 let find_one_user_doc_id = (accountID) => {
     return new Promise((resolve, reject) => {
         UserDoc.findOne({accountID: accountID}, function (err, user) {
@@ -187,7 +192,14 @@ let find_one_user_doc_id = (accountID) => {
         });
     });
 }
-
+let find_one_user_doc_obj= (obj) => {
+    return new Promise((resolve, reject) => {
+        UserDoc.findOne(obj, function (err, users) {
+            if (err) reject(err);
+            resolve(users);
+        });
+    });
+}
 let createUserDoc = (userDoc) => {
     return new Promise((resolve, reject) => {
         userDoc.save(function (err, user) {
@@ -196,8 +208,6 @@ let createUserDoc = (userDoc) => {
         });
     });
 }
-
-
 let Register = (newUser, res) => {
     if (newUser.email !== "") {
         findUserEmail(newUser.email)
@@ -259,7 +269,6 @@ let Register = (newUser, res) => {
         });
     }
 }
-
 let RegisterWeb = (newUser, res, req) => {
     newUser.save(function (err, user) {
         if (err) {
@@ -289,7 +298,6 @@ let RegisterWeb = (newUser, res, req) => {
         }
     });
 }
-
 let SingIN = (user, res) => {
     let Verification = rn(options);
     let newCode = new Code({
@@ -358,7 +366,6 @@ let SingIN = (user, res) => {
         });
     }
 }
-
 let Messages = {
     1: "Send mail or message code vefrify fail",
     2: "Register user fail",
@@ -373,8 +380,6 @@ let Messages = {
     11: "Error find code",
     12: "Check the phone number, send code more than 5 times will be blocked",
 };
-
-
 // gui lai code
 exports.send_code_again = function (req, res) {
     //lưu thông tin người dùng bảng chính
@@ -421,7 +426,6 @@ exports.send_code_again = function (req, res) {
     );
 
 }
-
 let mesVerify = {
     1: 'Authentication failed. User not found.',
     2: 'Authentication failed. code not right.',
@@ -429,7 +433,6 @@ let mesVerify = {
     4: 'Authentication failed. User not active.',
     5: 'Authentication failed. password not right.',
 };
-
 let findCode = (id) => {
     return new Promise((resolve, reject) => {
         Code.find({
@@ -445,7 +448,6 @@ let findCode = (id) => {
             .limit(1)
     });
 }
-
 exports.verify = function (req, res) {
     if (req.body.verifyType) {
         if (req.body.verifyType === 2) {
@@ -567,7 +569,6 @@ exports.verify = function (req, res) {
     }
 
 }
-
 // verify cho code
 exports.verify_web = function (req, res) {
     findUserPhone(req.body.phone)
@@ -654,13 +655,11 @@ exports.verify_web = function (req, res) {
             });
 
 }
-
 //function dung để đăng ký bằng web
 //dùng để đăng nhập bằng mật khẩu
 //roleType: 2, // 1 user, 2 driver, 0 admin
 //verifyType: 2, // 0: mail, 1 phone, 2 password
 //kiểm tra nếu email và phone tồn tại sẽ không cho đăng ký
-
 exports.register_old = function (req, res) {
     if (checkPass.validate(req.body.password)) {
         findUserEmail(req.body.email)
@@ -770,7 +769,6 @@ exports.register_old = function (req, res) {
         });
     }
 }
-
 exports.register_user_pass = function (req, res) {
     if (req.body.phone === undefined ||
         req.body.password === undefined ||
@@ -865,7 +863,6 @@ exports.register_user_pass = function (req, res) {
         });
     }
 }
-
 exports.update_active = function (req, res) {
     User.findOneAndUpdate({email: req.params.email}, req.body, {new: true}, function (err, User) {
         if (err)
@@ -880,7 +877,6 @@ exports.update_active = function (req, res) {
         });
     });
 }
-
 let FindOneUserDoc = (id) => {
     return new Promise((resolve, reject) => {
         UserDoc.findOne({accountID: id}, function (err, Profile) {
@@ -889,7 +885,6 @@ let FindOneUserDoc = (id) => {
         });
     });
 }
-
 exports.profile = function (req, res) {
     User.findOne({_id: req.params.id}, function (err, User) {
         if (err) {
@@ -924,7 +919,6 @@ exports.profile = function (req, res) {
         }
     });
 }
-
 exports.update_profile = function (req, res) {
     User.findOneAndUpdate({_id: req.params.id}, req.body, {new: true}, function (err, User) {
         if (err)
@@ -939,7 +933,6 @@ exports.update_profile = function (req, res) {
         });
     });
 }
-
 exports.update_password = function (req, res) {
     let {password, id} = req.body;
     if (password === undefined || id === undefined) {
@@ -988,8 +981,6 @@ exports.update_password = function (req, res) {
         });
     }
 }
-
-
 let deleteAvatar = (id) => {
     User.findOne({_id: id}, function (err, user) {
         if (err) console.log(err);
@@ -1002,7 +993,6 @@ let deleteAvatar = (id) => {
         }
     })
 }
-
 let updateAvatarUser = (id, filename, res) => {
     User.findOneAndUpdate({_id: id}, {avatarLink: filename}, {new: true}, function (err, User) {
         if (err)
@@ -1019,12 +1009,10 @@ let updateAvatarUser = (id, filename, res) => {
         });
     });
 }
-
 let DelAndUpdateAvatar = async (id, filename, res) => {
     await deleteAvatar(id);
     updateAvatarUser(id, filename, res);
 }
-
 //function will check if a directory exists, and create it if it doesn't
 let checkDirectory = (directory, callback) => {
     fs.stat(directory, function (err, stats) {
@@ -1038,7 +1026,6 @@ let checkDirectory = (directory, callback) => {
         }
     });
 }
-
 //upload file
 let uploadDir = 'public/uploads/';
 var Storage = multer.diskStorage({
@@ -1060,7 +1047,6 @@ var Storage = multer.diskStorage({
         callback(null, file.fieldname + '-' + Date.now() + ".jpg");
     }
 });
-
 var upload = multer({
     storage: Storage,
     fileFilter: function (req, file, callback) {
@@ -1077,7 +1063,6 @@ var upload = multer({
         fileSize: 6000000
     }
 }).single('avatar'); //Field name and max count
-
 exports.update_avatar = function (req, res) {
     upload(req, res, function (err) {
         if (err) {
@@ -1129,8 +1114,6 @@ exports.update_avatar = function (req, res) {
         }
     });
 }
-
-
 let deleteIdentityCardFront = (body) => {
     UserDoc.findOne({accountID: body.id}, function (err, doc) {
         if (err) console.log(err);
@@ -1159,7 +1142,6 @@ let deleteIdentityCardFront = (body) => {
         }
     })
 }
-
 // dung để update thông tin user phụ
 exports.update_userdoc = (req, res) => {
     FindOneUserDoc(req.body.id)
@@ -1189,7 +1171,6 @@ exports.update_userdoc = (req, res) => {
             }
         );
 }
-
 // dung để update thông tin user cả 2
 exports.update_userboth = (req, res) => {
     FindOneUserDoc(req.body.id)
@@ -1223,7 +1204,6 @@ exports.update_userboth = (req, res) => {
             }
         );
 }
-
 let updateUserDoc = (obj, res) => {
     UserDoc.findOneAndUpdate({accountID: obj.id}, obj, {new: true}, function (err, UserD) {
         if (err)
@@ -1304,7 +1284,6 @@ let updateUserDoc = (obj, res) => {
         }
     });
 }
-
 let updateIdentityCardFront = (body, filename, res) => {
 
     switch (body.expression) {
@@ -1323,12 +1302,10 @@ let updateIdentityCardFront = (body, filename, res) => {
         default:
     }
 }
-
 let DelAndUpdateIdentityCardFront = async (body, filename, res) => {
     await deleteIdentityCardFront(body);
     updateIdentityCardFront(body, filename, res);
 }
-
 exports.update_identityCardFront = function (req, res) {
     upload(req, res, function (err) {
         if (err) {
@@ -1379,8 +1356,6 @@ exports.update_identityCardFront = function (req, res) {
         }
     });
 }
-
-
 exports.sign_in = function (req, res) {
     if (req.body.phone === undefined ||
         req.body.password === undefined) {
@@ -1435,7 +1410,6 @@ exports.sign_in = function (req, res) {
         }
     })
 }
-
 exports.loginRequired = function (req, res, next) {
     if (req.user) {
         next();
@@ -1443,7 +1417,6 @@ exports.loginRequired = function (req, res, next) {
         return res.status(401).json({message: 'Unauthorized user!'});
     }
 };
-
 let UpdateUserID = (obj) => {
     return new Promise((resolve, reject) => {
         User.findOneAndUpdate({_id: obj._id}, obj, {new: true}, function (err, User) {
@@ -1453,7 +1426,6 @@ let UpdateUserID = (obj) => {
         });
     });
 }
-
 let UpdateUserSocketID = (obj) => {
     return new Promise((resolve, reject) => {
         User.findOneAndUpdate({socket_id: obj.socket_id}, obj, {new: true}, function (err, User) {
@@ -1462,7 +1434,6 @@ let UpdateUserSocketID = (obj) => {
         });
     });
 }
-
 let FindUserSocketID = (obj) => {
     return new Promise((resolve, reject) => {
         User.findOne({socket_id: socket_id, _id: obj._id}, function (err, User) {
@@ -1472,7 +1443,6 @@ let FindUserSocketID = (obj) => {
     });
 }
 exports.FindUserSocketID = FindUserSocketID;
-
 exports.connect = function (io, socket, obj) {
     //console.log("user: ", obj);
     // _id, device_token, isPlatform, offlineTime // không truyền lên
@@ -1513,7 +1483,6 @@ exports.connect = function (io, socket, obj) {
             }
         )
 };
-
 exports.disconnect = function (socket) {
     UpdateUserSocketID({
         socket_id: socket.id,
@@ -1530,7 +1499,6 @@ exports.disconnect = function (socket) {
         }
     )
 };
-
 exports.get_all_business = function (req, res) {
     findAllBusiness()
         .then(users => {
@@ -1562,3 +1530,67 @@ exports.get_all_business = function (req, res) {
             })
         })
 };
+//get all user not follow
+exports.get_all_user_business_follow = function (req, res) {
+    findManyUserObj({roleType: 2})
+        .then(users => {
+            let alluser = [];
+            async.forEachOf(users, function (user, key, callback) {
+                find_one_user_doc_obj({accountID:user._id, accept: false})
+                    .then(doc => {
+                            alluser.push(Object.assign(JSON.parse(JSON.stringify(user)), JSON.parse(JSON.stringify(doc))));
+                            callback();
+                        },
+                        err => {
+                            callback(err);
+                        }
+                    );
+            }, function (err) {
+                if (err) return res.json({
+                    response: false,
+                    value: err,
+                });
+                return res.json({
+                    response: true,
+                    value: alluser,
+                })
+            });
+        }, err => {
+            return res.json({
+                response: false,
+                value: err,
+            })
+        })
+};
+exports.get_all_user_business_following = function (req, res) {
+    findManyUserObj({roleType: 2})
+        .then(users => {
+            let alluser = [];
+            async.forEachOf(users, function (user, key, callback) {
+                find_one_user_doc_obj({accountID:user._id, accept: true})
+                    .then(doc => {
+                            alluser.push(Object.assign(JSON.parse(JSON.stringify(user)), JSON.parse(JSON.stringify(doc))));
+                            callback();
+                        },
+                        err => {
+                            callback(err);
+                        }
+                    );
+            }, function (err) {
+                if (err) return res.json({
+                    response: false,
+                    value: err,
+                });
+                return res.json({
+                    response: true,
+                    value: alluser,
+                })
+            });
+        }, err => {
+            return res.json({
+                response: false,
+                value: err,
+            })
+        })
+};
+

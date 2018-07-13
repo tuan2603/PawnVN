@@ -7,7 +7,6 @@ const PawnSchema = new mongoose.Schema({
     },
     name:{ // tên đồ vật đấu giá
         type:String,
-        lowercase:true,
     },
     adress:{ // địa chỉ
         type:String,
@@ -28,6 +27,10 @@ const PawnSchema = new mongoose.Schema({
     status:{//1 chờ duyệt đấu giá, 2 đã duyệt đấu giá
         type:Number,
         default:1,
+    },
+    deleted:{// false view,  true not view
+        type:Boolean,
+        default:true,
     },
     time_out:{ //thời gian hết hạn đấu giá
         type:Number,

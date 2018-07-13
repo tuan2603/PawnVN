@@ -21,6 +21,10 @@ const PurchasesSchema = new mongoose.Schema({
         type:Number,
         default:1,
     },
+    deleted:{// false view,  true not view
+        type:Boolean,
+        default:true,
+    },
     time_out:{ //thời gian hết hạn bán
         type:Number,
         default:Date.now,

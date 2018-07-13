@@ -53,3 +53,7 @@ paths:
     $ref: 'paths/pawn_list.yaml'
   '/api/category':
       $ref: 'paths/category.yaml'
+  '/api/user-business-follow':
+      $ref: 'paths/user_follow.yaml'
+  '/api/user-business-following':
+      $ref: 'paths/user_following.yaml'
