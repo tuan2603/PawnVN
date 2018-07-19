@@ -19,7 +19,7 @@ parameters:
 - name: "id"
   type: string
   in: formData
-  description: id người đăng tin, có id là update lại ảnh, không có là đăng tin mới
+  description: id Pawn cần update, không khai báo id là tạo mới, có khai báo là update
 - name: "pawn_image"
   in: "formData"
   description: "file to upload"

@@ -1,0 +1,36 @@
+#../components/wallet/update_wallet.yaml
+tags:
+  - Wallet
+security:
+- Bearer: []
+summary: update one wallet by id user
+description: ''
+operationId: updateOneWallet
+consumes:
+  - application/x-www-form-urlencoded
+produces:
+  - application/json
+parameters:
+- name: "accountID"
+  in: "formData"
+  description: "id of user"
+  required: false
+  type: "string"
+- name: "balance"
+  in: "formData"
+  description: "number money want to added wallet"
+  required: false
+  type: "number"
+  format: "double"
+responses:
+  'true':
+    description: update success
+    schema:
+      $ref: 'wallet_model.yaml'
+  'false':
+    description: update wallet fail
+    schema:
+      type: "string"
+      example: "Error .."
+
+

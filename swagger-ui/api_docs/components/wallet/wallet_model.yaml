@@ -1,0 +1,17 @@
+properties:
+  _id:
+    type: string
+  accountID:
+    type: string
+  phone:
+    type: number
+    format: double
+  balance:
+    type: number
+    format: double
+  created_at:
+    type: number
+    format: double
+  updated_at:
+    type: number
+    format: double

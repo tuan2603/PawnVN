@@ -12,8 +12,21 @@ module.exports = function (app) {
     let pawnAuction = require('../controllers/pawnAuctionController');
     let purchaseAuction = require('../controllers/purchaseAuctionController');
     let category = require('../controllers/categoryController');
+    let wallets = require('../controllers/walletsController');
+    let history = require('../controllers/tradeHistoryController');
 
     // todoList Routes
+    //get wallet user
+    app.route('/api/history/get')
+        .post(userHandles.loginRequired, history.find_all_history);
+
+    //get wallet user
+    app.route('/api/wallet/get')
+        .post(userHandles.loginRequired, wallets.find_one_wallet);
+    //update wallet user
+    app.route('/api/wallet/update')
+        .post(userHandles.loginRequired, wallets.update_wallet_user);
+
     //get, insert city
     app.route('/api/category')
         .get(category.list_categories)

@@ -44,7 +44,7 @@ exports.createWallets = createWallets;
 * */
 let updateWallets = (obj) => {
     return new Promise((resolve, reject) => {
-        User.findOneAndUpdate({
+        Wallets.findOneAndUpdate({
             accountID: obj.accountID
         }, {balance: obj.balance}, {new: true}, function (err, wl) {
             if (err) return reject(err);
@@ -129,7 +129,7 @@ exports.update_wallet_user = function (req, res) {
             wlf => {
                 if (wlf) {
                    let balancenew = wlf.balance +  balance;
-                    updateWallets({accountID:accountID,balancenew})
+                    updateWallets({accountID:accountID,balance:balancenew})
                         .then(
                             wlupd => {
                                 if (wlupd) {

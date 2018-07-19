@@ -1,0 +1,4 @@
+# /paths/get_history.yaml
+post:
+  $ref: '../components/history/get_history.yaml'
+

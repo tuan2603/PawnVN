@@ -22,6 +22,10 @@ securityDefinitions:
 tags:
 - name: User
   description: Everything about User
+- name: Wallet
+  description: Everything about Wallet
+- name: History
+  description: Everything about History
 - name: Pawnvn
   description: Everything about Pawnvn
 - name: Category Pawn
@@ -59,3 +63,9 @@ paths:
       $ref: 'paths/user_follow.yaml'
   '/api/user-business-following':
       $ref: 'paths/user_following.yaml'
+  '/api/wallet/get':
+      $ref: 'paths/get_wallet.yaml'
+  '/api/wallet/update':
+      $ref: 'paths/update_wallet.yaml'
+  '/api/history/get':
+      $ref: 'paths/get_history.yaml'

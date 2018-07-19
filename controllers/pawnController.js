@@ -15,6 +15,8 @@ const Pawn = require('../models/pawnModel'),
     path = require('path'),
     multer = require('multer'),
     fs = require('fs'),
+    fsextra = require('fs-extra'),
+    config = require('../config'),
     Async = require('async');
 
 //delete one Pawn
@@ -78,6 +80,15 @@ let FindPawnAll = () => {
         }, function (err, Pawn) {
             if (err) return reject(err);
             resolve(Pawn);
+        });
+    });
+};
+
+let FindPawnAllObj = (obj) => {
+    return new Promise((resolve, reject) => {
+        Pawn.find(obj, function (err, pawns) {
+            if (err) return reject(err);
+            resolve(pawns);
         });
     });
 };
@@ -320,43 +331,15 @@ let DelAndUpdateImange = (body, filename) => {
     });
 }
 
-/*
-*  function tìm xem thư mục có tồn tại, không có tại thư mục mới
-* */
-let checkDirectory = (directory, callback) => {
-    fs.stat(directory, function (err, stats) {
-        //Check if error defined and the error code is "not exists"
-        if (err && err.errno === 34) {
-            //Create the directory, call the callback.
-            fs.mkdir(directory, callback);
-        } else {
-            //just in case there was a different error:
-            callback(err)
-        }
-    });
-}
 
 /*
 *  function upload ảnh
 *  kiểm tra thư mục có tồn tại, không thì tạo thư mục mới
 *  tên thư mục là tên số điện thoại
 * */
-let uploadDir = 'public/uploads/';
+let uploadDir = config.folder_temp;
 let Storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        checkDirectory(uploadDir + req.user.phone, function (error) {
-            if (error) {
-                try {
-                    fs.statSync(uploadDir + req.user.phone);
-                } catch (e) {
-                    fs.mkdirSync(uploadDir + req.user.phone);
-                }
-                cb(null, uploadDir + req.user.phone);
-            } else {
-                cb(null, uploadDir + req.user.phone);
-            }
-        });
-    },
+    destination: uploadDir,
     filename: function (req, file, callback) {
         callback(null, file.fieldname + '-' + Date.now() + ".jpg");
     }
@@ -399,89 +382,101 @@ let upload = multer({
 exports.insert_image = function (req, res) {
     upload(req, res, function (err) {
         if (err) {
-            res.json({
+            return res.json({
                 "response": err,
                 "value": false
             });
-        } else {
-            if (req.file) {
-                let url_image = req.user.phone + "/" + req.file.filename;
-                if (req.body.accountID) {
-                    if (req.body.id) {
-                        FindOnePawn(req.body.id)
-                            .then(
-                                pawn => {
-                                    if (pawn) {
-                                        DelAndUpdateImange(req.body, url_image).then(
-                                            Pawn => {
-                                                if (Pawn) {
-                                                    return res.json({
-                                                        "response": true,
-                                                        "value": Pawn
-                                                    });
-                                                } else {
-                                                    deleteImageNew(url_image);
-                                                    return res.json({
-                                                        "response": false,
-                                                        "value": "Tạo lưu data không thành công"
-                                                    });
-                                                }
-                                            },
-                                            err => {
-                                                deleteImageNew(url_image);
-                                                return res.json({
-                                                    "response": false,
-                                                    "value": err
-                                                });
-                                            }
-                                        )
-                                    } else {
-                                        return createNewPawn(req.body, url_image, res);
-                                    }
-                                },
-                                err => {
-                                    return res.json({
-                                        "response": false,
-                                        "value": err
-                                    });
-                                }
-                            );
-
-                    } else {
-                        return createNewPawn(req.body, url_image, res);
-                    }
-
-                } else {
-                    deleteImageNew(url_image);
-                    return res.json({
-                        "response": false,
-                        "value": "Tạo lưu data không thành công"
-                    });
-                }
-            } else {
+        }
+        if (req.file) {
+            if (req.body.accountID === undefined || req.user.phone === undefined) {
                 return res.json({
                     "response": false,
-                    "value": "lưu image thất bại"
+                    "value": "not find params accountID user"
                 });
             }
+            let url_image = req.user.phone + "/" + req.file.filename;
+            if (req.body.id) {
+                FindOnePawn(req.body.id)
+                    .then(
+                        pawnf => {
+                            if (pawnf) {
+                                if (pawnf.pawn_image) {
+                                    //remove
+                                    try {
+                                        fsextra.remove(path.join(`${config.folder_uploads}`, `${pawnf.pawn_image}`));
+                                        console.log('success!')
+                                    } catch (err) {
+                                        console.error(err)
+                                    }
+                                }
+                                UpdatePawnObj({_id: req.body.id, pawn_image: url_image})
+                                    .then(pawnup => {
+                                            fsextra.moveSync(
+                                                path.join(`${config.folder_temp}`, `${req.file.filename}`),
+                                                path.join(`${config.folder_uploads}`, `${req.user.phone}`, `${req.file.filename}`),
+                                                {overwrite: true});
+                                            return res.json({
+                                                "response": true,
+                                                "value": pawnup
+                                            });
+                                        },
+                                        err => {
+                                            return res.json({
+                                                "response": false,
+                                                "value": err
+                                            });
+                                        }
+                                    );
+                            } else {
+                                return createNewPawn({
+                                    accountID: req.body.accountID,
+                                    url_image: url_image,
+                                    filename: req.file.filename,
+                                }, res);
+                            }
+                        },
+                        err => {
+                            return res.json({
+                                "response": false,
+                                "value": err
+                            });
+                        }
+                    );
+
+            } else {
+                return createNewPawn({
+                    accountID: req.body.accountID,
+                    url_image: url_image,
+                    filename: req.file.filename,
+                }, res);
+            }
+        } else {
+            return res.json({
+                "response": false,
+                "value": "lưu image thất bại"
+            });
         }
+
     });
 };
 
-let createNewPawn = (obj, filename, res) => {
+let createNewPawn = (obj, res) => {
     createPawn({
         accountID: obj.accountID,
-        pawn_image: filename,
+        pawn_image: obj.url_image,
     })
         .then(
-            Pawn => {
-                if (Pawn) {
+            pawnc => {
+                if (pawnc) {
+                    fsextra.moveSync(
+                        path.join(`${config.folder_temp}`, `${obj.filename}`),
+                        path.join(`${config.folder_uploads}`, `${obj.url_image}`),
+                        {overwrite: true});
                     return res.json({
                         "response": true,
-                        "value": Pawn
+                        "value": pawnc
                     });
                 } else {
-                    deleteImageNew(filename);
                     return res.json({
                         "response": false,
                         "value": "Tạo lưu data không thành công"
@@ -489,7 +484,6 @@ let createNewPawn = (obj, filename, res) => {
                 }
             },
             err => {
-                deleteImageNew(filename);
                 return res.json({
                     "response": false,
                     "value": err
@@ -510,55 +504,57 @@ let createNewPawn = (obj, filename, res) => {
 */
 
 exports.insert_doc = function (req, res) {
-    if (req.body && req.body.accountID !== undefined) {
-        if (req.body.id) {
-            FindOnePawn(req.body.id)
-                .then(
-                    pawn => {
-                        if (pawn) {
-                            Pawn.findOneAndUpdate({_id: req.body.id}, req.body, {new: true}, function (err, pawn) {
-                                if (err) return res.json({
-                                    "response": false,
-                                    "value": err
-                                });
-                                if (pawn) {
-                                    //pawn.status = undefined;
+    if (req.body.accountID === undefined || req.user.phone === undefined) {
+        return res.json({
+            "response": false,
+            "value": "not find params accountID user"
+        });
+    }
+    if (req.body.id) {
+        FindOnePawn(req.body.id)
+            .then(
+                pawn => {
+                    if (pawn) {
+                        Pawn.findOneAndUpdate({_id: req.body.id}, req.body, {new: true}, function (err, pawn) {
+                            if (err) return res.json({
+                                "response": false,
+                                "value": err
+                            });
+                            if (pawn) {
+                                //pawn.status = undefined;
+                                if (pawn.deleted === true){
+                                    send_notify_bussiness(pawn);
                                     Pawn.findOneAndUpdate({_id: req.body.id}, {deleted: false}, {new: true}, function (err) {
                                         console.log(err);
                                     });
-                                    return res.json({
-                                        "response": true,
-                                        "value": pawn
-                                    });
-                                } else {
-                                    return res.json({
-                                        "response": false,
-                                        "value": "Tạo lưu data không thành công"
-                                    });
                                 }
-                            });
-                        } else {
-                            return createNewPawnDoc(req.body, res);
-                        }
-                    },
-                    err => {
-                        return res.json({
-                            "response": false,
-                            "value": err
+                                return res.json({
+                                    "response": true,
+                                    "value": pawn
+                                });
+                            } else {
+                                return res.json({
+                                    "response": false,
+                                    "value": "Tạo lưu data không thành công"
+                                });
+                            }
                         });
+                    } else {
+                        return createNewPawnDoc(req.body, res);
                     }
-                );
-
-        } else {
-            return createNewPawnDoc(req.body, res);
-        }
+                },
+                err => {
+                    return res.json({
+                        "response": false,
+                        "value": err
+                    });
+                }
+            );
 
     } else {
-        return res.json({
-            "response": false,
-            "value": "not find id"
-        });
+        return createNewPawnDoc(req.body, res);
     }
+
 
 };
 
@@ -571,7 +567,6 @@ let createNewPawnDoc = (obj, res) => {
             pawn => {
                 if (pawn) {
                     // pawn.status = undefined;
-                    send_notify_bussiness(pawn);
                     return res.json({
                         "response": true,
                         "value": pawn
@@ -611,11 +606,10 @@ exports.notify = (io, socket, obj) => {
                                             users => {
                                                 if (users.length > 0) {
                                                     Async.forEachOf(users, function (usk, key, callback) {
-                                                        let distan = Distance.distance(usk.latitude, usk.longitude, user.latitude, user.longitude, "K");
-                                                        console.log(distan);
-                                                        if (distan <= 10) {
+                                                        let distance = Distance.distance(usk.latitude, usk.longitude, pawn.latitude, pawn.longitude, "K");
+                                                        if (distance <= 10.0) {
                                                             // người dùng đang online
-                                                            console.log(usk);
+                                                            console.log(distance);
                                                             if (usk.socket_id !== "" && usk.offlineTime > 0) {
                                                                 io.to(usk.socket_id).emit("notify-pawn-c-b", pawn._id);
                                                             } else if (usk.isPlatform === 0 && usk.device_token !== "") {
@@ -663,3 +657,20 @@ exports.notify = (io, socket, obj) => {
             }
         );
 };
+
+
+exports.delete_all_pawn_trash = () => {
+    FindPawnAllObj({deleted:true})
+        .then(pawnsf => {
+                if (!pawnsf) return;
+                pawnsf.map((pawnd, index) => {
+                    delete_one_pawn({_id:pawnd._id})
+                        .then(
+                            pawndl => console.log(pawndl),
+                            err => console.log(err)
+                        )
+                })
+            },
+            err => console.log(err)
+        );
+}

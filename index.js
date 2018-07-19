@@ -11,6 +11,7 @@ const express = require('express'),
     Code = require('./models/codeModel'),
     bodyParser = require('body-parser'),
     path = require('path'),
+    {autoruntime} = require('./routes/autodelete'),
     jsonwebtoken = require("jsonwebtoken");
 
 const http = require('http');
@@ -75,6 +76,10 @@ app.get('/*', function (req, res) {
 app.use(function(req, res) {
     res.status(404).send({ url: req.originalUrl + ' not found' })
 });
+
+
+// goi ham tự đọng xóa có hẹn giờ
+autoruntime();
 
 // app.listen(port, function(){
 // 	console.log('todo list RESTful API server started on: ' + port);

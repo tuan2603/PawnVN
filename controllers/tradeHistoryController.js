@@ -1,15 +1,14 @@
 'use strict';
 const TradeHistory = require('../models/tradeHistoryModel');
 
-
 /*
-* tìm giá theo accountID
+* tìm lịch sử theo accountID
 * */
-let FindTradeHistoryID = (accountID) => {
+let FindTradeHistoryID = (obj) => {
     return new Promise((resolve, reject) => {
-        TradeHistory.findOne({accountID:accountID}, function (err, Pawn) {
+        TradeHistory.find(obj, function (err, history) {
             if (err) return reject(err);
-            resolve(Pawn);
+            resolve(history);
         });
     });
 };
@@ -27,3 +26,35 @@ let CreateTradeHistory = (obj) => {
     });
 };
 exports.CreateTradeHistory = CreateTradeHistory;
+
+exports.find_all_history = function (req, res) {
+    if ( req.body.accountID === undefined )  {
+        return res.json({
+            response: false,
+            value: "not find params "
+        })
+    }
+    let {accountID} = req.body;
+    FindTradeHistoryID({accountID:accountID})
+        .then(
+            hisf => {
+                if (hisf) {
+                    return res.json({
+                        response: true,
+                        value: hisf
+                    })
+                } else {
+                    return res.json({
+                        response: false,
+                        value: "không tìm thấy"
+                    })
+                }
+            },
+            err => {
+                return res.json({
+                    response: false,
+                    value: err
+                })
+            }
+        )
+}

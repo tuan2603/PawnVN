@@ -1,0 +1,16 @@
+properties:
+  _id:
+    type: string
+  accountID:
+    type: string
+  pricepay:
+    type: number
+    format: double
+  description:
+    type: string
+  created_at:
+    type: number
+    format: double
+  updated_at:
+    type: number
+    format: double

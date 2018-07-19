@@ -1,0 +1,4 @@
+# /paths/get_wallet.yaml
+post:
+  $ref: '../components/wallet/get_wallet.yaml'
+

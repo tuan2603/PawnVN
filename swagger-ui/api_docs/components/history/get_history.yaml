@@ -1,0 +1,30 @@
+#../components/history/get_history.yaml
+tags:
+  - History
+security:
+- Bearer: []
+summary: get all history by id user
+description: ''
+operationId: getAllHistory
+consumes:
+  - application/x-www-form-urlencoded
+produces:
+  - application/json
+parameters:
+- name: "accountID"
+  in: "formData"
+  description: "id of user"
+  required: false
+  type: "string"
+responses:
+  'true':
+    description: get success
+    schema:
+      $ref: 'history_model.yaml'
+  'false':
+    description: get wallet fail
+    schema:
+      type: "string"
+      example: "Error .."
+
+
