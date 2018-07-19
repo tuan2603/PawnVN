@@ -17,6 +17,42 @@ const Pawn = require('../models/pawnModel'),
     fs = require('fs'),
     Async = require('async');
 
+//delete one Pawn
+let DeleteOnePawn = (obj) => {
+    return new Promise((resolve, reject) => {
+        Pawn.findOneAndRemove(obj, function (err, pawndl) {
+            if (err) return reject(err);
+            resolve(pawndl);
+        });
+    });
+};
+//delete on Pawn include image
+let delete_one_pawn = (obj) => {
+    return new Promise((resolve, reject) => {
+        deleteImage({id: obj._id})
+            .then(result => {
+                if (result) {
+                    DeleteOnePawn(obj)
+                        .then(
+                            pawndl => {
+                                if (pawndl) {
+                                    resolve(pawndl);
+                                } else {
+                                    reject("xóa pawn thất bại");
+                                }
+                            },
+                            err => reject(err)
+                        )
+                } else {
+                    reject("xóa pawn thất bại");
+                }
+            }, err => {
+                reject(err);
+            })
+    });
+};
+
+exports.delete_one_pawn = delete_one_pawn;
 /*
 * update Pawn dựa theo chính id của pawn đó
 * */
@@ -89,6 +125,23 @@ let FindPawn = (id) => {
         });
     });
 };
+
+//delete all pawn follow user id
+let DeleteAllPawnForUser = (obj) => {
+    Pawn.find({accountID: obj._id}, function (err, pawnall) {
+        if (err) return console.log(err);
+        pawnall.map((pawndl, index) => {
+            delete_one_pawn({_id: pawndl._id})
+                .then(
+                    pawndlted => console.log(pawndlted),
+                    err => console.log(err)
+                )
+        });
+    });
+};
+
+exports.DeleteAllPawnForUser = DeleteAllPawnForUser;
+
 let FindPawnDdeleted = (obj) => {
     return new Promise((resolve, reject) => {
         Pawn.find(obj, function (err, Pawn) {
@@ -97,7 +150,6 @@ let FindPawnDdeleted = (obj) => {
         });
     });
 };
-
 
 
 /*
@@ -205,7 +257,7 @@ let deleteImage = (body) => {
             if (err) reject(err);
             if (pawn) {
                 try {
-                    fs.unlinkSync(uploadDir+"/"+pawn.pawn_image);
+                    fs.unlinkSync(uploadDir + "/" + pawn.pawn_image);
                     resolve(pawn);
                 } catch (err) {
                     resolve(true);
@@ -224,7 +276,7 @@ let deleteImage = (body) => {
 * */
 let deleteImageNew = (filename) => {
     try {
-        fs.unlinkSync(uploadDir+"/"+filename);
+        fs.unlinkSync(uploadDir + "/" + filename);
     } catch (err) {
         console.log(err);
     }
@@ -429,7 +481,7 @@ let createNewPawn = (obj, filename, res) => {
                         "value": Pawn
                     });
                 } else {
-                    deleteImageNew( filename);
+                    deleteImageNew(filename);
                     return res.json({
                         "response": false,
                         "value": "Tạo lưu data không thành công"
@@ -437,7 +489,7 @@ let createNewPawn = (obj, filename, res) => {
                 }
             },
             err => {
-                deleteImageNew( filename);
+                deleteImageNew(filename);
                 return res.json({
                     "response": false,
                     "value": err
@@ -471,7 +523,7 @@ exports.insert_doc = function (req, res) {
                                 });
                                 if (pawn) {
                                     //pawn.status = undefined;
-                                    Pawn.findOneAndUpdate({_id: req.body.id},{deleted: false}, {new: true}, function (err){
+                                    Pawn.findOneAndUpdate({_id: req.body.id}, {deleted: false}, {new: true}, function (err) {
                                         console.log(err);
                                     });
                                     return res.json({
@@ -511,14 +563,14 @@ exports.insert_doc = function (req, res) {
 };
 
 let createNewPawnDoc = (obj, res) => {
-    if ( obj.status !== undefined) {
+    if (obj.status !== undefined) {
         obj.status = undefined;
     }
     createPawn(obj)
         .then(
             pawn => {
                 if (pawn) {
-                   // pawn.status = undefined;
+                    // pawn.status = undefined;
                     send_notify_bussiness(pawn);
                     return res.json({
                         "response": true,

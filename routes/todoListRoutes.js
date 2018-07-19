@@ -72,6 +72,8 @@ module.exports = function (app) {
     app.route('/api/auth/profile/:id')
         .put(userHandles.loginRequired, userHandles.update_profile)
         .get(userHandles.loginRequired, userHandles.profile);
+    app.route('/api/auth/delete')
+        .post(userHandles.loginRequired, userHandles.delete_one_user_by_id);
 
     app.route('/api/pawn/image')
         .post(userHandles.loginRequired, pawn.insert_image);

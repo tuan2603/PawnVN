@@ -1,0 +1,28 @@
+#../components/service_comment/create.yaml
+tags:
+- "User"
+security:
+- Bearer: []
+summary: Delete user account follow by id
+description: ''
+operationId: deleteUserAccountId
+consumes:
+- application/x-www-form-urlencoded
+produces:
+  - application/json
+parameters:
+- name: "_id"
+  type: string
+  in: formData
+  description: "id người người dùng"
+  required: true
+responses:
+  'true':
+    description: insert success
+    schema:
+      $ref: 'user_model.yaml'
+  'false':
+    description: Create service banner fail
+    schema:
+      type: "string"
+      example: "value: ...."

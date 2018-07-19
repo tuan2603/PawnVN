@@ -9,10 +9,13 @@ const mongoose = require('mongoose'),
     UserDoc = mongoose.model('userdocs'),
     config = require("../config"),
     codecrt = require("../controllers/codeController"),
+    {createWallets, DeleteOneWallet} = require("../controllers/walletsController"),
+    {DeleteAllPawnForUser} = require("../controllers/pawnController"),
     passwordValidator = require('password-validator'),
     path = require('path'),
     multer = require('multer'),
     fs = require('fs'),
+    fsextra = require('fs-extra'),
 // Create a schema
     checkPass = new passwordValidator(),
     nodemailer = require('nodemailer'),
@@ -192,7 +195,7 @@ let find_one_user_doc_id = (accountID) => {
         });
     });
 }
-let find_one_user_doc_obj= (obj) => {
+let find_one_user_doc_obj = (obj) => {
     return new Promise((resolve, reject) => {
         UserDoc.findOne(obj, function (err, users) {
             if (err) reject(err);
@@ -392,7 +395,7 @@ exports.send_code_again = function (req, res) {
     }
     codecrt.findAllFollowPhone(Number(phone)).then(
         codes => {
-            if(codes.length > 5) {
+            if (codes.length > 5) {
                 return res.send({
                     message: Messages,
                     value: 12,
@@ -713,6 +716,18 @@ exports.register_old = function (req, res) {
                                                             if (err) console.log(err);
                                                         });
                                                     }
+                                                    //tạo giỏ tiền khi đăng ký thành công
+                                                    createWallets({
+                                                        accountID: user._id,
+                                                        phone: user.phone,
+                                                    }).then(
+                                                        res => {
+                                                            console.log("create wallet success");
+                                                        },
+                                                        err => {
+                                                            console.log("create wallet fail");
+                                                        }
+                                                    );
                                                     return res.send({
                                                         message: 'Đăng ký thành công',
                                                         value: 0,
@@ -820,6 +835,18 @@ exports.register_user_pass = function (req, res) {
                                     //         });
                                     //     });
                                     //đăng ks thêm thông tin phụ
+                                    //tạo giỏ tiền khi đăng ký thành công
+                                    createWallets({
+                                        accountID: user._id,
+                                        phone: user.phone,
+                                    }).then(
+                                        res => {
+                                            console.log("create wallet success");
+                                        },
+                                        err => {
+                                            console.log("create wallet fail");
+                                        }
+                                    );
                                     return res.send({
                                         message: 'Đăng ký thành công',
                                         value: 0,
@@ -981,68 +1008,10 @@ exports.update_password = function (req, res) {
         });
     }
 }
-let deleteAvatar = (id) => {
-    User.findOne({_id: id}, function (err, user) {
-        if (err) console.log(err);
-        if (user) {
-            try {
-                fs.unlinkSync(uploadDir + user.phone + "/" + user.avatarLink);
-            } catch (err) {
-                console.log(err);
-            }
-        }
-    })
-}
-let updateAvatarUser = (id, filename, res) => {
-    User.findOneAndUpdate({_id: id}, {avatarLink: filename}, {new: true}, function (err, User) {
-        if (err)
-            return res.status(400).send({
-                response: err,
-                value: false
-            });
-        User.password = undefined;
-        User.activeType = undefined;
-        User.verifyType = undefined;
-        res.json({
-            value: true,
-            response: User
-        });
-    });
-}
-let DelAndUpdateAvatar = async (id, filename, res) => {
-    await deleteAvatar(id);
-    updateAvatarUser(id, filename, res);
-}
-//function will check if a directory exists, and create it if it doesn't
-let checkDirectory = (directory, callback) => {
-    fs.stat(directory, function (err, stats) {
-        //Check if error defined and the error code is "not exists"
-        if (err && err.errno === 34) {
-            //Create the directory, call the callback.
-            fs.mkdir(directory, callback);
-        } else {
-            //just in case there was a different error:
-            callback(err)
-        }
-    });
-}
-//upload file
-let uploadDir = 'public/uploads/';
+
+let uploadDir = config.folder_temp;
 var Storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        checkDirectory('public/uploads/' + req.user.phone, function (error) {
-            if (error) {
-                try {
-                    fs.statSync('public/uploads/' + req.user.phone);
-                } catch (e) {
-                    fs.mkdirSync('public/uploads/' + req.user.phone);
-                }
-                cb(null, 'public/uploads/' + req.user.phone);
-            } else {
-                cb(null, 'public/uploads/' + req.user.phone);
-            }
-        });
-    },
+    destination: uploadDir,
     filename: function (req, file, callback) {
         callback(null, file.fieldname + '-' + Date.now() + ".jpg");
     }
@@ -1067,142 +1036,110 @@ exports.update_avatar = function (req, res) {
     upload(req, res, function (err) {
         if (err) {
             res.json({
-                "response": err,
-                "value": false
+                "response": false,
+                "value": err,
             });
         } else {
             //console.log(req.file);
             if (req.file) {
-                if (req.body.id) {
-                    FindOneUserDoc(req.body.id)
-                        .then(
-                            UserDoc => {
-                                // console.log(UserDoc);
-                                if (UserDoc.accept !== undefined) {
-                                    if (UserDoc.accept) {
-                                        return res.json({
-                                            "response": false,
-                                            "value": "bạn không thể thay đổi ảnh đại diện vì thông tin này không được thay đổi"
-                                        });
-                                    } else {
-                                        DelAndUpdateAvatar(req.body.id, req.file.filename, res);
-                                    }
-                                } else {
-                                    DelAndUpdateAvatar(req.body.id, req.file.filename, res);
-                                }
-                            },
-                            err => {
-                                return res.json({
-                                    "response": false,
-                                    "value": "Lỗi tìm thông tin phụ"
-                                });
-                            }
-                        );
-                } else {
-                    deleteAvatar(req.body.id);
+                if (req.body.id === undefined) {
                     return res.json({
                         "response": false,
-                        "value": "không có id làm sao update"
+                        "value": "not find params id user"
                     });
                 }
+                findUserId(req.body.id)
+                    .then(
+                        userf => {
+                            if (userf) {
+                                if (userf.avatarLink) {
+                                    //remove and overwrite
+                                    try {
+                                        fsextra.remove(path.join(`${config.folder_uploads}`, `${userf.phone}`, `${userf.avatarLink}`));
+                                        console.log('success!')
+                                    } catch (err) {
+                                        console.error(err)
+                                    }
+                                }
+                                {
+                                    // update and move avatar from folder tepms to folder user( phone number)
+                                    UpdateUserID({_id: req.body.id, avatarLink: req.file.filename})
+                                        .then(useru => {
+                                            fsextra.moveSync(
+                                                path.join(`${config.folder_temp}`, `${req.file.filename}`),
+                                                path.join(`${config.folder_uploads}`, `${useru.phone}`, `${req.file.filename}`),
+                                                {overwrite: true});
+                                            FindAllInfoUser({_id: req.body.id})
+                                                .then(userrp => {
+                                                        return res.json({
+                                                            value: userrp,
+                                                            response: true
+                                                        });
+                                                    },
+                                                    err => {
+                                                        return res.json({
+                                                            "response": false,
+                                                            "value": err
+                                                        });
+                                                    }
+                                                );
+                                        }, err => {
+                                            return res.json({
+                                                "response": false,
+                                                "value": err
+                                            });
+                                        })
+                                }
+                            } else {
+                                return res.json({
+                                    "response": false,
+                                    "value": "not find user"
+                                });
+                            }
+                        },
+                        err => {
+                            return res.json({
+                                "response": false,
+                                "value": err
+                            });
+                        }
+                    );
             } else {
                 return res.json({
                     "response": false,
-                    "value": "not find id"
+                    "value": "not find image"
                 });
             }
         }
     });
-}
-let deleteIdentityCardFront = (body) => {
-    UserDoc.findOne({accountID: body.id}, function (err, doc) {
-        if (err) console.log(err);
-        if (doc) {
-            try {
-                switch (body.expression) {
-                    case "identityCardFront":
-                        fs.unlinkSync(uploadDir + body.folder + "/" + doc.identityCardFront);
-                        break;
-                    case "identityCardBehind":
-                        fs.unlinkSync(uploadDir + body.folder + "/" + doc.identityCardBehind);
-                        break;
-                    case "licenseeImageFront":
-                        fs.unlinkSync(uploadDir + body.folder + "/" + doc.licenseeImageFront);
-                        break;
-                    case "licenseeImageBehind":
-                        fs.unlinkSync(uploadDir + body.folder + "/" + doc.licenseeImageBehind);
-                        break;
-
-                    default:
-                }
-
-            } catch (err) {
-                console.log(err);
-            }
-        }
-    })
-}
-// dung để update thông tin user phụ
-exports.update_userdoc = (req, res) => {
-    FindOneUserDoc(req.body.id)
-        .then(
-            UserDoc => {
-                if (UserDoc.accept !== undefined) {
-                    if (UserDoc.accept) {
-                        return res.json({
-                            "response": false,
-                            "value": "Thông tin đã được duyệt bạn không được thay đổi"
-                        });
-                    } else {
-                        return updateUserDoc(req.body, res);
-                    }
-                } else {
-                    return res.json({
-                        "response": false,
-                        "value": "Lỗi tìm thông tin phụ"
-                    });
-                }
-            },
-            err => {
-                return res.json({
-                    "response": false,
-                    "value": "Lỗi tìm thông tin phụ"
-                });
-            }
-        );
-}
-// dung để update thông tin user cả 2
-exports.update_userboth = (req, res) => {
-    FindOneUserDoc(req.body.id)
-        .then(
-            User => {
-                if (User) {
-                    return updateUserDoc(req.body, res);
-                } else {
-                    //không có user phụ, tạo mới
-                    let user = new UserDoc(req.body);
-                    user.accountID = req.body.id;
-                    createUserDoc(user)
-                        .then(
-                            userdoc => {
-                                return updateUserDoc(req.body, res);
-                            },
-                            err => {
-                                return res.json({
-                                    "response": false,
-                                    "value": err,
-                                });
+};
+let FindAllInfoUser = (obj) => {
+    return new Promise((resolve, reject) => {
+        User.findOne({_id: obj._id}, function (err, userf) {
+            if (err) {
+                return reject(err)
+            } else {
+                if (userf) {
+                    FindOneUserDoc(obj._id)
+                        .then(userdocf => {
+                            if (userdocf) {
+                                resolve(Object.assign(
+                                    JSON.parse(JSON.stringify(userf)),
+                                    JSON.parse(JSON.stringify(userdocf)))
+                                );
+                            } else {
+                                resolve(userf);
                             }
-                        );
+
+                        }, err => {
+                            return reject(err);
+                        });
+                } else {
+                    return reject("not found")
                 }
-            },
-            err => {
-                return res.json({
-                    "response": false,
-                    "value": "Lỗi tìm thông tin phụ"
-                });
             }
-        );
+        });
+    });
 }
 let updateUserDoc = (obj, res) => {
     UserDoc.findOneAndUpdate({accountID: obj.id}, obj, {new: true}, function (err, UserD) {
@@ -1284,28 +1221,88 @@ let updateUserDoc = (obj, res) => {
         }
     });
 }
-let updateIdentityCardFront = (body, filename, res) => {
+// dung để update thông tin user phụ
+exports.update_userdoc = (req, res) => {
+    FindOneUserDoc(req.body.id)
+        .then(
+            userdoc => {
+                if (userdoc) {
+                    if (userdoc.accept !== undefined) {
+                        if (userdoc.accept) {
+                            return res.json({
+                                "response": false,
+                                "value": "Thông tin đã được duyệt bạn không được thay đổi"
+                            });
+                        } else {
+                            return updateUserDoc(req.body, res);
+                        }
+                    } else {
+                        return res.json({
+                            "response": false,
+                            "value": "Lỗi tìm thông tin phụ"
+                        });
+                    }
+                } else {
+                    //không có user phụ, tạo mới
+                    let user = new UserDoc(req.body);
+                    user.accountID = req.body.id;
+                    createUserDoc(user)
+                        .then(
+                            userdoc => {
+                                return updateUserDoc(req.body, res);
+                            },
+                            err => {
+                                return res.json({
+                                    "response": false,
+                                    "value": err,
+                                });
+                            }
+                        );
+                }
+            },
+            err => {
+                return res.json({
+                    "response": false,
+                    "value": "Lỗi tìm thông tin phụ"
+                });
+            }
+        );
+}
+// dung để update thông tin user cả 2
+exports.update_userboth = (req, res) => {
+    FindOneUserDoc(req.body.id)
+        .then(
+            User => {
+                if (User) {
+                    return updateUserDoc(req.body, res);
+                } else {
+                    //không có user phụ, tạo mới
+                    let user = new UserDoc(req.body);
+                    user.accountID = req.body.id;
+                    createUserDoc(user)
+                        .then(
+                            userdoc => {
+                                return updateUserDoc(req.body, res);
+                            },
+                            err => {
+                                return res.json({
+                                    "response": false,
+                                    "value": err,
+                                });
+                            }
+                        );
+                }
+            },
+            err => {
+                return res.json({
+                    "response": false,
+                    "value": "Lỗi tìm thông tin phụ"
+                });
+            }
+        );
+}
 
-    switch (body.expression) {
-        case "identityCardFront":
-            body.identityCardFront = filename;
-            return updateUserDoc(body, res);
-        case "identityCardBehind":
-            body.identityCardBehind = filename;
-            return updateUserDoc(body, res);
-        case "licenseeImageFront":
-            body.licenseeImageFront = filename;
-            return updateUserDoc(body, res);
-        case "licenseeImageBehind":
-            body.licenseeImageBehind = filename;
-            return updateUserDoc(body, res);
-        default:
-    }
-}
-let DelAndUpdateIdentityCardFront = async (body, filename, res) => {
-    await deleteIdentityCardFront(body);
-    updateIdentityCardFront(body, filename, res);
-}
+
 exports.update_identityCardFront = function (req, res) {
     upload(req, res, function (err) {
         if (err) {
@@ -1316,41 +1313,210 @@ exports.update_identityCardFront = function (req, res) {
         } else {
             //console.log(req.file);
             if (req.file) {
-                if (req.body.id) {
-                    FindOneUserDoc(req.body.id)
-                        .then(
-                            UserDoc => {
-                                if (UserDoc.accept !== undefined) {
-                                    if (UserDoc.accept) {
-                                        return res.json({
-                                            "response": false,
-                                            "value": "bạn không thể thay đổi ảnh đại diện vì thông tin này không được thay đổi"
-                                        });
-                                    } else {
-                                        DelAndUpdateIdentityCardFront(req.body, req.file.filename, res);
-                                    }
-                                } else {
-                                    DelAndUpdateIdentityCardFront(req.body, req.file.filename, res);
-                                }
-                            },
-                            err => {
-                                return res.json({
-                                    "response": false,
-                                    "value": "Lỗi tìm thông tin phụ"
-                                });
-                            }
-                        );
-                } else {
-                    deleteIdentityCardFront(req.body);
+                if (req.body.id === undefined || req.body.expression === undefined || req.body.folder === undefined) {
                     return res.json({
                         "response": false,
-                        "value": req.file.filename
+                        "value": "not find params id user"
                     });
                 }
+                FindOneUserDoc(req.body.id)
+                    .then(
+                        userf => {
+                            if (userf) {
+                                switch (req.body.expression) {
+                                    case 'identityCardFront':
+                                        if (userf.identityCardFront) {
+                                            //remove
+                                            try {
+                                                fsextra.remove(path.join(`${config.folder_uploads}`, `${req.body.folder}`, `${userf.identityCardFront}`));
+                                                console.log('success!')
+                                            } catch (err) {
+                                                console.error(err)
+                                            }
+                                        }
+                                    {
+                                        // update and move avatar from folder tepms to folder user( phone number)
+                                        UpdateUserDocAccountID({
+                                            accountID: req.body.id,
+                                            identityCardFront: req.file.filename
+                                        })
+                                            .then(useru => {
+                                                fsextra.moveSync(
+                                                    path.join(`${config.folder_temp}`, `${req.file.filename}`),
+                                                    path.join(`${config.folder_uploads}`, `${req.body.folder}`, `${req.file.filename}`),
+                                                    {overwrite: true});
+                                                FindAllInfoUser({_id: req.body.id})
+                                                    .then(userrp => {
+                                                            return res.json({
+                                                                value: userrp,
+                                                                response: true
+                                                            });
+                                                        },
+                                                        err => {
+                                                            return res.json({
+                                                                "response": false,
+                                                                "value": err
+                                                            });
+                                                        }
+                                                    );
+                                            }, err => {
+                                                return res.json({
+                                                    "response": false,
+                                                    "value": err
+                                                });
+                                            })
+                                    }
+                                        break;
+                                    case 'identityCardBehind':
+                                        if (userf.identityCardBehind) {
+                                            try {
+                                                fsextra.remove(path.join(`${config.folder_uploads}`, `${req.body.folder}`, `${userf.identityCardBehind}`));
+                                                console.log('success!')
+                                            } catch (err) {
+                                                console.error(err)
+                                            }
+                                        }
+                                    {
+                                        // update and move avatar from folder tepms to folder user( phone number)
+                                        UpdateUserDocAccountID({
+                                            accountID: req.body.id,
+                                            identityCardBehind: req.file.filename
+                                        })
+                                            .then(useru => {
+                                                fsextra.moveSync(
+                                                    path.join(`${config.folder_temp}`, `${req.file.filename}`),
+                                                    path.join(`${config.folder_uploads}`, `${req.body.folder}`, `${req.file.filename}`),
+                                                    {overwrite: true});
+                                                FindAllInfoUser({_id: req.body.id})
+                                                    .then(userrp => {
+                                                            return res.json({
+                                                                value: userrp,
+                                                                response: true
+                                                            });
+                                                        },
+                                                        err => {
+                                                            return res.json({
+                                                                "response": false,
+                                                                "value": err
+                                                            });
+                                                        }
+                                                    );
+                                            }, err => {
+                                                return res.json({
+                                                    "response": false,
+                                                    "value": err
+                                                });
+                                            })
+                                    }
+                                        break;
+                                    case 'licenseeImageFront':
+                                        if (userf.licenseeImageFront) {
+                                            try {
+                                                fsextra.remove(path.join(`${config.folder_uploads}`, `${req.body.folder}`, `${userf.licenseeImageFront}`));
+                                                console.log('success!')
+                                            } catch (err) {
+                                                console.error(err)
+                                            }
+                                        }
+                                    {
+                                        // update and move avatar from folder tepms to folder user( phone number)
+                                        UpdateUserDocAccountID({
+                                            accountID: req.body.id,
+                                            licenseeImageFront: req.file.filename
+                                        })
+                                            .then(useru => {
+                                                fsextra.moveSync(
+                                                    path.join(`${config.folder_temp}`, `${req.file.filename}`),
+                                                    path.join(`${config.folder_uploads}`, `${req.body.folder}`, `${req.file.filename}`),
+                                                    {overwrite: true});
+                                                FindAllInfoUser({_id: req.body.id})
+                                                    .then(userrp => {
+                                                            return res.json({
+                                                                value: userrp,
+                                                                response: true
+                                                            });
+                                                        },
+                                                        err => {
+                                                            return res.json({
+                                                                "response": false,
+                                                                "value": err
+                                                            });
+                                                        }
+                                                    );
+                                            }, err => {
+                                                return res.json({
+                                                    "response": false,
+                                                    "value": err
+                                                });
+                                            })
+                                    }
+                                        break;
+                                    case 'licenseeImageBehind':
+                                        if (userf.licenseeImageBehind) {
+                                            try {
+                                                fsextra.remove(path.join(`${config.folder_uploads}`, `${req.body.folder}`, `${userf.licenseeImageBehind}`));
+                                                console.log('success!')
+                                            } catch (err) {
+                                                console.error(err)
+                                            }
+                                        }
+                                    {
+                                        // update and move avatar from folder tepms to folder user( phone number)
+                                        UpdateUserDocAccountID({
+                                            accountID: req.body.id,
+                                            licenseeImageBehind: req.file.filename
+                                        })
+                                            .then(useru => {
+                                                fsextra.moveSync(
+                                                    path.join(`${config.folder_temp}`, `${req.file.filename}`),
+                                                    path.join(`${config.folder_uploads}`, `${req.body.folder}`, `${req.file.filename}`),
+                                                    {overwrite: true});
+                                                FindAllInfoUser({_id: req.body.id})
+                                                    .then(userrp => {
+                                                            return res.json({
+                                                                value: userrp,
+                                                                response: true
+                                                            });
+                                                        },
+                                                        err => {
+                                                            return res.json({
+                                                                "response": false,
+                                                                "value": err
+                                                            });
+                                                        }
+                                                    );
+                                            }, err => {
+                                                return res.json({
+                                                    "response": false,
+                                                    "value": err
+                                                });
+                                            })
+                                    }
+                                        break;
+                                    default:
+                                        return res.json({
+                                            "response": false,
+                                            "value": "không tim thấy"
+                                        });
+                                }
+                            } else {
+                                return res.json({
+                                    "response": false,
+                                    "value": "not find user"
+                                });
+                            }
+                        },
+                        err => {
+                            return res.json({
+                                "response": false,
+                                "value": err
+                            });
+                        }
+                    );
             } else {
                 return res.json({
                     "response": false,
-                    "value": "not find id"
+                    "value": "not find image"
                 });
             }
         }
@@ -1422,6 +1588,15 @@ let UpdateUserID = (obj) => {
         User.findOneAndUpdate({_id: obj._id}, obj, {new: true}, function (err, User) {
             if (err) return reject(err);
             User.password = undefined;
+            resolve(User);
+        });
+    });
+}
+
+let UpdateUserDocAccountID = (obj) => {
+    return new Promise((resolve, reject) => {
+        UserDoc.findOneAndUpdate({accountID: obj.accountID}, obj, {new: true}, function (err, User) {
+            if (err) return reject(err);
             resolve(User);
         });
     });
@@ -1536,7 +1711,7 @@ exports.get_all_user_business_follow = function (req, res) {
         .then(users => {
             let alluser = [];
             async.forEachOf(users, function (user, key, callback) {
-                find_one_user_doc_obj({accountID:user._id, accept: false})
+                find_one_user_doc_obj({accountID: user._id, accept: false})
                     .then(doc => {
                             alluser.push(Object.assign(JSON.parse(JSON.stringify(user)), JSON.parse(JSON.stringify(doc))));
                             callback();
@@ -1567,7 +1742,7 @@ exports.get_all_user_business_following = function (req, res) {
         .then(users => {
             let alluser = [];
             async.forEachOf(users, function (user, key, callback) {
-                find_one_user_doc_obj({accountID:user._id, accept: true})
+                find_one_user_doc_obj({accountID: user._id, accept: true})
                     .then(doc => {
                             alluser.push(Object.assign(JSON.parse(JSON.stringify(user)), JSON.parse(JSON.stringify(doc))));
                             callback();
@@ -1594,3 +1769,120 @@ exports.get_all_user_business_following = function (req, res) {
         })
 };
 
+//delete on user
+let DeleteOneUser = (obj) => {
+    return new Promise((resolve, reject) => {
+        User.findOneAndRemove(obj, function (err, userdl) {
+            if (err) return reject(err);
+            fsextra.removeSync(`public/uploads/${userdl.phone}`);
+            resolve(userdl);
+        });
+    });
+}
+//delete on userdoc, thông tin bảng phụ
+let DeleteOneUserDoc = (obj) => {
+    return new Promise((resolve, reject) => {
+        UserDoc.findOneAndRemove(obj, function (err, userdoc) {
+            if (err) return reject(err);
+            resolve(userdoc);
+        });
+    });
+}
+//delte user and delete all table have relationship
+let DeleteUser = (obj) => {
+    return new Promise((resolve, reject) => {
+        findUserId(obj._id)
+            .then(
+                userdl => {
+                    //console.log(userdl);
+                    if (userdl) {
+                        if (userdl.roleType === 1) {
+                            // = 1 là người dùng
+                            // tìm tất cả các pawn của người dùng để xóa
+
+                            DeleteAllPawnForUser(obj);
+                            DeleteOneUserDoc({accountID: obj._id})
+                                .then(usdl => {
+                                    DeleteOneUser(obj)
+                                        .then(
+                                            userldlted => {
+                                                if (userldlted) {
+                                                    DeleteOneWallet({phone: userldlted.phone});
+                                                }
+                                                resolve(userldlted)
+                                            },
+                                            err => {
+                                                reject(err);
+                                            }
+                                        )
+                                }, err => {
+                                    console.log(err);
+                                    reject(err);
+                                });
+                        } else if (userdl.roleType === 2) {
+                            // = 2 là bussiness
+                            DeleteOneUserDoc({accountID: obj._id})
+                                .then(usdl => {
+                                    DeleteOneUser(obj)
+                                        .then(
+                                            userldlted => {
+                                                if (userldlted) {
+                                                    DeleteOneWallet({phone: userldlted.phone});
+                                                }
+                                                resolve(userldlted)
+                                            },
+                                            err => {
+                                                reject(err);
+                                            }
+                                        )
+                                }, err => {
+                                    console.log(err);
+                                    reject(err);
+                                });
+                        } else {
+                            // không tồn tại hoặc là admin không được xóa
+                            reject("không xóa được, không tồn tại hoặc là admin");
+                        }
+                    } else {
+                        // không tồn tại hoặc là admin không được xóa
+                        reject("không xóa được, không tồn tại hoặc là admin");
+                    }
+
+                },
+                err => {
+                    reject(err);
+                }
+            )
+    });
+};
+
+exports.delete_one_user_by_id = (req, res) => {
+    if (req.body._id === undefined) {
+        return res.json({
+            response: false,
+            value: "not find params id user"
+        })
+    }
+    DeleteUser(req.body)
+        .then(
+            userdl => {
+                if (userdl) {
+                    return res.json({
+                        response: true,
+                        value: userdl
+                    })
+                } else {
+                    return res.json({
+                        response: false,
+                        value: "delete fail",
+                    })
+                }
+            },
+            err => {
+                return res.json({
+                    response: false,
+                    value: err,
+                })
+            }
+        )
+}

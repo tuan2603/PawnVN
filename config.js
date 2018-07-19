@@ -1,4 +1,5 @@
 require('dotenv').config();
+const path = require('path');
 module.exports = {
     'secret': process.env.SECRET,
     'bearer': process.env.BEARER,
@@ -8,4 +9,6 @@ module.exports = {
     'API_SECRET': process.env.NEXMO_API_SECRET,
     'API_SECRET_SPEEDSMS': process.env.SPEEDSMS_API_SECRET,
     'NUMBER': 84975227856,
+    'folder_temp': path.join(__dirname, 'public', 'temps'),
+    'folder_uploads': path.join(__dirname, 'public', 'uploads'),
 };

@@ -47,6 +47,8 @@ paths:
     $ref: 'paths/pawn_image.yaml'
   '/api/auth/avatar':
     $ref: 'paths/avatar.yaml'
+  '/api/auth/delete':
+    $ref: 'paths/delete_user.yaml'
   '/api/pawn/doc':
     $ref: 'paths/pawn.yaml'
   '/api/pawn/list':

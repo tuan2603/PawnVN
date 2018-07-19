@@ -17,9 +17,9 @@ let FindWalletsID = (accountID, phone) => {
 /*
 * tìm giá theo accountID
 * */
-let FindWalletsOne = (accountID) => {
+let FindWalletsOne = (obj) => {
     return new Promise((resolve, reject) => {
-        Wallets.findOne({accountID: accountID}, function (err, Pawn) {
+        Wallets.findOne(obj, function (err, Pawn) {
             if (err) return reject(err);
             resolve(Pawn);
         });
@@ -31,13 +31,14 @@ let FindWalletsOne = (accountID) => {
 * */
 let createWallets = (wl) => {
     return new Promise((resolve, reject) => {
-        wl.save(function (err, wl) {
+        let newWL= new Wallets(wl);
+        newWL.save(function (err, wl) {
             if (err) return reject(err);
             resolve(wl);
         });
     });
 };
-
+exports.createWallets = createWallets;
 /*
 *  function tạo update wallet qua accountID
 * */
@@ -51,57 +52,141 @@ let updateWallets = (obj) => {
         });
     });
 }
+exports.updateWallets = updateWallets;
 
+// delete wallet
+let DeleteOneWallet = (obj) => {
+    return new Promise((resolve, reject) => {
+        Wallets.findOneAndRemove(obj, function (err, wldl) {
+            if (err) return reject(err);
+            resolve(wldl);
+        });
+    });
+};
+exports.DeleteOneWallet = DeleteOneWallet;
 /*
-*  function tìm giá theo id
+*  api get wallet find user
 * */
-exports.find_one_wallet = function (accountID, phone) {
-    console.log(accountID, phone);
-    FindWalletsID(accountID, phone)
+exports.find_one_wallet = function (req, res) {
+    if ( req.body.accountID === undefined || req.user.phone === undefined)  {
+        return res.json({
+            response: false,
+            value: "not find params or Unauthorized user!"
+        })
+    }
+    let {accountID} = req.body;
+    let {phone} = req.user;
+
+    FindWalletsOne({accountID:accountID,phone:phone})
         .then(
-            wl => {
-                if (wl) {
-                    console.log(wl.balance);
-                    return wl.balance;
+            wlf => {
+                if (wlf) {
+                    return res.json({
+                        response: true,
+                        value: wlf
+                    })
                 } else {
-                    let newWL = new Wallets({accountID, phone});
-                    createWallets(newWL);
-                    return 0;
+                    createWallets({accountID, phone}).
+                    then(
+                        wlnew => {
+                            return res.json({
+                                response: true,
+                                value: wlnew
+                            })
+                        },
+                        err => {
+                            return res.json({
+                                response: false,
+                                value: err
+                            })
+                        }
+                    )
                 }
             },
             err => {
-                return 0;
+                return res.json({
+                    response: false,
+                    value: err
+                })
             }
         )
 }
 
-/*
-*  function update wallet and create history trade
-* */
-exports.update_wallet_pawn = function (obj) {
-    FindWalletsOne(obj)
+
+//api update wallet from user
+exports.update_wallet_user = function (req, res) {
+    if ( req.body.accountID === undefined || req.user.phone === undefined)  {
+        return res.json({
+            response: false,
+            value: "not find params or Unauthorized user!"
+        })
+    }
+    let {accountID, balance} = req.body;
+    let {phone} = req.user;
+
+    FindWalletsOne({accountID:accountID,phone:phone})
         .then(
-            wlold => {
-                if (wlold) {
-                    obj.balance = wlold.balance -  obj.balance;
-                    updateWallets(obj)
+            wlf => {
+                if (wlf) {
+                   let balancenew = wlf.balance +  balance;
+                    updateWallets({accountID:accountID,balancenew})
                         .then(
-                            wl => {
-                                if (wl) {
-                                    tradeHistory.insert_trade_history({
-                                        pricelistID:obj.pricelistID,
-                                        accountID:obj.accountID,
+                            wlupd => {
+                                if (wlupd) {
+                                    tradeHistory.CreateTradeHistory({
+                                        pricepay:balancenew,
+                                        accountID:accountID,
+                                        description:" Tài khoản của bạn vừa mới được cộng thêm ",
                                     });
+                                    return res.json({
+                                        response: true,
+                                        value: wlupd
+                                    })
+                                }else{
+                                    return res.json({
+                                        response: false,
+                                        value: "update wallet false"
+                                    })
                                 }
                             },
                             err => {
-                                console.log(err);
+                                return res.json({
+                                    response: false,
+                                    value: err,
+                                })
                             }
                         )
+                } else {
+                    createWallets({
+                        accountID: accountID,
+                        phone: phone,
+                        balance: balance,
+                    }).then(
+                        wlnew => {
+                            tradeHistory.CreateTradeHistory({
+                                pricepay:balance,
+                                accountID:accountID,
+                                description:" Tài khoản của bạn vừa mới được cộng thêm ",
+                            });
+                            return res.json({
+                                response: true,
+                                value: wlnew
+                            })
+                        },
+                        err => {
+                            return res.json({
+                                response: false,
+                                value: err
+                            })
+                        }
+                    );
                 }
             },
             err => {
-                console.log(err);
+                return res.json({
+                    response: false,
+                    value: err
+                })
             }
         )
 }
