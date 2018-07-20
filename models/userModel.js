@@ -60,6 +60,10 @@ const UserSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
+    rating_star: { // mặc định 3 *
+        type: Number,
+        default: 3,
+    },
     create_at: {
         type: Number,
         default: Date.now
