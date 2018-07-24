@@ -1,0 +1,4 @@
+# /paths/get_verify.yaml
+get:
+  $ref: '../components/user/get_verify.yaml'
+

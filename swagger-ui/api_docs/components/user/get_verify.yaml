@@ -1,0 +1,28 @@
+#../components/service_comment/create.yaml
+tags:
+- User
+summary: Get all code verify for all user
+description: ''
+operationId: GetVerifyCodeUser
+produces:
+- application/json
+responses:
+  'true':
+    description: get success
+    schema:
+      $ref: "#/definitions/verify"
+  'false':
+    description: get code fail
+    schema:
+      type: string
+      example: "Erorr"
+definitions:
+  verify:
+    type: "object"
+    properties:
+      phone:
+        type: "string"
+        example: phone
+      code:
+        type: "integer"
+        example: "1234"

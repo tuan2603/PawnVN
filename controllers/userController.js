@@ -665,109 +665,91 @@ exports.verify_web = function (req, res) {
 //kiểm tra nếu email và phone tồn tại sẽ không cho đăng ký
 exports.register_old = function (req, res) {
     if (checkPass.validate(req.body.password)) {
-        findUserEmail(req.body.email)
+        findUserPhone(req.body.phone)
             .then(
-                usermail => {
-                    if (!usermail) {
-                        findUserPhone(req.body.phone)
-                            .then(
-                                userphone => {
-                                    if (!userphone) {
-                                        let newUser = new User(req.body);
-                                        newUser.verifyType = 1;
-                                        newUser.roleType = 2;
-                                        newUser.password = bcrypt.hashSync(req.body.password, saltRounds);
-                                        newUser.save(function (err, user) {
-                                            if (err) {
-                                                console.log(err);
-                                                return res.send({
-                                                    message: 'Lối đăng ký',
-                                                    value: 4
-                                                });
-                                            } else {
-                                                if (user) {
-                                                    let Verification = rn(options);
-                                                    let newCode = new Code({
-                                                        accountId: user._id,
-                                                        phone: user.phone,
-                                                        code: Verification,
-                                                    });
-                                                    SaveCoseVerify(newCode);
-                                                    //gửi tin nhắn
-                                                    // SendMessageVN(user.phoneb, Verification)
-                                                    //     .then((repos) => {
-                                                    //         return res.json({
-                                                    //             value: 7,
-                                                    //             message: Messages,
-                                                    //             code: Verification
-                                                    //         });
-                                                    //     })
-                                                    //     .catch(function (err) {
-                                                    //         return res.json({
-                                                    //             value: 1,
-                                                    //             "message": Messages
-                                                    //         });
-                                                    //     });
-                                                    //đăng ks thêm thông tin phụ
-                                                    if (user.roleType === 2) {
-                                                        let newDoc = new UserDoc(req.body);
-                                                        newDoc.accountID = user._id;
-                                                        newDoc.save(function (err, docuser) {
-                                                            if (err) console.log(err);
-                                                        });
-                                                    }
-                                                    //tạo giỏ tiền khi đăng ký thành công
-                                                    createWallets({
-                                                        accountID: user._id,
-                                                        phone: user.phone,
-                                                    }).then(
-                                                        res => {
-                                                            console.log("create wallet success");
-                                                        },
-                                                        err => {
-                                                            console.log("create wallet fail");
-                                                        }
-                                                    );
-                                                    return res.send({
-                                                        message: 'Đăng ký thành công',
-                                                        value: 0,
-                                                        code: Verification
-                                                    });
-
-                                                }
-                                                else {
-                                                    return res.send({
-                                                        message: 'Lối đăng ký',
-                                                        value: 4,
-                                                    });
-                                                }
-                                            }
-                                        });
-                                    } else {
-                                        return res.send({
-                                            message: 'Số điện thoại đã tồn tại',
-                                            value: 3
+                userphone => {
+                    if (!userphone) {
+                        let newUser = new User(req.body);
+                        newUser.verifyType = 1;
+                        newUser.roleType = 2;
+                        newUser.password = bcrypt.hashSync(req.body.password, saltRounds);
+                        newUser.save(function (err, user) {
+                            if (err) {
+                                console.log(err);
+                                return res.send({
+                                    message: 'Lối đăng ký',
+                                    value: 4
+                                });
+                            } else {
+                                if (user) {
+                                    let Verification = rn(options);
+                                    let newCode = new Code({
+                                        accountId: user._id,
+                                        phone: user.phone,
+                                        code: Verification,
+                                    });
+                                    SaveCoseVerify(newCode);
+                                    //gửi tin nhắn
+                                    // SendMessageVN(user.phoneb, Verification)
+                                    //     .then((repos) => {
+                                    //         return res.json({
+                                    //             value: 7,
+                                    //             message: Messages,
+                                    //             code: Verification
+                                    //         });
+                                    //     })
+                                    //     .catch(function (err) {
+                                    //         return res.json({
+                                    //             value: 1,
+                                    //             "message": Messages
+                                    //         });
+                                    //     });
+                                    //đăng ks thêm thông tin phụ
+                                    if (user.roleType === 2) {
+                                        let newDoc = new UserDoc(req.body);
+                                        newDoc.accountID = user._id;
+                                        newDoc.save(function (err, docuser) {
+                                            if (err) console.log(err);
                                         });
                                     }
-                                },
-                                err => {
+                                    //tạo giỏ tiền khi đăng ký thành công
+                                    createWallets({
+                                        accountID: user._id,
+                                        phone: user.phone,
+                                    }).then(
+                                        res => {
+                                            console.log("create wallet success");
+                                        },
+                                        err => {
+                                            console.log("create wallet fail");
+                                        }
+                                    );
                                     return res.send({
-                                        message: 'Số điện thoại đã tồn tại',
-                                        value: 3
+                                        message: 'Đăng ký thành công',
+                                        value: 0,
+                                        code: Verification
+                                    });
+
+                                }
+                                else {
+                                    return res.send({
+                                        message: 'Lối đăng ký',
+                                        value: 4,
                                     });
                                 }
-                            );
+                            }
+                        });
                     } else {
                         return res.send({
-                            message: 'Email đã tồn tại',
-                            value: 2
+                            message: 'Số điện thoại đã tồn tại',
+                            value: 3
                         });
                     }
                 },
                 err => {
                     return res.send({
-                        message: 'Email đã tồn tại',
-                        value: 2
+                        message: 'Số điện thoại đã tồn tại',
+                        value: 3
                     });
                 }
             );

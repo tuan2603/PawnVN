@@ -66,7 +66,6 @@ routes(app);
 
 // socket
 require('./routes/socket')(server);
-
 //reactjs
 app.use(express.static(path.join(__dirname, 'build')));
 app.get('/*', function (req, res) {

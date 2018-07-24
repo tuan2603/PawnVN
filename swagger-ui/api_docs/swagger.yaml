@@ -43,6 +43,8 @@ paths:
     $ref: 'paths/get_code.yaml'
   '/api/auth/verify':
     $ref: 'paths/verify.yaml'
+  '/api/verify_code':
+    $ref: 'paths/get_verify.yaml'
   '/api/auth/profile/{id}':
     $ref: 'paths/profile.yaml'
   '/api/auth/doccumentboth':
