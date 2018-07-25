@@ -1,9 +1,11 @@
 properties:
   _id:
     type: string
-  provider_id:
+  icon:
     type: string
-  ads_id:
+  value:
+    type: string
+  label:
     type: string
   created_at:
     type: number

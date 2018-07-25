@@ -1,0 +1,27 @@
+#../components/service_comment/create.yaml
+tags:
+- User
+summary: LoginAdmin
+description: ''
+operationId: loginPasswordAdmin
+consumes:
+#- application/json
+- application/x-www-form-urlencoded
+produces:
+- application/json
+parameters:
+- name: "phone"
+  type: string
+  in: formData
+- name: "password"
+  type: string
+  format: password
+  in: formData
+responses:
+  'true':
+    description: login success
+  'false':
+    description: login fail
+    schema:
+      type: "string"
+      example: "Error.."

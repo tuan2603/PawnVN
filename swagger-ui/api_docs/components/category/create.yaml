@@ -7,11 +7,9 @@ summary: Add a new Category Pawn
 description: ''
 operationId: addNewCategoryPawn
 consumes:
-#- application/json
-- application/x-www-form-urlencoded
+ - application/json
 produces:
-- application/json
-- application/x-www-form-urlencoded
+ - application/json
 parameters:
 - name: "value"
   type: string
@@ -19,12 +17,11 @@ parameters:
 - name: "label"
   type: string
   in: formData
-#- in: body
-#  name: body
-#  description: The value/label
-#  required: true
-#  schema:
-#    $ref: '#/definitions/Login'
+- name: "icon"
+  in: "formData"
+  description: "file to upload"
+  required: false
+  type: "file"
 responses:
   'true':
     description: insert success
@@ -45,6 +42,8 @@ definitions:
  Login:
   type: object
   properties:
+   icon:
+    type: string
    value:
     type: string
    label:

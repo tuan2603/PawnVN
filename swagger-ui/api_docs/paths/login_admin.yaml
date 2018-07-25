@@ -1,0 +1,4 @@
+# /paths/login_admin.yaml
+post:
+  $ref: '../components/user/login_admin.yaml'
+

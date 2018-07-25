@@ -33,6 +33,8 @@ tags:
 paths:
   '/api/auth/sign-in-pass-word':
     $ref: 'paths/login.yaml'
+  '/api/auth/sign-in-admin':
+    $ref: 'paths/login_admin.yaml'
   '/api/auth/change-password':
     $ref: 'paths/change_password.yaml'
   '/api/auth/register-web':

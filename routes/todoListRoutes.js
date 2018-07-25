@@ -50,6 +50,9 @@ module.exports = function (app) {
     app.route('/api/auth/sign-in-pass-word')
         .post(userHandles.sign_in);
 
+    app.route('/api/auth/sign-in-admin')
+        .post(userHandles.sign_in_admin);
+
     app.route('/api/auth/register-web')
         .post(userHandles.register_old);
 

@@ -1558,6 +1558,64 @@ exports.sign_in = function (req, res) {
         }
     })
 }
+
+exports.sign_in_admin = function (req, res) {
+    if (req.body.phone === undefined ||
+        req.body.password === undefined) {
+        return res.send({
+            value: 'not find params',
+            response: false
+        });
+    }
+    User.findOne({
+        phone: req.body.phone
+    }, function (err, user) {
+        if (err) {
+            return res.send({
+                value: err,
+                response: false
+            });
+        } else if (!user) {
+            return res.send({
+                value: "user not found",
+                response: false
+            });
+        } else if (user.password !== undefined) {
+            if (!comparePassword(req.body.password, user)) {
+                return res.send({
+                    value: "wrong password",
+                    response: false
+                })
+            } else if (user.activeType < 1) {
+                return res.send({
+                    value: 'account not active',
+                    response: false,
+                })
+            } else {
+                if(user.roleType !== 0 ){
+                    return res.send({
+                        value: 'account not admin',
+                        response: false,
+                    })
+                }
+                return res.send({
+                    value: jwt.sign({
+                        phone: user.phone,
+                        fullName: user.fullName,
+                        _id: user._id
+                    }, config.secret),
+                    response: true,
+                });
+            }
+        } else {
+            return res.send({
+                value: 'account password undefined',
+                response: false,
+            })
+        }
+    })
+}
+
 exports.loginRequired = function (req, res, next) {
     if (req.user) {
         next();
