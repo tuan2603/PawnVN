@@ -1592,7 +1592,7 @@ exports.sign_in_admin = function (req, res) {
                     response: false,
                 })
             } else {
-                if(user.roleType !== 0 ){
+                if (user.roleType !== 0) {
                     return res.send({
                         value: 'account not admin',
                         response: false,
@@ -1614,6 +1614,37 @@ exports.sign_in_admin = function (req, res) {
             })
         }
     })
+}
+//kiem tra đang nhập qua session
+exports.get_info = function (req, res) {
+    let { phone } = req.user;
+    console.log(phone);
+    if (!phone) {
+        return res.send({
+            value:"not  find info user",
+            response: false
+        })
+    }
+
+    findUserPhone(phone)
+        .then(userf => {
+            if (userf) {
+                return res.send({
+                    value: userf,
+                    response: true
+                })
+            } else {
+                return res.send({
+                    value:"not  find info user",
+                    response: false
+                })
+            }
+        },err => {
+            return res.send({
+                value:err,
+                response: false
+            })
+        })
 }
 
 exports.loginRequired = function (req, res, next) {

@@ -31,7 +31,7 @@ app.use(express.static('public'));
 //swagger
 app.use(express.static('swagger-ui'));
 app.use(bodyParser.json({limit: "20mb"}));
-app.use(bodyParser.urlencoded({limit: "20mb", extended: true}));
+app.use(bodyParser.urlencoded({limit: "20mb", extended: true, cookie: { maxAge: 86400000 }}));
 // set up our express application
 app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)
