@@ -68,17 +68,18 @@ module.exports = function (app) {
     app.route('/api/auth/verify')
         .post(userHandles.verify);
 
-    app.route('/api/auth/verifyweb')
-        .post(userHandles.verify_web);
-
     app.route('/api/auth/avatar')
         .post(userHandles.loginRequired, userHandles.update_avatar);
+
     app.route('/api/auth/business')
         .get(userHandles.get_all_business);
+
     app.route('/api/auth/card')
         .post(userHandles.loginRequired, userHandles.update_identityCardFront);
+
     app.route('/api/auth/doccument')
-        .post(userHandles.loginRequired, userHandles.update_userdoc);
+        .post(userHandles.loginRequired, userHandles.update_userboth);
+
     app.route('/api/auth/doccumentboth')
         .post(userHandles.loginRequired, userHandles.update_userboth);
 
@@ -91,8 +92,12 @@ module.exports = function (app) {
     app.route('/api/auth/profile/:id')
         .put(userHandles.loginRequired, userHandles.update_profile)
         .get(userHandles.loginRequired, userHandles.profile);
+
     app.route('/api/auth/delete')
         .post(userHandles.loginRequired, userHandles.delete_one_user_by_id);
+
+    app.route('/api/auth/comment')
+        .post(userHandles.loginRequired, userHandles.insert_comment);
 
     app.route('/api/pawn/image')
         .post(userHandles.loginRequired, pawn.insert_image);
@@ -104,36 +109,19 @@ module.exports = function (app) {
     app.route('/api/pawn/one')
         .post(userHandles.loginRequired, pawn.get_one);
 
-    app.route('/api/purchase/image')
-        .post(userHandles.loginRequired, purchase.insert_image);
-    app.route('/api/purchase/doc')
-        .post(userHandles.loginRequired, purchase.insert_doc);
-    app.route('/api/purchase/list')
-        .post(userHandles.loginRequired, purchase.get_list)
-        .get(purchase.get_list_all);
-    app.route('/api/purchase/one')
-        .post(userHandles.loginRequired, purchase.get_one);
+    //choose auction pawn
+    app.route('/api/choose-auction-pawn')
+        .post(userHandles.loginRequired, pawn.choose_pawn_auction);
 
-    app.route('/api/pricelist')
-        .post(userHandles.loginRequired, pricelist.insert_pricelist);
+    app.route('/api/auction-pawn')
+        .post(userHandles.loginRequired, pawn.insert_pawn_auction)
+        .get(userHandles.loginRequired, pawn.get_pawn_auction_for_business);
 
-    //get list đấu giá cầm đồ
-    app.route('/api/pawn-auction/list')
-        .post(userHandles.loginRequired, pawnAuction.find_pawn_auction_pawn_id);
-    app.route('/api/pawn-auction')
-        .post(userHandles.loginRequired, pawnAuction.insert_pawn_auction);
-    app.route('/api/pawn-auction/:id')
-        .get(userHandles.loginRequired, pawnAuction.find_pawn_auction_id)
-        .put(userHandles.loginRequired, pawnAuction.update_pawn_auction_id);
+    app.route('/api/list-was-auctioned')
+        .get(userHandles.loginRequired, pawn.list_was_auctioned);
 
-    //get list đấu giá mua đồ
-    app.route('/api/purchase-auction/list')
-        .post(userHandles.loginRequired, purchaseAuction.find_purchase_auction_purchase_id);
-    app.route('/api/purchase-auction')
-        .post(userHandles.loginRequired, purchaseAuction.insert_purchase_auction);
-    app.route('/api/purchase-auction/:id')
-        .get(userHandles.loginRequired, purchaseAuction.find_purchase_auction_id)
-        .put(userHandles.loginRequired, purchaseAuction.update_purchase_auction_id);
+    app.route('/api/list-pawn-auction-selected')
+        .get(userHandles.loginRequired, pawn.list_pawn_auction_selected);
 
     //api get all user business follow and following
     app.route('/api/user-business-follow')

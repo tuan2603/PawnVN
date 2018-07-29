@@ -11,4 +11,5 @@ module.exports = {
     'NUMBER': 84975227856,
     'folder_temp': path.join(__dirname, 'public', 'temps'),
     'folder_uploads': path.join(__dirname, 'public', 'uploads'),
+    'distance_config': 20.0,
 };

@@ -1,0 +1,35 @@
+#../components/user/user_comment.yaml
+tags:
+- "User"
+security:
+- Bearer: []
+summary: Insert comment and rating star for user
+description: 'hãy cẩn thận coi chừng nổ...'
+operationId: insertNewComments
+consumes:
+- application/x-www-form-urlencoded
+produces:
+- application/json
+parameters:
+- name: "_id"
+  type: string
+  description: "id user muốn đánh giá, không phải của người comment"
+  in: formData
+- name: "rating_star"
+  type: number
+  description: "từ 1 -> 5"
+  in: formData
+- name: "body"
+  type: string
+  description: "Nội dung bình loạn ở đây"
+  in: formData
+responses:
+  'true':
+    description: insert success
+    schema:
+      $ref: 'user_model.yaml'
+  'false':
+    description: insert fail
+    schema:
+      type: "string"
+      example: "Erro... "

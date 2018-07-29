@@ -57,10 +57,20 @@ paths:
     $ref: 'paths/avatar.yaml'
   '/api/auth/delete':
     $ref: 'paths/delete_user.yaml'
+  '/api/auth/comment':
+    $ref: 'paths/user_comment.yaml'
   '/api/pawn/doc':
     $ref: 'paths/pawn.yaml'
   '/api/pawn/list':
     $ref: 'paths/pawn_list.yaml'
+  '/api/auction-pawn':
+    $ref: 'paths/auction_pawn.yaml'
+  '/api/choose-auction-pawn':
+    $ref: 'paths/choose_auction_pawn.yaml'
+  '/api/list-was-auctioned':
+    $ref: 'paths/auction_pawn_owner.yaml'
+  '/api/list-pawn-auction-selected':
+    $ref: 'paths/auction_pawn_selected.yaml'
   '/api/category':
       $ref: 'paths/category.yaml'
   '/api/user-business-follow':

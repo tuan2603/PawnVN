@@ -1,0 +1,39 @@
+#../components/service_comment/choose_auction_pawn.yaml
+tags:
+- Pawnvn
+security:
+- Bearer: []
+summary: choose Auction Pawn
+description: ''
+operationId: chooseAuctionPawn
+consumes:
+- application/x-www-form-urlencoded
+produces:
+- application/json
+parameters:
+- name: "auctionID"
+  type: string
+  description: "id auction paw được chọn"
+  required: true
+  in: formData
+- name: "pawnID"
+  type: string
+  description: "id món đồ cầm"
+  required: true
+  in: formData
+- name: "status"
+  type: number
+  in: formData
+  description: "2- Đã chọn người đấu giá. 3- Quá trình cầm đồ hoàn thành. 4- Đã huỷ."
+  required: true
+responses:
+  'true':
+    description: choose success
+    schema:
+      $ref: 'pawn_model.yaml'
+  'false':
+    description: choose auction pawn fail
+    schema:
+      type: "string"
+      example: "value: ...."
+

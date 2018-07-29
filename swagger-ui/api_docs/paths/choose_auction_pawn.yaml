@@ -1,0 +1,4 @@
+# /paths/choose_auction_pawn.yaml
+post:
+  $ref: '../components/pawn/choose_auction_pawn.yaml'
+

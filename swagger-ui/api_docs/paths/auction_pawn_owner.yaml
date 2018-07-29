@@ -1,0 +1,4 @@
+# /paths/auction_pawn_owner.yaml
+get:
+  $ref: '../components/pawn/auction_pawn_owner.yaml'
+

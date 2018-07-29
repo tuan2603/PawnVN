@@ -1,0 +1,21 @@
+#../components/pawn/auction_pawn_selected.yaml
+tags:
+- Pawnvn
+security:
+- Bearer: []
+summary: get all list auction pawn seleted
+description: ''
+operationId: getListAuctionPawnSeleted
+produces:
+- application/json
+responses:
+  'true':
+    description: get success
+    schema:
+      $ref: 'pawn_model.yaml'
+  'false':
+    description: get fail
+    schema:
+      type: "string"
+      example: "value: ...."
+

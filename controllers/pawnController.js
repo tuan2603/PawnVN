@@ -8,8 +8,7 @@
 * -> Số tiền còn lại chuyển wa cho chủ tiệm).
 */
 const Pawn = require('../models/pawnModel'),
-    User = require("../models/userModel"),
-    UserCrt = require("../controllers/userController"),
+    User = require("../controllers/userController"),
     Ios = require("../controllers/notifyIOSController"),
     Distance = require("../ultils/distance"),
     path = require('path'),
@@ -53,7 +52,6 @@ let delete_one_pawn = (obj) => {
             })
     });
 };
-
 exports.delete_one_pawn = delete_one_pawn;
 /*
 * update Pawn dựa theo chính id của pawn đó
@@ -68,6 +66,14 @@ let UpdatePawnObj = (Obj) => {
 };
 exports.update_pawn_obj = UpdatePawnObj;
 
+let UpdatePawnOne = (condition, update) => {
+    return new Promise((resolve, reject) => {
+        Pawn.findOneAndUpdate(condition, update, {new: true}, function (err, pawn) {
+            if (err) reject(err);
+            resolve(pawn);
+        });
+    });
+};
 
 /*
 * tìm và xuất ra tất cả các document cầm đồ đã được admin duyệt
@@ -87,6 +93,15 @@ let FindPawnAll = () => {
 let FindPawnAllObj = (obj) => {
     return new Promise((resolve, reject) => {
         Pawn.find(obj, function (err, pawns) {
+            if (err) return reject(err);
+            resolve(pawns);
+        });
+    });
+};
+
+let FindPawnOneObj = (obj) => {
+    return new Promise((resolve, reject) => {
+        Pawn.findOne(obj, function (err, pawns) {
             if (err) return reject(err);
             resolve(pawns);
         });
@@ -522,7 +537,7 @@ exports.insert_doc = function (req, res) {
                             });
                             if (pawn) {
                                 //pawn.status = undefined;
-                                if (pawn.deleted === true){
+                                if (pawn.deleted === true) {
                                     send_notify_bussiness(pawn);
                                     Pawn.findOneAndUpdate({_id: req.body.id}, {deleted: false}, {new: true}, function (err) {
                                         console.log(err);
@@ -554,8 +569,6 @@ exports.insert_doc = function (req, res) {
     } else {
         return createNewPawnDoc(req.body, res);
     }
-
-
 };
 
 let createNewPawnDoc = (obj, res) => {
@@ -593,7 +606,7 @@ let send_notify_bussiness = (pawn) => {
 }
 
 exports.notify = (io, socket, obj) => {
-    UserCrt.findUserId(obj.accountID)
+    User.findUserId(obj.accountID)
         .then(
             user => {
                 if (user) {
@@ -601,13 +614,13 @@ exports.notify = (io, socket, obj) => {
                         .then(
                             pawn => {
                                 if (pawn) {
-                                    UserCrt.findAllBusiness()
+                                    User.findAllBusiness()
                                         .then(
                                             users => {
                                                 if (users.length > 0) {
                                                     Async.forEachOf(users, function (usk, key, callback) {
                                                         let distance = Distance.distance(usk.latitude, usk.longitude, pawn.latitude, pawn.longitude, "K");
-                                                        if (distance <= 10.0) {
+                                                        if (distance <= config.distance_config) {
                                                             // người dùng đang online
                                                             console.log(distance);
                                                             if (usk.socket_id !== "" && usk.offlineTime > 0) {
@@ -660,11 +673,11 @@ exports.notify = (io, socket, obj) => {
 
 
 exports.delete_all_pawn_trash = () => {
-    FindPawnAllObj({deleted:true})
+    FindPawnAllObj({deleted: true})
         .then(pawnsf => {
                 if (!pawnsf) return;
                 pawnsf.map((pawnd, index) => {
-                    delete_one_pawn({_id:pawnd._id})
+                    delete_one_pawn({_id: pawnd._id})
                         .then(
                             pawndl => console.log(pawndl),
                             err => console.log(err)
@@ -673,4 +686,292 @@ exports.delete_all_pawn_trash = () => {
             },
             err => console.log(err)
         );
+}
+
+// inser auction pawn new for business
+exports.insert_pawn_auction = (req, res) => {
+    let {accountID, pawnID, price, interest_rate} = req.body;
+    let {phone} = req.user;
+    if (accountID === undefined ||
+        pawnID === undefined ||
+        price === undefined ||
+        interest_rate === undefined ||
+        phone === undefined) {
+        return res.send({
+            "response": false,
+            "value": "not find params "
+        });
+    }
+    User.FindOneUserObj({_id: accountID, phone: phone, roleType: 2})
+        .then(userf => {
+                if (userf) {
+                    FindPawnOneObj({_id: pawnID})
+                        .then(pawnf => {
+                                if (pawnf) {
+                                    pawnf.auction.push(req.body);
+                                    pawnf.save(function (err, pawns) {
+                                        if (err) return res.send({
+                                            "response": false,
+                                            "value": err
+                                        });
+                                        return res.send({
+                                            "response": true,
+                                            "value": pawns
+                                        });
+                                    });
+                                } else {
+                                    return res.send({
+                                        "response": false,
+                                        "value": "not find pawn"
+                                    });
+                                }
+                            },
+                            err => {
+                                return res.send({
+                                    "response": false,
+                                    "value": err
+                                });
+                            }
+                        )
+                } else {
+                    return res.send({
+                        "response": false,
+                        "value": "can't auction so user is not business , token is not master onwe"
+                    });
+                }
+            },
+            err => {
+                return res.send({
+                    "response": false,
+                    "value": err
+                });
+            }
+        )
+}
+
+exports.choose_pawn_auction = (req, res) => {
+    let {pawnID, auctionID, status} = req.body;
+    let {phone} = req.user;
+    if (
+        auctionID === undefined ||
+        status === undefined ||
+        pawnID === undefined ||
+        phone === undefined) {
+        return res.send({
+            "response": false,
+            "value": "not find params "
+        });
+    }
+    User.FindOneUserObj({phone})
+        .then(userf => {
+                if (userf) {
+                    UpdatePawnOne({_id: pawnID, accountID: userf._id}, {status})
+                        .then(pawnup => {
+                                if (pawnup) {
+                                    Async.forEachOf(pawnup.auction, function (auctionitem, key, callback) {
+                                        if (auctionitem._id != auctionID) {
+                                            pawnup.auction.id(auctionitem._id).remove();
+                                        }
+                                        callback();
+                                    }, function (err) {
+                                        if (err) return res.send({
+                                            "response": false,
+                                            "value": err
+                                        });
+                                        pawnup.save(function (err, pawns) {
+                                            if (err) return res.send({
+                                                "response": false,
+                                                "value": err
+                                            });
+                                            return res.send({
+                                                "response": true,
+                                                "value": pawns
+                                            });
+                                        });
+                                    });
+                                } else {
+                                    return res.send({
+                                        "response": false,
+                                        "value": "not found pawn or token not master onwe"
+                                    });
+                                }
+                            },
+                            err => {
+                                return res.send({
+                                    "response": false,
+                                    "value": err
+                                });
+                            }
+                        )
+                } else {
+                    return res.send({
+                        "response": false,
+                        "value": "user is not exits"
+                    });
+                }
+            },
+            err => {
+                return res.send({
+                    "response": false,
+                    "value": err
+                });
+            }
+        )
+}
+
+exports.get_pawn_auction_for_business = (req, res) => {
+    let {phone} = req.user;
+    if (phone === undefined) {
+        return res.send({
+            "response": false,
+            "value": "not find user "
+        });
+    }
+    User.FindOneUserObj({phone})
+        .then(userf => {
+                if (userf) {
+                    FindPawnAllObj({status:1})
+                        .then(pawnfs => {
+                            if (pawnfs) {
+                                let allpawn = [];
+                                Async.forEachOf(pawnfs, function (pawn, key, callback) {
+                                    let distance = Distance.distance(userf.latitude, userf.longitude, pawn.latitude, pawn.longitude, "K");
+                                    if (distance <= config.distance_config) {
+                                        allpawn.push(pawn);
+                                    }
+                                    callback();
+                                }, function (err) {
+                                    if (err) return res.send({
+                                        "response": false,
+                                        "value": err
+                                    });
+                                    res.send({
+                                        "response": true,
+                                        "value": allpawn
+                                    });
+                                });
+                            } else {
+                                return res.send({
+                                    "response": false,
+                                    "value": "pawn is not exits"
+                                });
+                            }
+                        },
+                        err => {
+                            return res.send({
+                                "response": false,
+                                "value": err
+                            });
+                        }
+                    )
+                } else {
+                    return res.send({
+                        "response": false,
+                        "value": "user is not exits"
+                    });
+                }
+            },
+            err => {
+                return res.send({
+                    "response": false,
+                    "value": err
+                });
+            }
+        )
+}
+
+exports.list_was_auctioned = (req, res) => {
+    let {phone} = req.user;
+    if (phone === undefined) {
+        return res.send({
+            "response": false,
+            "value": "not find user "
+        });
+    }
+    User.FindOneUserObj({phone})
+        .then(userf => {
+                if (userf) {
+                    FindPawnAllObj({"auction.accountID":userf._id})
+                        .then(pawnfs => {
+                            if (pawnfs) {
+                                    res.send({
+                                        "response": true,
+                                        "value": pawnfs
+                                    });
+                            } else {
+                                return res.send({
+                                    "response": false,
+                                    "value": "pawn is not exits"
+                                });
+                            }
+                        },
+                        err => {
+                            return res.send({
+                                "response": false,
+                                "value": err
+                            });
+                        }
+                    )
+                } else {
+                    return res.send({
+                        "response": false,
+                        "value": "user is not exits"
+                    });
+                }
+            },
+            err => {
+                return res.send({
+                    "response": false,
+                    "value": err
+                });
+            }
+        )
+}
+
+exports.list_pawn_auction_selected= (req, res) => {
+    let {phone} = req.user;
+    if (phone === undefined) {
+        return res.send({
+            "response": false,
+            "value": "not find user "
+        });
+    }
+    User.FindOneUserObj({phone})
+        .then(userf => {
+                if (userf) {
+                    FindPawnAllObj({status: {$gt: 1},"auction.accountID":userf._id})
+                        .then(pawnfs => {
+                            if (pawnfs) {
+                                    res.send({
+                                        "response": true,
+                                        "value": pawnfs
+                                    });
+                            } else {
+                                return res.send({
+                                    "response": false,
+                                    "value": "pawn is not exits"
+                                });
+                            }
+                        },
+                        err => {
+                            return res.send({
+                                "response": false,
+                                "value": err
+                            });
+                        }
+                    )
+                } else {
+                    return res.send({
+                        "response": false,
+                        "value": "user is not exits"
+                    });
+                }
+            },
+            err => {
+                return res.send({
+                    "response": false,
+                    "value": err
+                });
+            }
+        )
 }

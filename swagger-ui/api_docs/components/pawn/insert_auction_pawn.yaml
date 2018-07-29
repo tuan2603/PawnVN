@@ -1,0 +1,54 @@
+#../components/pawn/insert_auction_pawn.yaml
+tags:
+- Pawnvn
+security:
+- Bearer: []
+summary: insert new Auction Pawn
+description: ''
+operationId: addNewAuctionPawn
+consumes:
+- application/x-www-form-urlencoded
+produces:
+- application/json
+parameters:
+- name: "accountID"
+  type: string
+  description: "id người đấu giá"
+  required: true
+  in: formData
+- name: "pawnID"
+  type: string
+  description: "id món đồ cầm"
+  required: true
+  in: formData
+- name: "price"
+  type: number
+  in: formData
+  description: "giá người đấu đưa ra"
+  required: true
+- name: "interest_rate"
+  type: number
+  description: "lãi xuất do người đấu giá đưa ra"
+  required: true
+  in: formData
+- name: "period"
+  type: number
+  in: formData
+  required: true
+  description: kỳ hạn đóng lãi
+- name: "price"
+  type: number
+  description: giá đấu ban đầu
+  required: true
+  in: formData
+responses:
+  'true':
+    description: insert success
+    schema:
+      $ref: 'pawn_model.yaml'
+  'false':
+    description: insert auction pawn fail
+    schema:
+      type: "string"
+      example: "value: ...."
+

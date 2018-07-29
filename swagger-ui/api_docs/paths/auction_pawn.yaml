@@ -1,0 +1,6 @@
+# /paths/auction_pawn.yaml
+post:
+  $ref: '../components/pawn/insert_auction_pawn.yaml'
+get:
+  $ref: '../components/pawn/get_auction_pawn.yaml'
+

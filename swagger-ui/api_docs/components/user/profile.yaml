@@ -6,7 +6,6 @@ summary: "get user info follow by id"
 description: "trả về thông tin của một người dùng"
 operationId: "getUserById"
 produces:
-- "application/xml"
 - "application/json"
 parameters:
 - name: "id"
@@ -21,3 +20,5 @@ responses:
       $ref: "user_model.yaml"
   false:
     description: "Invalid ID supplied"
+    type: "string"
+    example: "Error..."

@@ -1,0 +1,21 @@
+#../components/pawn/get_auction_pawn.yaml
+tags:
+- Pawnvn
+security:
+- Bearer: []
+summary: get all list auction pawn of business
+description: ''
+operationId: getListAuctionPawnUser
+produces:
+- application/json
+responses:
+  'true':
+    description: insert success
+    schema:
+      $ref: 'pawn_model.yaml'
+  'false':
+    description: Create service banner fail
+    schema:
+      type: "string"
+      example: "value: ...."
+

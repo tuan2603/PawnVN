@@ -37,9 +37,13 @@ properties:
   latitude:
     type: string
     example: //vĩ độ
-  examples:
-    type: string
-    example: //mô tả sản phẩm đấu giá
+  auction:
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: string
   created_at:
     type: number
     format: double
