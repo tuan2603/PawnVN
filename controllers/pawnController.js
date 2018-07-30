@@ -618,11 +618,16 @@ exports.notify = (io, socket, obj) => {
                                         .then(
                                             users => {
                                                 if (users.length > 0) {
-                                                    Async.forEachOf(users, function (usk, key, callback) {
+                                                    users.map((usk) => {
                                                         let distance = Distance.distance(usk.latitude, usk.longitude, pawn.latitude, pawn.longitude, "K");
                                                         if (distance <= config.distance_config) {
                                                             // người dùng đang online
                                                             console.log(distance);
+                                                            pawn.reciver.push({_id:usk._id});
+                                                            pawn.save(function (err, pawns) {
+                                                                if (err) socket.emit("notifited", false);
+                                                                else  socket.emit("notifited", true);
+                                                            });
                                                             if (usk.socket_id !== "" && usk.offlineTime > 0) {
                                                                 io.to(usk.socket_id).emit("notify-pawn-c-b", pawn._id);
                                                             } else if (usk.isPlatform === 0 && usk.device_token !== "") {
@@ -633,13 +638,6 @@ exports.notify = (io, socket, obj) => {
                                                                     content_text: "Có tin người đăng đấu giá " + pawn._id,
                                                                 });
                                                             }
-                                                        }
-                                                        callback();
-                                                    }, function (err) {
-                                                        if (err) {
-                                                            socket.emit("notifited", false);
-                                                        } else {
-                                                            socket.emit("notifited", true);
                                                         }
                                                     });
                                                 } else {
@@ -709,6 +707,66 @@ exports.insert_pawn_auction = (req, res) => {
                         .then(pawnf => {
                                 if (pawnf) {
                                     pawnf.auction.push(req.body);
+                                    pawnf.reciver.id(accountID).remove();
+                                    pawnf.save(function (err, pawns) {
+                                        if (err) return res.send({
+                                            "response": false,
+                                            "value": err
+                                        });
+                                        return res.send({
+                                            "response": true,
+                                            "value": pawns
+                                        });
+                                    });
+                                } else {
+                                    return res.send({
+                                        "response": false,
+                                        "value": "not find pawn"
+                                    });
+                                }
+                            },
+                            err => {
+                                return res.send({
+                                    "response": false,
+                                    "value": err
+                                });
+                            }
+                        )
+                } else {
+                    return res.send({
+                        "response": false,
+                        "value": "can't auction so user is not business , token is not master onwe"
+                    });
+                }
+            },
+            err => {
+                return res.send({
+                    "response": false,
+                    "value": err
+                });
+            }
+        )
+}
+
+// hủy đấu giá hay bỏ qua
+exports.not_view_pawn = (req, res) => {
+    let {accountID,pawnID} = req.body;
+    let {phone} = req.user;
+    if (accountID === undefined ||
+        pawnID === undefined ||
+        phone === undefined) {
+        return res.send({
+            "response": false,
+            "value": "not find params "
+        });
+    }
+    User.FindOneUserObj({_id: accountID, phone: phone, roleType: 2})
+        .then(userf => {
+                if (userf) {
+                    FindPawnOneObj({_id: pawnID})
+                        .then(pawnf => {
+                                if (pawnf) {
+                                    pawnf.reciver.id(accountID).remove();
                                     pawnf.save(function (err, pawns) {
                                         if (err) return res.send({
                                             "response": false,
@@ -778,6 +836,7 @@ exports.choose_pawn_auction = (req, res) => {
                                             "response": false,
                                             "value": err
                                         });
+                                        pawnup.reciver = [];
                                         pawnup.save(function (err, pawns) {
                                             if (err) return res.send({
                                                 "response": false,
@@ -830,40 +889,27 @@ exports.get_pawn_auction_for_business = (req, res) => {
     User.FindOneUserObj({phone})
         .then(userf => {
                 if (userf) {
-                    FindPawnAllObj({status:1})
+                    FindPawnAllObj({status: 1,"reciver._id": userf._id})
                         .then(pawnfs => {
-                            if (pawnfs) {
-                                let allpawn = [];
-                                Async.forEachOf(pawnfs, function (pawn, key, callback) {
-                                    let distance = Distance.distance(userf.latitude, userf.longitude, pawn.latitude, pawn.longitude, "K");
-                                    if (distance <= config.distance_config) {
-                                        allpawn.push(pawn);
-                                    }
-                                    callback();
-                                }, function (err) {
-                                    if (err) return res.send({
-                                        "response": false,
-                                        "value": err
-                                    });
-                                    res.send({
+                                if (pawnfs) {
+                                    return res.send({
                                         "response": true,
-                                        "value": allpawn
+                                        "value": pawnfs
                                     });
-                                });
-                            } else {
+                                } else {
+                                    return res.send({
+                                        "response": false,
+                                        "value": "pawn is not exits"
+                                    });
+                                }
+                            },
+                            err => {
                                 return res.send({
                                     "response": false,
-                                    "value": "pawn is not exits"
+                                    "value": err
                                 });
                             }
-                        },
-                        err => {
-                            return res.send({
-                                "response": false,
-                                "value": err
-                            });
-                        }
-                    )
+                        )
                 } else {
                     return res.send({
                         "response": false,
@@ -891,27 +937,27 @@ exports.list_was_auctioned = (req, res) => {
     User.FindOneUserObj({phone})
         .then(userf => {
                 if (userf) {
-                    FindPawnAllObj({"auction.accountID":userf._id})
+                    FindPawnAllObj({"auction.accountID": userf._id})
                         .then(pawnfs => {
-                            if (pawnfs) {
+                                if (pawnfs) {
                                     res.send({
                                         "response": true,
                                         "value": pawnfs
                                     });
-                            } else {
+                                } else {
+                                    return res.send({
+                                        "response": false,
+                                        "value": "pawn is not exits"
+                                    });
+                                }
+                            },
+                            err => {
                                 return res.send({
                                     "response": false,
-                                    "value": "pawn is not exits"
+                                    "value": err
                                 });
                             }
-                        },
-                        err => {
-                            return res.send({
-                                "response": false,
-                                "value": err
-                            });
-                        }
-                    )
+                        )
                 } else {
                     return res.send({
                         "response": false,
@@ -928,7 +974,7 @@ exports.list_was_auctioned = (req, res) => {
         )
 }
 
-exports.list_pawn_auction_selected= (req, res) => {
+exports.list_pawn_auction_selected = (req, res) => {
     let {phone} = req.user;
     if (phone === undefined) {
         return res.send({
@@ -939,27 +985,93 @@ exports.list_pawn_auction_selected= (req, res) => {
     User.FindOneUserObj({phone})
         .then(userf => {
                 if (userf) {
-                    FindPawnAllObj({status: {$gt: 1},"auction.accountID":userf._id})
+                    FindPawnAllObj({status: {$gt: 1}, "auction.accountID": userf._id})
                         .then(pawnfs => {
-                            if (pawnfs) {
+                                if (pawnfs) {
                                     res.send({
                                         "response": true,
                                         "value": pawnfs
                                     });
-                            } else {
+                                } else {
+                                    return res.send({
+                                        "response": false,
+                                        "value": "pawn is not exits"
+                                    });
+                                }
+                            },
+                            err => {
                                 return res.send({
                                     "response": false,
-                                    "value": "pawn is not exits"
+                                    "value": err
                                 });
                             }
-                        },
-                        err => {
-                            return res.send({
-                                "response": false,
-                                "value": err
-                            });
-                        }
-                    )
+                        )
+                } else {
+                    return res.send({
+                        "response": false,
+                        "value": "user is not exits"
+                    });
+                }
+            },
+            err => {
+                return res.send({
+                    "response": false,
+                    "value": err
+                });
+            }
+        )
+}
+
+exports.list_auction_of_pawn = (req, res) => {
+    let {_id} = req.body;
+    let {phone} = req.user;
+    if (phone === undefined) {
+        return res.send({
+            "response": false,
+            "value": "not find user "
+        });
+    }
+    User.FindOneUserObj({phone})
+        .then(userf => {
+                if (userf) {
+                    FindPawnOneObj({accountID: userf._id, _id})
+                        .then(pawnf => {
+                                if (!pawnf) {
+                                    return res.send({
+                                        "response": false,
+                                        "value": "pawn is not exits"
+                                    });
+                                }
+
+                                let allauction = [];
+                                Async.forEachOf(pawnf.auction, function (aucton, key, callback) {
+                                    User.FindOneUserObj({_id: aucton.accountID})
+                                        .then(userf => {
+                                                allauction.push(Object.assign(JSON.parse(JSON.stringify(userf)),JSON.parse(JSON.stringify(aucton))));
+                                                callback();
+                                            }, err => {
+                                                callback(err);
+                                            }
+                                        )
+                                }, function (err) {
+                                    if (err) return res.send({
+                                        "response": false,
+                                        "value": err
+                                    });
+                                    res.send({
+                                        "response": true,
+                                        "value": allauction
+                                    });
+                                });
+
+                            },
+                            err => {
+                                return res.send({
+                                    "response": false,
+                                    "value": err
+                                });
+                            }
+                        )
                 } else {
                     return res.send({
                         "response": false,

@@ -1,0 +1,34 @@
+#../components/pawn/not_view_pawn.yaml
+tags:
+- Pawnvn
+security:
+- Bearer: []
+summary: "delete pawn list not view (xóa món đồ khỏi danh sách)"
+description: ''
+operationId: notVIewPawn
+consumes:
+- application/x-www-form-urlencoded
+produces:
+- application/json
+parameters:
+- name: "accountID"
+  type: string
+  description: "_id người người muốn xóa"
+  required: true
+  in: formData
+- name: "pawnID"
+  type: string
+  description: "id món đồ cầm cần xóa khỏi danh sách"
+  required: true
+  in: formData
+responses:
+  'true':
+    description: delete success
+    schema:
+      $ref: 'pawn_model.yaml'
+  'false':
+    description: delete pawn fail
+    schema:
+      type: "string"
+      example: "value: ...."
+

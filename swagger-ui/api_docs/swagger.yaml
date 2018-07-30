@@ -71,6 +71,10 @@ paths:
     $ref: 'paths/auction_pawn_owner.yaml'
   '/api/list-pawn-auction-selected':
     $ref: 'paths/auction_pawn_selected.yaml'
+  '/api/pawn/get-info-auction-user':
+    $ref: 'paths/auction_pawn_user.yaml'
+  '/api/pawn/not-view-pawn':
+    $ref: 'paths/not_view_pawn.yaml'
   '/api/category':
       $ref: 'paths/category.yaml'
   '/api/user-business-follow':

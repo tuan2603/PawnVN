@@ -1,0 +1,27 @@
+properties:
+  _id:
+    type: string
+  accountID:
+    type: string
+    example: "_id người đấu giá"
+  price:
+    type: number
+    example: "giá người đấu đưa ra"
+  status:
+    type: number
+    example: "chua dung toi có thể là duyệt đấu giá nếu admin muốn"
+  interest_rate:
+    type: number
+    example: "lãi xuất do người đấu giá đưa ra"
+  period:
+    type: string
+    example: kỳ hạn đóng lãi
+  price:
+    type: number
+    example: "giá đấu ban đầu"
+  created_at:
+    type: number
+    format: double
+  updated_at:
+    type: number
+    format: double

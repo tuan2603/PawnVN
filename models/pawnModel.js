@@ -32,6 +32,12 @@ const AuctionPawnSchema = new mongoose.Schema({
     }
 });
 
+const reciver = new mongoose.Schema({
+    _id:{ // _id nhận được pawn
+        type:String,
+    },
+});
+
 const PawnSchema = new mongoose.Schema({
     accountID:{ // _id người đăng
         type:String,
@@ -87,6 +93,7 @@ const PawnSchema = new mongoose.Schema({
         lowercase:true,
     },
     auction:[AuctionPawnSchema],
+    reciver:[reciver],
     create_at: {
         type: Number,
         default: Date.now

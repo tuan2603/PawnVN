@@ -1,0 +1,29 @@
+#../components/user/get_auction_pawn_user.yaml
+tags:
+- Pawnvn
+security:
+- Bearer: []
+summary: get info auction pawn have info user auction
+description: ''
+operationId: getInfoAuctionPawnUser
+consumes:
+- application/x-www-form-urlencoded
+produces:
+- application/json
+parameters:
+- name: "_id"
+  type: string
+  description: "_id của pawn cần lấy thông tin đấu giá"
+  required: true
+  in: formData
+responses:
+  'true':
+    description: get success
+    schema:
+      $ref: 'auction_pawn_model.yaml'
+  'false':
+    description: get fail
+    schema:
+      type: "string"
+      example: "value: ...."
+

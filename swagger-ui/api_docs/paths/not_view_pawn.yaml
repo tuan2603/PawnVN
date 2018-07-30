@@ -1,0 +1,4 @@
+# /paths/not_view_pawn.yaml
+post:
+  $ref: '../components/pawn/not_view_pawn.yaml'
+

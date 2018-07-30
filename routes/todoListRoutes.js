@@ -109,6 +109,12 @@ module.exports = function (app) {
     app.route('/api/pawn/one')
         .post(userHandles.loginRequired, pawn.get_one);
 
+    app.route('/api/pawn/get-info-auction-user')
+        .post(userHandles.loginRequired, pawn.list_auction_of_pawn);
+
+    app.route('/api/pawn/not-view-pawn')
+        .post(userHandles.loginRequired, pawn.not_view_pawn);
+
     //choose auction pawn
     app.route('/api/choose-auction-pawn')
         .post(userHandles.loginRequired, pawn.choose_pawn_auction);

@@ -1,0 +1,3 @@
+# /paths/auction_pawn_user.yaml
+post:
+  $ref: '../components/pawn/get_auction_pawn_user.yaml'
