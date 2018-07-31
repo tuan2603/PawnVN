@@ -195,13 +195,13 @@ let SingIN = (user, res) => {
         // veify code mail
         if (Send_mail(user.email, Verification)) {
             SaveCoseVerify(newCode);
-            return res.json({
+            return res.send({
                 value: 6,
                 message: Messages,
                 code: Verification
             });
         } else {
-            return res.json({
+            return res.send({
                 value: 1,
                 "message": Messages
             });
@@ -209,13 +209,13 @@ let SingIN = (user, res) => {
     } else if (user.verifyType === 1) {
         //verify code sen message
         SaveCoseVerify(newCode);
-        return res.json({
+        return res.send({
             value: 7,
             message: Messages,
             code: Verification
         });
     } else {
-        return res.json({
+        return res.send({
             value: 8,
             message: Messages
         });
@@ -253,7 +253,7 @@ exports.send_code_again = function (req, res) {
                     value: 12,
                 });
             }
-            findUserPhone(req.body.phone)
+            findUserPhone(Number(phone))
                 .then(
                     user => {
                         if (user) {
@@ -342,7 +342,7 @@ exports.verify = function (req, res) {
                                             })
                                     }
                                     userf.password = undefined;
-                                    return res.json({
+                                    return res.send({
                                         message: jwt.sign({
                                             phone: userf.phone,
                                             create_at: userf.create_at,
@@ -354,14 +354,14 @@ exports.verify = function (req, res) {
                                         roleType: userf.roleType,
                                     });
                                 } else {
-                                    return res.json({
+                                    return res.send({
                                         value: 2,
                                         message: mesVerify
                                     })
                                 }
                             }
                             else {
-                                return res.json({
+                                return res.send({
                                     value: 2,
                                     message: mesVerify
                                 })
@@ -419,7 +419,7 @@ exports.register_old = function (req, res) {
                     newUser.verifyType = 1;
                     newUser.roleType = 2;
                     newUser.password = bcrypt.hashSync(req.body.password, saltRounds);
-                    newUser.save(function (err, user) {
+                    newUser.save(function (err, users) {
                         if (err) {
                             console.log(err);
                             return res.send({
@@ -427,18 +427,18 @@ exports.register_old = function (req, res) {
                                 value: 4
                             });
                         } else {
-                            if (user) {
+                            if (users) {
                                 let Verification = rn(options);
                                 let newCode = new Code({
-                                    accountId: user._id,
-                                    phone: user.phone,
+                                    accountId: users._id,
+                                    phone: users.phone,
                                     code: Verification,
                                 });
                                 SaveCoseVerify(newCode);
                                 //tạo giỏ tiền khi đăng ký thành công
                                 createWallets({
-                                    accountID: user._id,
-                                    phone: user.phone,
+                                    accountID: users._id,
+                                    phone: users.phone,
                                 }).then(
                                     res => {
                                         console.log("create wallet success");

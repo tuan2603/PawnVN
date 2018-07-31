@@ -826,26 +826,17 @@ exports.choose_pawn_auction = (req, res) => {
                     UpdatePawnOne({_id: pawnID, accountID: userf._id}, {status})
                         .then(pawnup => {
                                 if (pawnup) {
-                                    Async.forEachOf(pawnup.auction, function (auctionitem, key, callback) {
-                                        if (auctionitem._id != auctionID) {
-                                            pawnup.auction.id(auctionitem._id).remove();
-                                        }
-                                        callback();
-                                    }, function (err) {
+                                    let choose = pawnup.auction.id(auctionID);
+                                    pawnup.reciver = [];
+                                    pawnup.auction = [choose];
+                                    pawnup.save(function (err, pawns) {
                                         if (err) return res.send({
                                             "response": false,
                                             "value": err
                                         });
-                                        pawnup.reciver = [];
-                                        pawnup.save(function (err, pawns) {
-                                            if (err) return res.send({
-                                                "response": false,
-                                                "value": err
-                                            });
-                                            return res.send({
-                                                "response": true,
-                                                "value": pawns
-                                            });
+                                        return res.send({
+                                            "response": true,
+                                            "value": pawns
                                         });
                                     });
                                 } else {
