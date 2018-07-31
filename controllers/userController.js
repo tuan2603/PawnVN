@@ -773,7 +773,9 @@ let FindAllInfoUser = (obj) => {
 // update thông tin user
 exports.update_userboth = (req, res) => {
     let {id} = req.body;
-    if (id === undefined) {
+    let {phone} = req.user;
+    console.log(req.body);
+    if (id === undefined ) {
         return res.send({
             "response": false,
             "value": "not found id",

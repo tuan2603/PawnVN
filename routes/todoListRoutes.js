@@ -7,10 +7,6 @@ module.exports = function (app) {
     let codeVerify = require('../controllers/codeController');
     let pawn = require('../controllers/pawnController');
     let city = require('../controllers/cityController');
-    let purchase = require('../controllers/purchaseController');
-    let pricelist = require('../controllers/pricelistController');
-    let pawnAuction = require('../controllers/pawnAuctionController');
-    let purchaseAuction = require('../controllers/purchaseAuctionController');
     let category = require('../controllers/categoryController');
     let wallets = require('../controllers/walletsController');
     let history = require('../controllers/tradeHistoryController');
@@ -76,9 +72,6 @@ module.exports = function (app) {
 
     app.route('/api/auth/card')
         .post(userHandles.loginRequired, userHandles.update_identityCardFront);
-
-    app.route('/api/auth/doccument')
-        .post(userHandles.loginRequired, userHandles.update_userboth);
 
     app.route('/api/auth/doccumentboth')
         .post(userHandles.loginRequired, userHandles.update_userboth);
