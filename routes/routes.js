@@ -2,13 +2,6 @@ const socketdoc = require("../controllers/socketController");
 module.exports = function(app, passport) {
 
     // =====================================
-    // Default PAGE (with single page reactjs) ========
-    // =====================================
-    app.get('/*',  function(req, res) {
-        res.render('build.ejs'); // load the index.ejs file
-    });
-
-    // =====================================
     // SOCKET PAGE (with login links) ========
     // =====================================
     app.get('/testclient',  function(req, res) {

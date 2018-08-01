@@ -28,7 +28,7 @@ mongoose.Promise = global.Promise;
 mongoose.connect(config.database);
 app.set('uploads','./public/uploads');
 app.use(express.static('public'));
-app.use(express.static('build'));
+// app.use(express.static('build'));
 //swagger
 app.use(express.static('swagger-ui'));
 app.use(bodyParser.json({limit: "20mb"}));
@@ -68,10 +68,10 @@ routes(app);
 // socket
 require('./routes/socket')(server);
 //reactjs
-// app.use(express.static(path.join(__dirname, 'build')));
-// app.get('/*', function (req, res) {
-//     res.sendFile(path.join(__dirname, 'build', 'index.html'));
-// });
+app.use(express.static(path.join(__dirname, 'build')));
+app.get('/*', function (req, res) {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 app.use(function(req, res) {
     res.status(404).send({ url: req.originalUrl + ' not found' })
