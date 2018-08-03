@@ -10,8 +10,14 @@ module.exports = function (app) {
     let category = require('../controllers/categoryController');
     let wallets = require('../controllers/walletsController');
     let history = require('../controllers/tradeHistoryController');
+    let terms = require('../controllers/termsController');
 
     // todoList Routes
+    //get wallet user
+    app.route('/api/terms')
+        .get(userHandles.loginRequired, terms.list_terms)
+        .post(userHandles.loginRequired, terms.insert_and_update);
+
     //get wallet user
     app.route('/api/history/get')
         .post(userHandles.loginRequired, history.find_all_history);
