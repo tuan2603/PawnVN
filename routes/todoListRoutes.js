@@ -14,9 +14,12 @@ module.exports = function (app) {
 
     // todoList Routes
     //get wallet user
-    app.route('/api/terms')
-        .get(userHandles.loginRequired, terms.list_terms)
-        .post(userHandles.loginRequired, terms.insert_and_update);
+    app.route('/api/insert-terms')
+        .post(userHandles.loginRequired, terms.insert_terms);
+    app.route('/api/update-terms')
+        .post(userHandles.loginRequired, terms.update_terms);
+    app.route('/api/get-terms')
+        .post(userHandles.loginRequired, terms.get_tems_title);
 
     //get wallet user
     app.route('/api/history/get')
@@ -56,7 +59,7 @@ module.exports = function (app) {
         .post(userHandles.sign_in_admin);
 
     app.route('/api/auth/get-info')
-        .get(userHandles.loginRequired,userHandles.get_info);
+        .get(userHandles.loginRequired, userHandles.get_info);
 
     app.route('/api/auth/register-web')
         .post(userHandles.register_old);

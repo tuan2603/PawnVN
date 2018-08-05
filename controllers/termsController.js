@@ -20,11 +20,14 @@ let UpdateTerms = (condition, Obj) => {
     });
 };
 
-let update_terms = function (req, res) {
-    let {_id} = req.body;
+exports.update_terms = function (req, res) {
+    let {_id, title, content} = req.body;
     let {phone} = req.user;
+
     if (
         phone === undefined ||
+        (title === undefined &&
+            content === undefined) ||
         _id === undefined
     ) {
         return res.send({
@@ -63,15 +66,16 @@ let update_terms = function (req, res) {
         )
 };
 
-let insert_terms = function (req, res) {
-
-    if (req.user.phone === undefined) {
+exports.insert_terms = function (req, res) {
+    let {title, content} = req.body;
+    let {phone} = req.user;
+    if (phone === undefined || title === undefined || content === undefined) {
         return res.send({
             "response": false,
             "value": "user not found"
         });
     }
-    find_user_phone(req.user.phone)
+    find_user_phone(phone)
         .then(userf => {
                 if (userf.roleType === 0) {
                     let newTems = new Terms(req.body);
@@ -101,25 +105,32 @@ let insert_terms = function (req, res) {
         )
 };
 
-exports.insert_and_update = (req, res) =>{
-    let {_id} = req.body;
-    if (_id === undefined ) {
-        insert_terms(req, res);
-    } else {
-        update_terms(req, res);
-    }
-}
 
-exports.list_terms = function (req, res) {
-    Terms.findOne({}, function (err, terms) {
+exports.get_tems_title = function (req, res) {
+    let {title} = req.body;
+    if (title === undefined) {
+        return res.send({
+            "response": false,
+            "value": "user not found"
+        });
+    }
+    Terms.findOne({title}, function (err, terms) {
         if (err) return res.send({
             response: false,
             value: err,
         });
-        res.send({
-            response: true,
-            value: terms,
-        })
+        if (terms) {
+            res.send({
+                response: true,
+                value: terms,
+            })
+        } else {
+            return res.send({
+                response: false,
+                value: "không tìm thấy",
+            });
+        }
+
     })
 };
 
