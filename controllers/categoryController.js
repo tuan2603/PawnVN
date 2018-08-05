@@ -112,6 +112,7 @@ exports.insert_one = function (req, res) {
 
 };
 
+
 exports.list_categories = function (req, res) {
     category.find({}, function (err, categories) {
         if (err) return res.send({
