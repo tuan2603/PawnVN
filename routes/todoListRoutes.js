@@ -37,6 +37,9 @@ module.exports = function (app) {
         .get(category.list_categories)
         .post(userHandles.loginRequired, category.insert_one);
 
+    app.route('/api/category/update')
+        .post(userHandles.loginRequired, category.update_cat);
+
     //get, insert city
     app.route('/api/city')
         .get(city.list_city)

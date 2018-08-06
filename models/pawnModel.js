@@ -88,6 +88,17 @@ const PawnSchema = new mongoose.Schema({
     latitude :{ //vĩ độ
         type:Number,
     },
+    //start_comming (bool - mặc định là false)
+    start_comming:{  //mặc định là false
+        type:Boolean,
+        default: false,
+    },
+    track_pawnowner_lat:{  //vĩ độ
+        type:Number,
+    },
+    track_pawnowner_long :{ //kinh độ
+        type:Number,
+    },
     descriptions:{ //mô tả sản phẩm đấu giá
         type:String,
         lowercase:true,

@@ -23,11 +23,19 @@ module.exports = function (server) {
             //khi nguoi dung ngat ket noi server
             User.disconnect(socket);
         });
-        // gủi tin nhắn đấu giá từ khách hàng cho những các doanh nghiệp có bán kính 10km,
+        // gủi tin nhắn đấu giá từ khách hàng cho những các doanh nghiệp có bán kính 20km,
         socket.on("notify-pawn-c-b", function (data) {
             let obj = JSON.parse(data);
             if (obj) {
                 Pawn.notify(io, socket, obj);
+            }
+        });
+
+        // cập nhật vị trí
+        socket.on("update-track-pawnowner", function (data) {
+            let obj = JSON.parse(data);
+            if (obj) {
+                Pawn.update_track_pawnowner_lat(io, obj);
             }
         });
     });

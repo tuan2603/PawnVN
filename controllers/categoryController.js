@@ -15,9 +15,9 @@ let FindOneCategories = (obj) => {
     });
 };
 
-let UpdateCategory = (Obj) => {
+let UpdateCategory = (condition, Obj) => {
     return new Promise((resolve, reject) => {
-        category.findOneAndUpdate({_id: Obj._id}, Obj, {new: true}, function (err, cate) {
+        category.findOneAndUpdate(condition, Obj, {new: true}, function (err, cate) {
             if (err) reject(err);
             resolve(cate);
         });
@@ -70,13 +70,13 @@ exports.insert_one = function (req, res) {
                 });
             }
             user.find_user_phone(req.user.phone)
-                .then( user => {
+                .then(user => {
                         if (user.roleType === 0) {
                             let newCat = new category(req.body);
                             newCat.icon = req.file.filename;
                             newCat.save(function (err, categories) {
                                 if (err) return res.send({
-                                    respone: false,
+                                    response: false,
                                     value: err,
                                 });
                                 fsextra.moveSync(
@@ -84,18 +84,18 @@ exports.insert_one = function (req, res) {
                                     path.join(`${config.folder_uploads}`, `categories`, `${req.file.filename}`),
                                     {overwrite: true});
                                 res.send({
-                                    respone: true,
+                                    response: true,
                                     value: categories,
                                 })
                             })
-                        }else{
+                        } else {
                             return res.send({
                                 "response": false,
                                 "value": "user isn't admin, only admin insert, update, delete category"
                             });
                         }
                     },
-                    err=>{
+                    err => {
                         return res.send({
                             "response": false,
                             "value": err
@@ -109,6 +109,58 @@ exports.insert_one = function (req, res) {
             });
         }
     });
+
+};
+
+exports.update_cat = function (req, res) {
+    let {_id} = req.body;
+    if (req.user.phone === undefined || _id === undefined) {
+        return res.send({
+            "response": false,
+            "value": "user not found"
+        });
+    }
+    user.find_user_phone(req.user.phone)
+        .then(user => {
+                if (user.roleType === 0) {
+                    UpdateCategory({_id}, req.body).then(
+                        catu => {
+                            if (catu) {
+                                console.log("req.body",req.body);
+                                console.log("catu",catu);
+                                res.send({
+                                    response: true,
+                                    value: catu,
+                                })
+
+                            } else {
+                                return res.send({
+                                    "response": false,
+                                    "value": "update false"
+                                });
+                            }
+                        }, err => {
+                            return res.send({
+                                "response": false,
+                                "value": err
+                            });
+                        }
+                    )
+                } else {
+                    return res.send({
+                        "response": false,
+                        "value": "user isn't admin, only admin insert, update, delete category"
+                    });
+                }
+            },
+            err => {
+                return res.send({
+                    "response": false,
+                    "value": "loi tim user "
+                });
+            }
+        )
+
 
 };
 
