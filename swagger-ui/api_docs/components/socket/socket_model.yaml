@@ -1,0 +1,9 @@
+properties:
+  _id:
+    type: string
+  method:
+    type: string
+  address:
+    type: string
+  description:
+    type: string

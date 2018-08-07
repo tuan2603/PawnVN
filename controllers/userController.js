@@ -72,7 +72,16 @@ let Send_mail = async (mail, Verification) => {
     });
 
 }
-
+//delete on user
+let DeleteOneUser = (obj) => {
+    return new Promise((resolve, reject) => {
+        User.findOneAndRemove(obj, function (err, userdl) {
+            if (err) return reject(err);
+            fsextra.removeSync(`public/uploads/${userdl.phone}`);
+            resolve(userdl);
+        });
+    });
+}
 let UpdateUserSocketID = (obj) => {
     return new Promise((resolve, reject) => {
         User.findOneAndUpdate({socket_id: obj.socket_id}, obj, {new: true}, function (err, User) {
@@ -1216,16 +1225,7 @@ exports.get_all_user_business_following = function (req, res) {
         })
 };
 
-//delete on user
-let DeleteOneUser = (obj) => {
-    return new Promise((resolve, reject) => {
-        User.findOneAndRemove(obj, function (err, userdl) {
-            if (err) return reject(err);
-            fsextra.removeSync(`public/uploads/${userdl.phone}`);
-            resolve(userdl);
-        });
-    });
-}
+
 
 
 //delte user and delete all table have relationship

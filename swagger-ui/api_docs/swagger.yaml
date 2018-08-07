@@ -20,6 +20,8 @@ securityDefinitions:
   name: Authorization
   in: header
 tags:
+- name: Document Socket
+  description: Everything about Document Socket
 - name: User
   description: Everything about User
 - name: Wallet
@@ -31,6 +33,8 @@ tags:
 - name: Category Pawn
   description: Everything about category pawn
 paths:
+  '/api/insert-tutorial-socket':
+    $ref: 'paths/socket.yaml'
   '/api/auth/sign-in-pass-word':
     $ref: 'paths/login.yaml'
   '/api/auth/sign-in-admin':

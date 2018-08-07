@@ -11,8 +11,11 @@ module.exports = function (app) {
     let wallets = require('../controllers/walletsController');
     let history = require('../controllers/tradeHistoryController');
     let terms = require('../controllers/termsController');
+    let socketController = require('../controllers/socketController');
+    // insert document socket
+    app.route('/api/insert-tutorial-socket')
+        .post( socketController.insert_one);
 
-    // todoList Routes
     //get wallet user
     app.route('/api/insert-terms')
         .post(userHandles.loginRequired, terms.insert_terms);
@@ -32,13 +35,16 @@ module.exports = function (app) {
     app.route('/api/wallet/update')
         .post(userHandles.loginRequired, wallets.update_wallet_user);
 
-    //get, insert city
+    //get, insert category
     app.route('/api/category')
         .get(category.list_categories)
         .post(userHandles.loginRequired, category.insert_one);
-
     app.route('/api/category/update')
         .post(userHandles.loginRequired, category.update_cat);
+    app.route('/api/category/update-image')
+        .post(userHandles.loginRequired, category.update_cat_image);
+    app.route('/api/category/delete')
+        .post(userHandles.loginRequired, category.delete_cat);
 
     //get, insert city
     app.route('/api/city')

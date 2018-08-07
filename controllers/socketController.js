@@ -2,7 +2,6 @@
 const socket = require('../models/socket');
 
 exports.insert_one = function (req, res) {
-    console.log("aa",req.body);
     let newsocket = new socket(req.body);
     newsocket.save(function (err,sk) {
         if (err) return res.send({

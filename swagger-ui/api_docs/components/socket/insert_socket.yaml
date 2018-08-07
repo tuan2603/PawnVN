@@ -1,0 +1,40 @@
+#../components/socket/insert_socket.yaml
+tags:
+  - Document Socket
+summary: Add a new Document Socket
+description: ''
+operationId: addNewDocumentSocket
+consumes:
+- application/x-www-form-urlencoded
+produces:
+- application/json
+parameters:
+- name: "method"
+  type: string
+  description: on or emit
+  required: true
+  in: formData
+- name: "address"
+  type: string
+  in: formData
+  description: name for on or  emit
+- name: "params"
+  type: string
+  description: params send and receive
+  required: true
+  in: formData
+- name: "description"
+  type: string
+  in: formData
+  required: true
+  description: 'description'
+responses:
+  'true':
+    description: insert success
+    schema:
+      $ref: 'socket_model.yaml'
+  'false':
+    description: Create service banner fail
+    schema:
+      type: "string"
+      example: "value: ...."

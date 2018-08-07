@@ -24,6 +24,22 @@ let UpdateCategory = (condition, Obj) => {
     });
 };
 
+//delete on Cat
+let DeleteOneCat = (obj) => {
+    return new Promise((resolve, reject) => {
+        category.findOneAndRemove(obj, function (err, cat) {
+            if (err) return reject(err);
+            //remove icon old
+            try {
+                fsextra.remove(path.join(`${config.folder_uploads}`, `categories`, `${cat.icon}`));
+                resolve(cat);
+            } catch (err) {
+                return reject(err);
+            }
+        });
+    });
+}
+
 let uploadDir = config.folder_temp;
 let Storage = multer.diskStorage({
     destination: uploadDir,
@@ -126,13 +142,10 @@ exports.update_cat = function (req, res) {
                     UpdateCategory({_id}, req.body).then(
                         catu => {
                             if (catu) {
-                                console.log("req.body",req.body);
-                                console.log("catu",catu);
                                 res.send({
                                     response: true,
                                     value: catu,
                                 })
-
                             } else {
                                 return res.send({
                                     "response": false,
@@ -162,6 +175,139 @@ exports.update_cat = function (req, res) {
         )
 
 
+};
+
+exports.update_cat_image = function (req, res) {
+    upload(req, res, function (err) {
+        if (err) {
+            return res.send({
+                "response": false,
+                "value": err
+            });
+        }
+        if (req.file) {
+            let {_id} = req.body;
+            if (req.user.phone === undefined || _id === undefined) {
+                return res.send({
+                    "response": false,
+                    "value": "user not found"
+                });
+            }
+            user.find_user_phone(req.user.phone)
+                .then(user => {
+                        if (user.roleType === 0) {
+                            let obj = req.body;
+                            obj.icon = req.file.filename;
+                            FindOneCategories({_id})
+                                .then(catf => {
+                                    UpdateCategory({_id}, obj).then(
+                                        catu => {
+                                            if (catu) {
+                                                //remove icon old
+                                                try {
+                                                    fsextra.remove(path.join(`${config.folder_uploads}`, `categories`, `${catf.icon}`));
+                                                    console.log('success!')
+                                                } catch (err) {
+                                                    console.error(err)
+                                                }
+                                                fsextra.moveSync(
+                                                    path.join(`${config.folder_temp}`, `${req.file.filename}`),
+                                                    path.join(`${config.folder_uploads}`, `categories`, `${req.file.filename}`),
+                                                    {overwrite: true});
+                                                res.send({
+                                                    response: true,
+                                                    value: catu,
+                                                })
+
+                                            } else {
+                                                return res.send({
+                                                    "response": false,
+                                                    "value": "update false"
+                                                });
+                                            }
+                                        }, err => {
+                                            return res.send({
+                                                "response": false,
+                                                "value": err
+                                            });
+                                        }
+                                    )
+                                }, err => {
+                                    return res.send({
+                                        "response": false,
+                                        "value": err
+                                    });
+                                })
+
+                        } else {
+                            return res.send({
+                                "response": false,
+                                "value": "user isn't admin, only admin insert, update, delete category"
+                            });
+                        }
+                    },
+                    err => {
+                        return res.send({
+                            "response": false,
+                            "value": err
+                        });
+                    }
+                )
+        } else {
+            return res.send({
+                "response": false,
+                "value": "save image fail"
+            });
+        }
+    });
+
+};
+
+exports.delete_cat = function (req, res) {
+    let {_id} = req.body;
+    if (req.user.phone === undefined || _id === undefined) {
+        return res.send({
+            "response": false,
+            "value": "user not found"
+        });
+    }
+    user.find_user_phone(req.user.phone)
+        .then(user => {
+                if (user.roleType === 0) {
+                    DeleteOneCat({_id})
+                        .then(catdel => {
+                                if (catdel) {
+                                    res.send({
+                                        response: true,
+                                        value: catdel,
+                                    })
+                                } else {
+                                    return res.send({
+                                        "response": false,
+                                        "value": "delete false"
+                                    });
+                                }
+                            }, err => {
+                                return res.send({
+                                    "response": false,
+                                    "value": err
+                                });
+                            }
+                        )
+                } else {
+                    return res.send({
+                        "response": false,
+                        "value": "user isn't admin, only admin insert, update, delete category"
+                    });
+                }
+            },
+            err => {
+                return res.send({
+                    "response": false,
+                    "value": err,
+                });
+            }
+        )
 };
 
 
