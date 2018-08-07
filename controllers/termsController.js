@@ -11,6 +11,16 @@ let FindTerms = (obj) => {
     });
 };
 
+let FindAllTerm = (obj) => {
+    return new Promise((resolve, reject) => {
+        Terms.find(obj, function (err, terms) {
+            if (err) return reject(err);
+            resolve(terms);
+        });
+    });
+};
+
+
 let UpdateTerms = (condition, Obj) => {
     return new Promise((resolve, reject) => {
         Terms.findOneAndUpdate(condition, Obj, {new: true}, function (err, terms) {
@@ -19,6 +29,16 @@ let UpdateTerms = (condition, Obj) => {
         });
     });
 };
+
+//delete on page
+let DeleteOnePage = (obj) => {
+    return new Promise((resolve, reject) => {
+        Terms.findOneAndRemove(obj, function (err, page) {
+            if (err) return reject(err);
+            resolve(page);
+        });
+    });
+}
 
 exports.update_terms = function (req, res) {
     let {_id, title, content} = req.body;
@@ -132,6 +152,75 @@ exports.get_tems_title = function (req, res) {
         }
 
     })
+};
+
+exports.get_all_term = function (req, res) {
+    FindAllTerm({})
+        .then(termf=>{
+            if (termf) {
+                res.send({
+                    response: true,
+                    value: termf,
+                })
+            } else {
+                return res.send({
+                    response: false,
+                    value: "not found pages",
+                });
+            }
+        },err=>{
+            return res.send({
+                response: false,
+                value: err,
+            });
+        })
+};
+
+exports.delete_page = function (req, res) {
+    let {_id} = req.body;
+    if (req.user.phone === undefined || _id === undefined) {
+        return res.send({
+            "response": false,
+            "value": "user not found"
+        });
+    }
+    user.find_user_phone(req.user.phone)
+        .then(user => {
+                if (user.roleType === 0) {
+                    DeleteOnePage({_id})
+                        .then(pagedel => {
+                                if (pagedel) {
+                                    res.send({
+                                        response: true,
+                                        value: pagedel,
+                                    })
+                                } else {
+                                    return res.send({
+                                        "response": false,
+                                        "value": "delete false"
+                                    });
+                                }
+                            }, err => {
+                                return res.send({
+                                    "response": false,
+                                    "value": err
+                                });
+                            }
+                        )
+                } else {
+                    return res.send({
+                        "response": false,
+                        "value": "user isn't admin, only admin insert, update, delete category"
+                    });
+                }
+            },
+            err => {
+                return res.send({
+                    "response": false,
+                    "value": err,
+                });
+            }
+        )
 };
 
 

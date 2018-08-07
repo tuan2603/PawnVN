@@ -22,7 +22,11 @@ module.exports = function (app) {
     app.route('/api/update-terms')
         .post(userHandles.loginRequired, terms.update_terms);
     app.route('/api/get-terms')
-        .post(userHandles.loginRequired, terms.get_tems_title);
+        .post( terms.get_tems_title);
+    app.route('/api/get-all-pages')
+        .get(terms.get_all_term);
+    app.route('/api/delete-page')
+        .post(userHandles.loginRequired,terms.delete_page);
 
     //get wallet user
     app.route('/api/history/get')
