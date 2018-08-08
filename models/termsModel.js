@@ -1,15 +1,19 @@
 'use strict';
 const mongoose = require('mongoose');
 const TermsSchema = new mongoose.Schema({
-    categories: String,
     title: String,
     content: String,
-    accountID: String,
-    Created: {
-       type: Number,
-        default:Date.now,
+    author:{
+        type: {},
     },
-    Updated: Number,
+    permalink: String,
+    create_at: {
+        type: Number,
+        default: Date.now
+    },
+    updated_at: {
+        type: Number
+    }
 });
 module.exports = mongoose.model('terms', TermsSchema);
 

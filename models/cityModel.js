@@ -8,11 +8,13 @@ const CitySchema = new Schema({
     ID: Number,
     Title: String,
     STT: Number,
-    Created: {
-       type: Number,
-        default:Date.now,
+    create_at: {
+        type: Number,
+        default: Date.now
     },
-    Updated: Number,
+    updated_at: {
+        type: Number
+    }
 });
 
 

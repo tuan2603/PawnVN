@@ -8,6 +8,13 @@ var socketSchema = mongoose.Schema({
     address: String,
     params: String,
     description: String,
+    create_at: {
+        type: Number,
+        default: Date.now
+    },
+    updated_at: {
+        type: Number
+    }
 });
 
 // create the model for users and expose it to our app

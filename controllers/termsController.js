@@ -41,13 +41,11 @@ let DeleteOnePage = (obj) => {
 }
 
 exports.update_terms = function (req, res) {
-    let {_id, title, content} = req.body;
+    let {_id} = req.body;
     let {phone} = req.user;
 
     if (
         phone === undefined ||
-        (title === undefined &&
-            content === undefined) ||
         _id === undefined
     ) {
         return res.send({
@@ -184,7 +182,7 @@ exports.delete_page = function (req, res) {
             "value": "user not found"
         });
     }
-    user.find_user_phone(req.user.phone)
+    find_user_phone(req.user.phone)
         .then(user => {
                 if (user.roleType === 0) {
                     DeleteOnePage({_id})

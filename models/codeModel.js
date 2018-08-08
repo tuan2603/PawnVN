@@ -19,9 +19,12 @@ const CodeSchema = new Schema({
         type:String,
         lowercase: true,
     },
-    create_at:{
+    create_at: {
         type: Number,
-        default:Date.now
+        default: Date.now
+    },
+    updated_at: {
+        type: Number
     }
 });
 

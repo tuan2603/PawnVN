@@ -680,7 +680,8 @@ exports.update_track_pawnowner_lat = (io, obj) => {
                             pawnup => {
                                 if (pawnup) {
                                     if (user.socket_id !== "" && user.offlineTime > 0) {
-                                        io.to(user.socket_id).emit("update-track-pawnowner", {_id, accountID, track_pawnowner_lat, track_pawnowner_long });
+                                        io.to(user.socket_id).emit("update-track-pawnowner",
+                                            {_id, accountID, track_pawnowner_lat, track_pawnowner_long });
                                     } else if (user.isPlatform === 0 && user.device_token !== "") {
                                         // người dùng offline, kiểm tra người dùng có dùng ios không
                                         Ios.sendNotifyIOS({
