@@ -22,7 +22,7 @@ module.exports = function (app) {
     app.route('/api/update-terms')
         .post(userHandles.loginRequired, terms.update_terms);
     app.route('/api/get-terms')
-        .post( terms.get_tems_title);
+        .post( terms.get_one_tems);
     app.route('/api/get-all-pages')
         .get(terms.get_all_term);
     app.route('/api/delete-page')

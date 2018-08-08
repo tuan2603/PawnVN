@@ -152,6 +152,34 @@ exports.get_tems_title = function (req, res) {
     })
 };
 
+exports.get_one_tems = function (req, res) {
+    let obj = req.body;
+    if (obj === undefined) {
+        return res.send({
+            "response": false,
+            "value": "not found"
+        });
+    }
+    Terms.findOne(obj, function (err, terms) {
+        if (err) return res.send({
+            response: false,
+            value: err,
+        });
+        if (terms) {
+            res.send({
+                response: true,
+                value: terms,
+            })
+        } else {
+            return res.send({
+                response: false,
+                value: "không tìm thấy",
+            });
+        }
+
+    })
+};
+
 exports.get_all_term = function (req, res) {
     FindAllTerm({})
         .then(termf=>{

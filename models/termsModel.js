@@ -3,9 +3,8 @@ const mongoose = require('mongoose');
 const TermsSchema = new mongoose.Schema({
     title: String,
     content: String,
-    author:{
-        type: {},
-    },
+    categories: [],
+    author:{},
     permalink: String,
     create_at: {
         type: Number,

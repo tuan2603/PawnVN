@@ -1124,6 +1124,7 @@ exports.loginRequired = function (req, res, next) {
 };
 
 
+
 exports.connect = function (io, socket, obj) {
     //console.log("user: ", obj);
     // _id, device_token, isPlatform, offlineTime // không truyền lên
