@@ -23,7 +23,7 @@ module.exports = function (server) {
         });
         // gủi tin nhắn đấu giá từ khách hàng cho những các doanh nghiệp có bán kính 20km,
         socket.on("notify-pawn-c-b", function (data) {
-            let pawn = JSON.parse(data);
+            let pawn = JSON.parse(JSON.stringify(data));
             if (pawn) {
                 Pawn.notify({io, socket, pawn});
             }
@@ -31,9 +31,17 @@ module.exports = function (server) {
 
         // cập nhật vị trí
         socket.on("update-track-pawnowner", function (data) {
-            let obj = JSON.parse(data);
+            let obj = JSON.parse(JSON.stringify(data));
             if (obj) {
                 Pawn.update_track_pawnowner_lat(io, obj);
+            }
+        });
+
+        // cập nhật vị trí
+        socket.on("update-start-comming", function (data) {
+            let info = JSON.parse(JSON.stringify(data));
+            if (info) {
+                Pawn.update_start_comming({io, info, socket});
             }
         });
     });

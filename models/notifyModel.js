@@ -25,6 +25,5 @@ const NotifySchema = new mongoose.Schema({
         type: Number
     }
 });
-
 module.exports = mongoose.model('notifications', NotifySchema);
 

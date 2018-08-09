@@ -26,7 +26,7 @@ const session      = require('express-session');
 const config = require("./config");
 const port = config.AUrl;
 mongoose.Promise = global.Promise;
-mongoose.connect(config.database);
+mongoose.connect(config.database, { useNewUrlParser: true });
 app.set('uploads','./public/uploads');
 app.use(express.static('public'));
 // app.use(express.static('build'));

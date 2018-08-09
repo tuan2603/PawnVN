@@ -141,3 +141,4 @@ exports.connect = connect;
 exports.disconnect = disconnect;
 exports.removeOnline = removeOnline;
 exports.FindAllUserOnline = FindAllUserOnline;
+exports.FindOneUserObj = FindOneUserObj;

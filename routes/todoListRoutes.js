@@ -12,6 +12,12 @@ module.exports = function (app) {
     let history = require('../controllers/tradeHistoryController');
     let terms = require('../controllers/termsController');
     let socketController = require('../controllers/socketController');
+    let notify = require('../controllers/notifyController');
+
+    // insert document socket
+    app.route('/api/get-notification-one-user')
+        .post( userHandles.loginRequired, notify.get_all_notification_for_one_user);
+
     // insert document socket
     app.route('/api/insert-tutorial-socket')
         .post( socketController.insert_one);

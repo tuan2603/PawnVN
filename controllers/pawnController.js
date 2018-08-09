@@ -608,67 +608,66 @@ let send_notify_bussiness = (pawn) => {
 }
 
 exports.notify = (obj) => {
-    let {io, socket, pawn} = obj;
+    let {io, pawn} = obj;
     User.findUserId(pawn.accountID)
         .then(
             usersend => {
                 if (usersend) {
-                    FindOnePawn(pawn._id)
+                    User.findAllBusiness()
                         .then(
-                            pawnf => {
-                                if (pawnf) {
-                                    User.findAllBusiness()
-                                        .then(
-                                            users => {
-                                                if (users.length > 0) {
-                                                    users.map((usk) => {
-                                                        let distance = Distance.distance(usk.latitude, usk.longitude, pawn.latitude, pawn.longitude, "K");
-                                                        if (distance <= config.distance_config) {
-                                                            // người dùng đang online
-                                                            console.log(distance);
-                                                            pawnf.reciver.push({_id: usk._id});
-                                                            pawnf.save(function (err, pawns) {
-                                                                if (err) {
-                                                                    console.log("pawn.reciver.push", err);
-                                                                }
-                                                                if (pawns) {
-                                                                    // lưu thông báo người dùng
-                                                                    Notify.CreateNotify({
-                                                                        author: usersend,
-                                                                        to_id: usk._id,
-                                                                        content: notification.pawn_new,
-                                                                        categories: 'pawn',
-                                                                    }).then(nt => {
-                                                                        if (usk.offlineTime > 0) {
-                                                                            UserOnline.FindAllUserOnline({user_id})
-                                                                                .then(userOneL => {
-                                                                                    if (userOneL.length > 0) {
-                                                                                        userOneL.map((uonl) => {
-                                                                                            io.to(uonl.socket_id).emit("notify-pawn-c-b", nt);
-                                                                                        })
-                                                                                    }
-                                                                                })
-                                                                        } else if (usk.isPlatform === 0 && usk.device_token !== "") {
-                                                                            // người dùng offline, kiểm tra người dùng có dùng ios không
-                                                                            Ios.sendNotifyIOS({
-                                                                                device_token: usk.device_token,
-                                                                                countMes: 1,
-                                                                                content_text: nt,
-                                                                            });
-                                                                        }
-                                                                    });
-                                                                }
-                                                            });
+                            users => {
+                                if (users.length > 0) {
+                                    users.map((usk) => {
+                                        let distance = Distance.distance(usk.latitude, usk.longitude, pawn.latitude, pawn.longitude, "K");
+                                        if (distance <= config.distance_config) {
+                                            // người dùng đang online
+                                            FindPawnOneObj({_id: pawn._id})
+                                                .then(pawnf => {
+                                                    pawnf.reciver.push({_id: usk._id});
+                                                    pawnf.save(function (err) {
+                                                        if (err) {
+                                                            console.log("pawn.reciver.push", err);
+                                                            return
                                                         }
-
+                                                        // lưu thông báo người dùng
+                                                        Notify.CreateNotify({
+                                                            author: usersend,
+                                                            to_id: usk._id,
+                                                            content: notification.pawn_new,
+                                                            categories: 'pawn',
+                                                        }).then(nt => {
+                                                            if (usk.offlineTime > 0) {
+                                                                UserOnline.FindAllUserOnline({user_id: usk._id})
+                                                                    .then(userOneL => {
+                                                                        if (userOneL.length > 0) {
+                                                                            userOneL.map((uonl) => {
+                                                                                console.log("online", uonl.socket_id)
+                                                                                io.to(uonl.socket_id).emit("notify-pawn-c-b", nt);
+                                                                            })
+                                                                        }
+                                                                    })
+                                                            } else if (usk.isPlatform === 0 && usk.device_token !== "") {
+                                                                // người dùng offline, kiểm tra người dùng có dùng ios không
+                                                                console.log("offline", usk.device_token);
+                                                                Ios.sendNotifyIOS({
+                                                                    device_token: usk.device_token,
+                                                                    countMes: 1,
+                                                                    content_text: nt,
+                                                                });
+                                                            }
+                                                        });
                                                     });
-                                                }
-                                            },
-                                            err => {
-                                                console.log(err);
-                                            });
+
+                                                });
+
+                                        }
+
+                                    });
                                 }
-                            })
+                            },
+                            err => {
+                                console.log(err);
+                            });
                 }
             }
         )
@@ -684,9 +683,22 @@ exports.update_track_pawnowner_lat = (io, obj) => {
                         .then(
                             pawnup => {
                                 if (pawnup) {
-                                    if (user.socket_id !== "" && user.offlineTime > 0) {
-                                        io.to(user.socket_id).emit("update-track-pawnowner",
-                                            {_id, accountID, track_pawnowner_lat, track_pawnowner_long});
+                                    if (user.offlineTime > 0) {
+                                        UserOnline.FindAllUserOnline({user_id: user._id})
+                                            .then(userOneL => {
+                                                if (userOneL.length > 0) {
+                                                    userOneL.map((uonl) => {
+                                                        console.log("uonl", uonl);
+                                                        io.to(uonl.socket_id).emit("update-track-pawnowner",
+                                                            {
+                                                                _id,
+                                                                accountID,
+                                                                track_pawnowner_lat,
+                                                                track_pawnowner_long
+                                                            });
+                                                    })
+                                                }
+                                            })
                                     } else if (user.isPlatform === 0 && user.device_token !== "") {
                                         // người dùng offline, kiểm tra người dùng có dùng ios không
                                         Ios.sendNotifyIOS({
@@ -701,6 +713,48 @@ exports.update_track_pawnowner_lat = (io, obj) => {
                                 console.log(err);
                             }
                         );
+                }
+            },
+            err => {
+                console.log(err);
+            }
+        );
+};
+
+exports.update_start_comming = (obj) => {
+    let {io, socket} = obj;
+    let {start_comming, pawn_id, from_id, to_id} = info;
+    UpdatePawnOne({_id: pawn_id}, {start_comming})
+        .then(
+            pawnup => {
+                if (pawnup) {
+                    socket.emit("update-start-comming", {pawn: pawnup});
+                    User.FindOneUserObj({_id: to_id})
+                        .then(userf => {
+                            User.FindOneUserObj({_id:from_id})
+                                .then(usersend => {
+                                    if (usersend) {
+                                        if (userf.offlineTime > 0) {
+                                            UserOnline.FindAllUserOnline({user_id: to_id})
+                                                .then(userOneL => {
+                                                    if (userOneL.length > 0) {
+                                                        userOneL.map((uonl) => {
+                                                            console.log("uonl", uonl);
+                                                            io.to(uonl.socket_id).emit("update-start-comming", {pawn: pawnup,author:usersend});
+                                                        })
+                                                    }
+                                                })
+                                        } else if (userf.isPlatform === 0 && userf.device_token !== "") {
+                                            // người dùng offline, kiểm tra người dùng có dùng ios không
+                                            Ios.sendNotifyIOS({
+                                                device_token: userf.device_token,
+                                                countMes: 1,
+                                                content_text: `${usersend.fullName} đang di chuyển`,
+                                            });
+                                        }
+                                    }
+                                })
+                        })
                 }
             },
             err => {
