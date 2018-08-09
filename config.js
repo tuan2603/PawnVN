@@ -12,4 +12,5 @@ module.exports = {
     'folder_temp': path.join(__dirname, 'public', 'temps'),
     'folder_uploads': path.join(__dirname, 'public', 'uploads'),
     'distance_config': 20.0,
+    'server_socket': 'http://localhost:8080',
 };

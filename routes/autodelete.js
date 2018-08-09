@@ -6,8 +6,8 @@ const config = require('../config');
 const pawn = require('../controllers/pawnController');
 
 exports.autoruntime = function() {
-    cron.schedule('* 12 * * *', function(){
-        console.log('running a task every 23 clock');
+    cron.schedule('49 3 * * *', function(){
+        console.log('running a task every 3 clock 49 minute');
         pawn.delete_all_pawn_trash();
         //fsextra.removeSync(`${config.folder_temp}`);
         deletefileinfoldertemps();

@@ -82,9 +82,18 @@ let DeleteOneUser = (obj) => {
         });
     });
 }
+
 let UpdateUserSocketID = (obj) => {
     return new Promise((resolve, reject) => {
         User.findOneAndUpdate({socket_id: obj.socket_id}, obj, {new: true}, function (err, User) {
+            if (err) return reject(err);
+            resolve(User);
+        });
+    });
+}
+let UpdateUser = (condition,obj) => {
+    return new Promise((resolve, reject) => {
+        User.findOneAndUpdate(condition, obj, {new: true}, function (err, User) {
             if (err) return reject(err);
             resolve(User);
         });
@@ -113,7 +122,7 @@ let FindOneUserObj = (obj) => {
         });
     });
 }
-exports.FindOneUserObj = FindOneUserObj;
+
 
 let FindUserSocketID = (obj) => {
     return new Promise((resolve, reject) => {
@@ -123,7 +132,7 @@ let FindUserSocketID = (obj) => {
         });
     });
 }
-exports.FindUserSocketID = FindUserSocketID;
+
 
 let findUserPhone = (phone) => {
     return new Promise((resolve, reject) => {
@@ -133,8 +142,7 @@ let findUserPhone = (phone) => {
         });
     });
 };
-// tìm kiếm người dùng qua số điện thoại
-exports.find_user_phone = findUserPhone;
+
 
 let findUserId = (id) => {
     return new Promise((resolve, reject) => {
@@ -144,7 +152,6 @@ let findUserId = (id) => {
         });
     });
 }
-exports.findUserId = findUserId;
 
 let findAllUser = () => {
     return new Promise((resolve, reject) => {
@@ -155,7 +162,6 @@ let findAllUser = () => {
     });
 }
 
-exports.findAllUser = findAllUser;
 
 let findAllBusiness = () => {
     return new Promise((resolve, reject) => {
@@ -165,8 +171,6 @@ let findAllBusiness = () => {
         });
     });
 }
-
-exports.findAllBusiness = findAllBusiness;
 
 let UpdateUserID = (obj) => {
     return new Promise((resolve, reject) => {
@@ -717,14 +721,6 @@ exports.update_avatar = function (req, res) {
             .then(
                 userf => {
                     if (userf) {
-                        if (userf.avatarLink) {
-                            //remove and overwrite
-                            try {
-                                fsextra.remove(path.join(`${config.folder_uploads}`, `${userf.phone}`, `${userf.avatarLink}`));
-                            } catch (err) {
-                                console.error(err)
-                            }
-                        }
                         // update and move avatar from folder tepms to folder user( phone number)
                         UpdateUserID({_id: id, avatarLink: req.file.filename})
                             .then(useru => {
@@ -849,16 +845,7 @@ exports.update_identityCardFront = function (req, res) {
                     }
                     switch (req.body.expression) {
                         case 'identityCardFront':
-                            if (userf.identityCardFront) {
-                                //remove
-                                try {
-                                    fsextra.remove(path.join(`${config.folder_uploads}`, `${userf.phone}`, `${userf.identityCardFront}`));
-                                    console.log('success!')
-                                } catch (err) {
-                                    console.error(err)
-                                }
-                            }
-                            // update and move avatar from folder tepms to folder user( phone number)
+                                                       // update and move avatar from folder tepms to folder user( phone number)
                             UpdateUserObj({_id: req.body.id}, {identityCardFront: req.file.filename})
                                 .then(useru => {
                                     fsextra.moveSync(
@@ -877,16 +864,7 @@ exports.update_identityCardFront = function (req, res) {
                                 });
                             break;
                         case 'identityCardBehind':
-                            if (userf.identityCardBehind) {
-                                //remove
-                                try {
-                                    fsextra.remove(path.join(`${config.folder_uploads}`, `${userf.phone}`, `${userf.identityCardBehind}`));
-                                    console.log('success!')
-                                } catch (err) {
-                                    console.error(err)
-                                }
-                            }
-                            // update and move avatar from folder tepms to folder user( phone number)
+                                                       // update and move avatar from folder tepms to folder user( phone number)
                             UpdateUserObj({_id: req.body.id}, {identityCardBehind: req.file.filename})
                                 .then(useru => {
                                     fsextra.moveSync(
@@ -905,16 +883,7 @@ exports.update_identityCardFront = function (req, res) {
                                 });
                             break;
                         case 'licenseeImageFront':
-                            if (userf.licenseeImageFront) {
-                                //remove
-                                try {
-                                    fsextra.remove(path.join(`${config.folder_uploads}`, `${userf.phone}`, `${userf.licenseeImageFront}`));
-                                    console.log('success!')
-                                } catch (err) {
-                                    console.error(err)
-                                }
-                            }
-                            // update and move avatar from folder tepms to folder user( phone number)
+                                                       // update and move avatar from folder tepms to folder user( phone number)
                             UpdateUserObj({_id: req.body.id}, {licenseeImageFront: req.file.filename})
                                 .then(useru => {
                                     fsextra.moveSync(
@@ -933,15 +902,7 @@ exports.update_identityCardFront = function (req, res) {
                                 });
                             break;
                         case 'licenseeImageBehind':
-                            if (userf.licenseeImageBehind) {
-                                //remove
-                                try {
-                                    fsextra.remove(path.join(`${config.folder_uploads}`, `${userf.phone}`, `${userf.licenseeImageBehind}`));
-                                    console.log('success!')
-                                } catch (err) {
-                                    console.error(err)
-                                }
-                            }
+
                             // update and move avatar from folder tepms to folder user( phone number)
                             UpdateUserObj({_id: req.body.id}, {licenseeImageBehind: req.file.filename})
                                 .then(useru => {
@@ -1025,7 +986,6 @@ exports.sign_in = function (req, res) {
         });
     })
 }
-
 exports.sign_in_admin = function (req, res) {
     if (req.body.phone === undefined ||
         req.body.password === undefined) {
@@ -1083,7 +1043,6 @@ exports.sign_in_admin = function (req, res) {
         });
     })
 }
-
 //kiem tra đang nhập qua session
 exports.get_info = function (req, res) {
     let {phone} = req.user;
@@ -1114,7 +1073,6 @@ exports.get_info = function (req, res) {
             })
         })
 }
-
 exports.loginRequired = function (req, res, next) {
     if (req.user) {
         next();
@@ -1123,64 +1081,6 @@ exports.loginRequired = function (req, res, next) {
     }
 };
 
-
-
-exports.connect = function (io, socket, obj) {
-    //console.log("user: ", obj);
-    // _id, device_token, isPlatform, offlineTime // không truyền lên
-    findUserId(obj._id)
-        .then(
-            user => {
-                if (user) {
-                    if (user.offlineTime > 0) {
-                        // người dùng đang online
-                        // gửi lệnh kit out người dùng hiện tại
-                        let socket_id_old = user.socket_id;
-                        if (socket_id_old !== "") {
-                            io.to(socket_id_old).emit("kit-out-user-connecting", user._id);
-                        }
-                        // update lại thông tin người dùng mới
-                        UpdateUserID(Object.assign(obj, {offlineTime: Date.now(), socket_id: socket.id}))
-                            .then(user => {
-                                if (user) {
-                                    socket.emit("connected", user._id);
-                                }
-                            }, err => console.log(err));
-                    } else {
-                        // người dùng đang offline, hoặc chưa có thiết bị nào kết nối
-                        // update thông tin người dùng mới
-                        UpdateUserID(Object.assign(obj, {offlineTime: Date.now()}))
-                            .then(user => {
-                                if (user) {
-                                    socket.broadcast.emit("new-user-connect", user._id);
-                                }
-                            }, err => console.log(err));
-                    }
-                } else {
-                    console.log("không tìm thấy user");
-                }
-            },
-            err => {
-                console.log(err);
-            }
-        )
-};
-exports.disconnect = function (socket) {
-    UpdateUserSocketID({
-        socket_id: socket.id,
-        offlineTime: 0,
-    }).then(
-        user => {
-            if (user) {
-            } else {
-                console.log("không tìm thấy user");
-            }
-        },
-        err => {
-            console.log(err);
-        }
-    )
-};
 exports.get_all_business = function (req, res) {
     findAllBusiness()
         .then(users => {
@@ -1225,9 +1125,6 @@ exports.get_all_user_business_following = function (req, res) {
             })
         })
 };
-
-
-
 
 //delte user and delete all table have relationship
 let DeleteUser = (obj) => {
@@ -1357,3 +1254,12 @@ exports.insert_comment = (req, res) => {
             }
         )
 }
+
+exports.FindOneUserObj = FindOneUserObj;
+exports.findAllBusiness = findAllBusiness;
+exports.FindUserSocketID = FindUserSocketID;
+exports.findUserId = findUserId;
+// tìm kiếm người dùng qua số điện thoại
+exports.find_user_phone = findUserPhone;
+exports.findAllUser = findAllUser;
+exports.UpdateUser = UpdateUser;

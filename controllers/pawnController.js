@@ -9,8 +9,11 @@
 */
 const Pawn = require('../models/pawnModel'),
     User = require("../controllers/userController"),
+    UserOnline = require("../controllers/onlineController"),
+    Notify = require("../controllers/notifyController"),
     Ios = require("../controllers/notifyIOSController"),
     Distance = require("../ultils/distance"),
+    notification = require("../ultils/notification"),
     path = require('path'),
     multer = require('multer'),
     fs = require('fs'),
@@ -601,19 +604,19 @@ let createNewPawnDoc = (obj, res) => {
 };
 
 let send_notify_bussiness = (pawn) => {
-    let sockets = require('socket.io-client')('http://localhost:8080');
-    sockets.emit("notify-pawn-c-b", JSON.stringify(pawn));
+    require('socket.io-client')(config.server_socket).emit("notify-pawn-c-b", JSON.stringify(pawn));
 }
 
-exports.notify = (io, socket, obj) => {
-    User.findUserId(obj.accountID)
+exports.notify = (obj) => {
+    let {io, socket, pawn} = obj;
+    User.findUserId(pawn.accountID)
         .then(
-            user => {
-                if (user) {
-                    FindOnePawn(obj._id)
+            usersend => {
+                if (usersend) {
+                    FindOnePawn(pawn._id)
                         .then(
-                            pawn => {
-                                if (pawn) {
+                            pawnf => {
+                                if (pawnf) {
                                     User.findAllBusiness()
                                         .then(
                                             users => {
@@ -623,65 +626,67 @@ exports.notify = (io, socket, obj) => {
                                                         if (distance <= config.distance_config) {
                                                             // người dùng đang online
                                                             console.log(distance);
-                                                            pawn.reciver.push({_id:usk._id});
-                                                            pawn.save(function (err, pawns) {
-                                                                if (err) socket.emit("notifited", false);
-                                                                else  socket.emit("notifited", true);
+                                                            pawnf.reciver.push({_id: usk._id});
+                                                            pawnf.save(function (err, pawns) {
+                                                                if (err) {
+                                                                    console.log("pawn.reciver.push", err);
+                                                                }
+                                                                if (pawns) {
+                                                                    // lưu thông báo người dùng
+                                                                    Notify.CreateNotify({
+                                                                        author: usersend,
+                                                                        to_id: usk._id,
+                                                                        content: notification.pawn_new,
+                                                                        categories: 'pawn',
+                                                                    }).then(nt => {
+                                                                        if (usk.offlineTime > 0) {
+                                                                            UserOnline.FindAllUserOnline({user_id})
+                                                                                .then(userOneL => {
+                                                                                    if (userOneL.length > 0) {
+                                                                                        userOneL.map((uonl) => {
+                                                                                            io.to(uonl.socket_id).emit("notify-pawn-c-b", nt);
+                                                                                        })
+                                                                                    }
+                                                                                })
+                                                                        } else if (usk.isPlatform === 0 && usk.device_token !== "") {
+                                                                            // người dùng offline, kiểm tra người dùng có dùng ios không
+                                                                            Ios.sendNotifyIOS({
+                                                                                device_token: usk.device_token,
+                                                                                countMes: 1,
+                                                                                content_text: nt,
+                                                                            });
+                                                                        }
+                                                                    });
+                                                                }
                                                             });
-                                                            if (usk.socket_id !== "" && usk.offlineTime > 0) {
-                                                                io.to(usk.socket_id).emit("notify-pawn-c-b", pawn._id);
-                                                            } else if (usk.isPlatform === 0 && usk.device_token !== "") {
-                                                                // người dùng offline, kiểm tra người dùng có dùng ios không
-                                                                Ios.sendNotifyIOS({
-                                                                    device_token: usk.device_token,
-                                                                    countMes: 1,
-                                                                    content_text: "Có tin người đăng đấu giá " + pawn._id,
-                                                                });
-                                                            }
                                                         }
+
                                                     });
-                                                } else {
-                                                    // không tìm thấy người dùng, tin ảo
-                                                    socket.emit("notifited", false);
                                                 }
                                             },
                                             err => {
                                                 console.log(err);
-                                            }
-                                        );
-                                } else {
-                                    // không tìm thấy người dùng, tin ảo
-                                    socket.emit("notifited", false);
+                                            });
                                 }
-                            },
-                            err => {
-                                console.log(err);
-                            }
-                        );
-                } else {
-                    // không tìm thấy người dùng, tin ảo
-                    socket.emit("notifited", false);
+                            })
                 }
-            },
-            err => {
-                console.log(err);
             }
-        );
+        )
 };
 
 exports.update_track_pawnowner_lat = (io, obj) => {
-    let {_id, accountID, track_pawnowner_lat, track_pawnowner_long } = obj;
+    let {_id, accountID, track_pawnowner_lat, track_pawnowner_long} = obj;
     User.findUserId(accountID)
         .then(
             user => {
                 if (user) {
-                    UpdatePawnOne({_id},{track_pawnowner_lat,track_pawnowner_long})
+                    UpdatePawnOne({_id}, {track_pawnowner_lat, track_pawnowner_long})
                         .then(
                             pawnup => {
                                 if (pawnup) {
                                     if (user.socket_id !== "" && user.offlineTime > 0) {
                                         io.to(user.socket_id).emit("update-track-pawnowner",
-                                            {_id, accountID, track_pawnowner_lat, track_pawnowner_long });
+                                            {_id, accountID, track_pawnowner_lat, track_pawnowner_long});
                                     } else if (user.isPlatform === 0 && user.device_token !== "") {
                                         // người dùng offline, kiểm tra người dùng có dùng ios không
                                         Ios.sendNotifyIOS({
@@ -785,7 +790,7 @@ exports.insert_pawn_auction = (req, res) => {
 
 // hủy đấu giá hay bỏ qua
 exports.not_view_pawn = (req, res) => {
-    let {accountID,pawnID} = req.body;
+    let {accountID, pawnID} = req.body;
     let {phone} = req.user;
     if (accountID === undefined ||
         pawnID === undefined ||
@@ -915,7 +920,7 @@ exports.get_pawn_auction_for_business = (req, res) => {
     User.FindOneUserObj({phone})
         .then(userf => {
                 if (userf) {
-                    FindPawnAllObj({status: 1,"reciver._id": userf._id})
+                    FindPawnAllObj({status: 1, "reciver._id": userf._id})
                         .then(pawnfs => {
                                 if (pawnfs) {
                                     return res.send({
@@ -1073,7 +1078,7 @@ exports.list_auction_of_pawn = (req, res) => {
                                 Async.forEachOf(pawnf.auction, function (aucton, key, callback) {
                                     User.FindOneUserObj({_id: aucton.accountID})
                                         .then(userf => {
-                                                allauction.push(Object.assign(JSON.parse(JSON.stringify(userf)),JSON.parse(JSON.stringify(aucton))));
+                                                allauction.push(Object.assign(JSON.parse(JSON.stringify(userf)), JSON.parse(JSON.stringify(aucton))));
                                                 callback();
                                             }, err => {
                                                 callback(err);

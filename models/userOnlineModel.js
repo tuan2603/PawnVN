@@ -7,6 +7,9 @@ const OnlineSchema = new mongoose.Schema({
     socket_id:{ // id socket cua nguoi dung hien tai
         type:String,
     },
+    device_token:{ // device_token cua nguoi dung hien tai
+        type:String,
+    },
     isPlatform:{ //thiết bị sử dụng. 0 ios, 1 android, 2 web
         type:Number,
         default:2,

@@ -12,6 +12,7 @@ const express = require('express'),
     bodyParser = require('body-parser'),
     path = require('path'),
     {autoruntime} = require('./routes/autodelete'),
+    {removeOnline} = require('./controllers/onlineController'),
     jsonwebtoken = require("jsonwebtoken");
 
 const http = require('http');
@@ -85,6 +86,9 @@ autoruntime();
 // 	console.log('todo list RESTful API server started on: ' + port);
 // });
 
-server.listen(port, () => console.log(`todo list RESTful API server started on: ${port}`));
+server.listen(port, () =>{
+    console.log(`todo list RESTful API server started on: ${port}`)
+    removeOnline();
+});
 
 module.exports = app;

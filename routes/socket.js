@@ -1,6 +1,6 @@
 'use strict';
 const socketIO = require('socket.io');
-const User = require('../controllers/userController');
+const {connect, disconnect} = require('../controllers/onlineController');
 const Pawn = require('../controllers/pawnController');
 
 module.exports = function (server) {
@@ -9,25 +9,23 @@ module.exports = function (server) {
     const io = socketIO(server);
     // This is what the socket.io syntax is like, we will work this later
     io.on('connection', socket => {
-        console.log(socket.id);
         // DANG KY NGUOI DUNG
         socket.on("register", function (data) {
-            console.log(data);
             let obj = JSON.parse(JSON.stringify(data));
             if (obj) {
-                User.connect(io, socket, obj);
+                connect({io, socket, info:obj});
             }
         });
         //nguoi dung offline
         socket.on("disconnect", function () {
             //khi nguoi dung ngat ket noi server
-            User.disconnect(socket);
+            disconnect(socket.id);
         });
         // gủi tin nhắn đấu giá từ khách hàng cho những các doanh nghiệp có bán kính 20km,
         socket.on("notify-pawn-c-b", function (data) {
-            let obj = JSON.parse(data);
-            if (obj) {
-                Pawn.notify(io, socket, obj);
+            let pawn = JSON.parse(data);
+            if (pawn) {
+                Pawn.notify({io, socket, pawn});
             }
         });
 
