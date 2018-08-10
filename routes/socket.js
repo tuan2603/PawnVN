@@ -10,8 +10,14 @@ module.exports = function (server) {
     // This is what the socket.io syntax is like, we will work this later
     io.on('connection', socket => {
         // DANG KY NGUOI DUNG
+        console.log("ket noi socket",socket.id);
         socket.on("register", function (data) {
-            let obj = JSON.parse(JSON.stringify(data));
+            let obj = null;
+            if	(typeof data === "string"){
+                obj = JSON.parse(data);
+            } else{
+                obj = JSON.parse(JSON.stringify(data));
+            }
             if (obj) {
                 connect({io, socket, info:obj});
             }
@@ -23,15 +29,25 @@ module.exports = function (server) {
         });
         // gủi tin nhắn đấu giá từ khách hàng cho những các doanh nghiệp có bán kính 20km,
         socket.on("notify-pawn-c-b", function (data) {
-            let pawn = JSON.parse(JSON.stringify(data));
-            if (pawn) {
-                Pawn.notify({io, socket, pawn});
+            let obj = null;
+            if	(typeof data === "string"){
+                obj = JSON.parse(data);
+            } else{
+                obj = JSON.parse(JSON.stringify(data));
+            }
+            if (obj) {
+                Pawn.notify({io, socket, pawn:obj});
             }
         });
 
         // cập nhật vị trí
         socket.on("update-track-pawnowner", function (data) {
-            let obj = JSON.parse(JSON.stringify(data));
+            let obj = null;
+            if	(typeof data === "string"){
+                obj = JSON.parse(data);
+            } else{
+                obj = JSON.parse(JSON.stringify(data));
+            }
             if (obj) {
                 Pawn.update_track_pawnowner_lat(io, obj);
             }
@@ -39,10 +55,37 @@ module.exports = function (server) {
 
         // cập nhật vị trí
         socket.on("update-start-comming", function (data) {
-            let info = JSON.parse(JSON.stringify(data));
+            let info = JSON.parse(data);
             if (info) {
                 Pawn.update_start_comming({io, info, socket});
             }
         });
+
+        // send notification send auction
+        socket.on("notify-insert-pawn-auction", function (data) {
+            let info = null;
+            if	(typeof data === "string"){
+                info = JSON.parse(data);
+            } else{
+                info = JSON.parse(JSON.stringify(data));
+            }
+            if (info) {
+                Pawn.notify_insert_auction({io, info});
+            }
+        });
+
+        // send notification choose auction
+        socket.on("notify-choose-pawn-auction", function (data) {
+            let info = null;
+            if	(typeof data === "string"){
+                info = JSON.parse(data);
+            } else{
+                info = JSON.parse(JSON.stringify(data));
+            }
+            if (info) {
+                Pawn.notify_choose_auction({io, info});
+            }
+        });
+
     });
 };

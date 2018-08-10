@@ -1,0 +1,7 @@
+# /paths/update_view_notification.yaml
+#post:
+#  $ref: '../components/notification/get_notification.yaml'
+
+get:
+  $ref: '../components/notification/update_view_notification.yaml'
+

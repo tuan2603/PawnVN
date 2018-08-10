@@ -1,0 +1,36 @@
+#../components/notification/update_one_notification.yaml
+tags:
+- Notification
+security:
+- Bearer: []
+summary: update one notifacation of one user
+description: ''
+operationId: updateOneNotificationOneUser
+consumes:
+- application/x-www-form-urlencoded
+produces:
+- application/json
+parameters:
+- name: "notification_id"
+  type: string
+  description: "_id notification want to update"
+  in: formData
+- name: "status"
+  type: number
+  in: formData
+  description: "0 user not watch, 1 user watched"
+responses:
+  'true':
+    description: get success
+    schema:
+      $ref: 'notification_model.yaml'
+  'false':
+    description: Create service banner fail
+    schema:
+      type: "object"
+      properties:
+       err:
+        type: string
+
+
+

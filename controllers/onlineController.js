@@ -68,7 +68,7 @@ let connect = (obj) => {
         socket.emit("connected", {response: false, err: 'not user!'});
         return;
     }
-
+    console.log("connect",user.fullName);
     FindOneUserObj({_id: user._id})
         .then(userf => {
             if (!userf) {

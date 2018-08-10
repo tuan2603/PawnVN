@@ -1,0 +1,19 @@
+properties:
+  author:
+    type: object
+  to_id:
+    type: string
+  content:
+    type: string
+  status:
+    type: number
+  categories:
+    type: string
+  detail_id:
+    type: string
+  created_at:
+    type: number
+    format: double
+  updated_at:
+    type: number
+    format: double

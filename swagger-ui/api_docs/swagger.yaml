@@ -32,6 +32,8 @@ tags:
   description: Everything about Pawnvn
 - name: Category Pawn
   description: Everything about category pawn
+- name: Notification
+  description: Everything about notification
 paths:
   '/api/insert-tutorial-socket':
     $ref: 'paths/socket.yaml'
@@ -91,3 +93,9 @@ paths:
       $ref: 'paths/update_wallet.yaml'
   '/api/history/get':
       $ref: 'paths/get_history.yaml'
+  '/api/get-notification-one-user':
+      $ref: 'paths/get_notification.yaml'
+  '/api/update-view-notification-for-one-user':
+      $ref: 'paths/update_view_notification.yaml'
+  '/api/update-one-notification-for-one-user':
+      $ref: 'paths/update_one_notification.yaml'

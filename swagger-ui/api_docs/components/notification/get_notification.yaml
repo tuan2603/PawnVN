@@ -1,0 +1,36 @@
+#../components/notification/get_notification.yaml
+tags:
+- Notification
+security:
+- Bearer: []
+summary: get all notification of one user
+description: ''
+operationId: getAllNotificationOneUser
+consumes:
+- application/x-www-form-urlencoded
+produces:
+- application/json
+parameters:
+- name: "page"
+  type: number
+  description: "page number want get"
+  in: formData
+- name: "limit"
+  type: number
+  in: formData
+  description: "limit number notify on page"
+responses:
+  'true':
+    description: get success
+    schema:
+      $ref: 'notification_model.yaml'
+  'false':
+    description: Create service banner fail
+    schema:
+      type: "object"
+      properties:
+       err:
+        type: string
+
+
+

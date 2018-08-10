@@ -2,6 +2,7 @@
 const mongoose = require('mongoose'),
     bcrypt = require('bcryptjs'),
     async = require('async'),
+     app = require('../index'),
     saltRounds = 10,
     jwt = require('jsonwebtoken'),
     User = mongoose.model('User'),

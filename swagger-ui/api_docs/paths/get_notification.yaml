@@ -1,0 +1,7 @@
+# /paths/get_notification.yaml
+post:
+  $ref: '../components/notification/get_notification.yaml'
+
+#get:
+#  $ref: '../components/pawn/get_auction_pawn.yaml'
+

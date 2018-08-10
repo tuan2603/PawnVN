@@ -2,15 +2,18 @@
 const mongoose = require('mongoose');
 const NotifySchema = new mongoose.Schema({
     author:{ // thông tin người gửi
-        type:String,
+        type:Object,
     },
-    to_id:{ // _id ngươi gửi
+    to_id:{ // _id ngươi nhận
         type:String,
     },
     content:{ // nội dung tin nhắn
         type:String,
     },
     categories:{ // danh mục
+        type:String,
+    },
+    detail_id:{ // id của pawn hoặc 1 đối tượng nào cần đi đến
         type:String,
     },
     status:{

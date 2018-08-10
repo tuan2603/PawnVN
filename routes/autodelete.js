@@ -4,20 +4,19 @@ const path = require('path');
 const fsextra = require('fs-extra');
 const config = require('../config');
 const pawn = require('../controllers/pawnController');
+const {delete_notification_old} = require('../controllers/notifyController');
 
 exports.autoruntime = function() {
     cron.schedule('49 3 * * *', function(){
         console.log('running a task every 3 clock 49 minute');
         pawn.delete_all_pawn_trash();
-        //fsextra.removeSync(`${config.folder_temp}`);
         deletefileinfoldertemps();
+        delete_notification_old();
     });
 
     // cron.schedule('* * * * *', function(){
     //     console.log('running a task every minute');
-    //     //pawn.delete_all_pawn_trash();
-    //     //fsextra.removeSync(`${config.folder_temp}`);
-    //     deletefileinfoldertemps();
+    //
     // });
 }
 

@@ -633,8 +633,9 @@ exports.notify = (obj) => {
                                                         Notify.CreateNotify({
                                                             author: usersend,
                                                             to_id: usk._id,
-                                                            content: notification.pawn_new,
+                                                            content: `${usersend.fullName} ${notification.pawn_new}`,
                                                             categories: 'pawn',
+                                                            detail_id: pawnf._id,
                                                         }).then(nt => {
                                                             if (usk.offlineTime > 0) {
                                                                 UserOnline.FindAllUserOnline({user_id: usk._id})
@@ -652,7 +653,7 @@ exports.notify = (obj) => {
                                                                 Ios.sendNotifyIOS({
                                                                     device_token: usk.device_token,
                                                                     countMes: 1,
-                                                                    content_text: nt,
+                                                                    content_text: `${usersend.fullName} ${notification.pawn_new}`,
                                                                 });
                                                             }
                                                         });
@@ -762,8 +763,6 @@ exports.update_start_comming = (obj) => {
             }
         );
 };
-
-
 exports.delete_all_pawn_trash = () => {
     FindPawnAllObj({deleted: true})
         .then(pawnsf => {
@@ -794,6 +793,7 @@ exports.insert_pawn_auction = (req, res) => {
             "value": "not find params "
         });
     }
+
     User.FindOneUserObj({_id: accountID, phone: phone, roleType: 2})
         .then(userf => {
                 if (userf) {
@@ -807,7 +807,9 @@ exports.insert_pawn_auction = (req, res) => {
                                             "response": false,
                                             "value": err
                                         });
-                                        return res.send({
+                                        require('socket.io-client')(config.server_socket)
+                                            .emit("notify-insert-pawn-auction", JSON.stringify({ pawn: pawns, usersend:userf}));
+                                         res.send({
                                             "response": true,
                                             "value": pawns
                                         });
@@ -841,6 +843,43 @@ exports.insert_pawn_auction = (req, res) => {
             }
         )
 }
+
+exports.notify_insert_auction = (obj) => {
+    let {io} = obj;
+    let { pawn,  usersend} = obj.info;
+    // lưu thông báo người dùng
+    Notify.CreateNotify({
+        author: usersend,
+        to_id: pawn.accountID,
+        content: `${usersend.fullName} ${notification.auction_new}`,
+        categories: 'pawn',
+        detail_id: pawn._id,
+    }).then(nt => {
+        User.FindOneUserObj({_id: pawn.accountID})
+            .then(userr => {
+                if (userr.offlineTime > 0) {
+                    UserOnline.FindAllUserOnline({user_id: userr._id})
+                        .then(userOneL => {
+                            if (userOneL.length > 0) {
+                                userOneL.map((uonl) => {
+                                    console.log("online", uonl.socket_id)
+                                    io.to(uonl.socket_id).emit("notify-pawn-c-b", nt);
+                                })
+                            }
+                        })
+                } else if (userr.isPlatform === 0 && userr.device_token !== "") {
+                    // người dùng offline, kiểm tra người dùng có dùng ios không
+                    console.log("offline", userr.device_token);
+                    Ios.sendNotifyIOS({
+                        device_token: userr.device_token,
+                        countMes: 1,
+                        content_text: `${usersend.fullName} ${notification.auction_new}`,
+                    });
+                }
+
+            });
+    });
+};
 
 // hủy đấu giá hay bỏ qua
 exports.not_view_pawn = (req, res) => {
@@ -928,7 +967,9 @@ exports.choose_pawn_auction = (req, res) => {
                                             "response": false,
                                             "value": err
                                         });
-                                        return res.send({
+                                        require('socket.io-client')(config.server_socket)
+                                            .emit("notify-choose-pawn-auction", JSON.stringify({ pawn: pawns, usersend:userf,to_id:auctionID }));
+                                        res.send({
                                             "response": true,
                                             "value": pawns
                                         });
@@ -962,6 +1003,44 @@ exports.choose_pawn_auction = (req, res) => {
             }
         )
 }
+
+exports.notify_choose_auction = (obj) => {
+    let {io} = obj;
+    let { pawn,  usersend, to_id} = obj.info;
+    // lưu thông báo người dùng
+    // lưu thông báo người dùng
+    Notify.CreateNotify({
+        author: usersend,
+        to_id: to_id,
+        content: `${usersend.fullName} ${notification.auction_choose}`,
+        categories: 'pawn',
+        detail_id: pawn._id,
+    }).then(nt => {
+        User.FindOneUserObj({_id: to_id})
+            .then(userr => {
+                if (userr.offlineTime > 0) {
+                    UserOnline.FindAllUserOnline({user_id: userr._id})
+                        .then(userOneL => {
+                            if (userOneL.length > 0) {
+                                userOneL.map((uonl) => {
+                                    console.log("online", uonl.socket_id)
+                                    io.to(uonl.socket_id).emit("notify-pawn-c-b", nt);
+                                })
+                            }
+                        })
+                } else if (userr.isPlatform === 0 && userr.device_token !== "") {
+                    // người dùng offline, kiểm tra người dùng có dùng ios không
+                    console.log("offline", userr.device_token);
+                    Ios.sendNotifyIOS({
+                        device_token: userr.device_token,
+                        countMes: 1,
+                        content_text: `${usersend.fullName} ${notification.auction_choose}`,
+                    });
+                }
+
+            });
+    });
+};
 
 exports.get_pawn_auction_for_business = (req, res) => {
     let {phone} = req.user;
