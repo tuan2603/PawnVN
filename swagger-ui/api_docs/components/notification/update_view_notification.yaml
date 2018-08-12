@@ -1,5 +1,7 @@
 tags:
   - Notification
+security:
+- Bearer: []
 summary: update all notification have status from 0 to 1( form not watch to watched )
 description: ''
 operationId: updateWatchedNotificationOneUser

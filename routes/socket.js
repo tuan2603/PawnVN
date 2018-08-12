@@ -55,7 +55,12 @@ module.exports = function (server) {
 
         // cập nhật vị trí
         socket.on("update-start-comming", function (data) {
-            let info = JSON.parse(data);
+            let info = null;
+            if	(typeof data === "string"){
+                info = JSON.parse(data);
+            } else{
+                info = JSON.parse(JSON.stringify(data));
+            }
             if (info) {
                 Pawn.update_start_comming({io, info, socket});
             }
@@ -84,6 +89,32 @@ module.exports = function (server) {
             }
             if (info) {
                 Pawn.notify_choose_auction({io, info});
+            }
+        });
+
+        // Request disbursement verify
+        socket.on("request-disbursement-verify", function (data) {
+            let info = null;
+            if	(typeof data === "string"){
+                info = JSON.parse(data);
+            } else{
+                info = JSON.parse(JSON.stringify(data));
+            }
+            if (info) {
+                Pawn.request_disbursement_verify({io, info});
+            }
+        });
+
+        //disbursement verify
+        socket.on("disbursement-verify", function (data) {
+            let info = null;
+            if	(typeof data === "string"){
+                info = JSON.parse(data);
+            } else{
+                info = JSON.parse(JSON.stringify(data));
+            }
+            if (info) {
+                Pawn.disbursement_verify({io, info});
             }
         });
 

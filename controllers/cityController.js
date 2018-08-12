@@ -1,15 +1,14 @@
 'use strict';
-const mongoose = require('mongoose');
 const city = require('../models/cityModel');
 
 exports.insert_many = function (req, res) {
     city.insertMany(req.body,function (err,city) {
         if (err) return res.send({
-            respone:false,
+            response:false,
             value:err,
         });
         res.send({
-            respone:true,
+            response:true,
             value:city,
         })
     })
@@ -18,11 +17,11 @@ exports.insert_many = function (req, res) {
 exports.list_city = function (req, res) {
     city.find({},function (err,city) {
         if (err) return res.send({
-            respone:false,
+            response:false,
             value:err,
         });
         res.send({
-            respone:true,
+            response:true,
             value:city,
         })
     })

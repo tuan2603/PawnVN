@@ -1057,6 +1057,9 @@ exports.get_info = function (req, res) {
     findUserPhone(phone)
         .then(userf => {
             if (userf) {
+                userf.activeType = undefined;
+                userf.password = undefined;
+                userf.verifyType = undefined;
                 return res.send({
                     value: userf,
                     response: true
