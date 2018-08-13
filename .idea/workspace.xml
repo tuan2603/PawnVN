@@ -2,34 +2,103 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c76d89b5-0984-4f1a-87c1-813aa64b54b2" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/build/static/css/main.8ef86c3a.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/static/css/main.8ef86c3a.css.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/static/js/main.90da367b.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/static/js/main.90da367b.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/static/js/main.e95ed5cd.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/static/js/main.e95ed5cd.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/static/media/themify.2c454669.eot" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/static/media/themify.a1ecc3b8.woff" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/static/media/themify.cba68f98.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/static/media/themify.e23a7dca.ttf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apns.p8" beforeDir="false" afterPath="$PROJECT_DIR$/apns.p8" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/asset-manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/build/asset-manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/service-worker.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/service-worker.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/static/css/main.1a18119c.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/static/css/main.1a18119c.css.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/static/css/main.38ce106b.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/static/css/main.38ce106b.css.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/static/css/main.9300b90e.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/static/css/main.9300b90e.css.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/static/css/main.fae891cc.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/static/css/main.fae891cc.css.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/static/js/main.08fb2155.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/static/js/main.08fb2155.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/static/js/main.0de5ef4b.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/static/js/main.0de5ef4b.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/static/js/main.5d45be60.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/static/js/main.5d45be60.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/static/js/main.7e99090a.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/static/js/main.7e99090a.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/static/js/main.b080bd71.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/static/js/main.b080bd71.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/static/js/main.b4eefffa.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/static/js/main.b4eefffa.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/static/media/logo.5bc6093c.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/static/media/picture.79d1cca5.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.js" beforeDir="false" afterPath="$PROJECT_DIR$/config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controllers/pawnController.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/pawnController.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/socket.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/socket.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
-    <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FUSProjectUsageTrigger">
+    <session id="540240785">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="1" />
+          <entry key="project.open.time.2" value="1" />
+          <entry key="project.open.time.3" value="1" />
+          <entry key="project.opened" value="2" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="js" value="6" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="JavaScript" value="6" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="js" value="148" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="JavaScript" value="148" />
+        </counts>
+      </usages-collector>
+    </session>
   </component>
   <component name="FavoritesManager">
     <favorites_list name="PawnVN" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="todoListRoutes.js" pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/todoListRoutes.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="186">
+            <state relative-caret-position="1632">
               <caret line="96" column="29" selection-start-line="96" selection-start-column="29" selection-end-line="96" selection-end-column="29" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="notifyController.js" pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/controllers/notifyController.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1326">
@@ -38,7 +107,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="notification.js" pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ultils/notification.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="85">
@@ -47,7 +116,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1190">
@@ -56,7 +125,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="autodelete.js" pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/autodelete.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="323">
@@ -65,29 +134,29 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="userController.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/controllers/userController.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-535">
-              <caret line="319" selection-start-line="319" selection-end-line="319" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="pawnController.js" pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/controllers/pawnController.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="504">
-              <caret line="723" lean-forward="true" selection-start-line="723" selection-end-line="723" />
+            <state relative-caret-position="212">
+              <caret line="1117" column="24" lean-forward="true" selection-start-line="1117" selection-start-column="24" selection-end-line="1117" selection-end-column="24" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="socket.js" pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/config.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="272">
+              <caret line="16" selection-start-line="16" selection-end-line="16" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/socket.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="884">
-              <caret line="52" column="13" lean-forward="true" selection-start-line="52" selection-start-column="13" selection-end-line="52" selection-end-column="13" />
+            <state relative-caret-position="318">
+              <caret line="103" column="41" selection-start-line="103" selection-start-column="41" selection-end-line="103" selection-end-column="41" />
             </state>
           </provider>
         </entry>
@@ -178,7 +247,6 @@
         <option value="$PROJECT_DIR$/models/termsModel.js" />
         <option value="$PROJECT_DIR$/views/testsocket.ejs" />
         <option value="$PROJECT_DIR$/models/userOnlineModel.js" />
-        <option value="$PROJECT_DIR$/config.js" />
         <option value="$PROJECT_DIR$/package.json" />
         <option value="$PROJECT_DIR$/controllers/onlineController.js" />
         <option value="$PROJECT_DIR$/routes/autodelete.js" />
@@ -198,8 +266,9 @@
         <option value="$PROJECT_DIR$/index.js" />
         <option value="$PROJECT_DIR$/controllers/userController.js" />
         <option value="$PROJECT_DIR$/ultils/notification.js" />
-        <option value="$PROJECT_DIR$/controllers/pawnController.js" />
         <option value="$PROJECT_DIR$/routes/socket.js" />
+        <option value="$PROJECT_DIR$/controllers/pawnController.js" />
+        <option value="$PROJECT_DIR$/config.js" />
       </list>
     </option>
   </component>
@@ -216,12 +285,13 @@
   </component>
   <component name="NodePackageJsonFileManager">
     <packageJsonPaths>
+      <path value="$PROJECT_DIR$/apns/package.json" />
       <path value="$PROJECT_DIR$/package.json" />
     </packageJsonPaths>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="11" />
-    <option name="y" value="69" />
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
     <option name="width" value="1382" />
     <option name="height" value="744" />
   </component>
@@ -233,7 +303,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -241,21 +310,17 @@
               <item name="PawnVN" type="b2602c69:ProjectViewProjectNode" />
               <item name="PawnVN" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="PawnVN" type="b2602c69:ProjectViewProjectNode" />
-              <item name="PawnVN" type="462c0819:PsiDirectoryNode" />
-              <item name="controllers" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="javascript.nodejs.core.library.configured.version" value="8.11.1" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Downloads/game" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.prettier" value="true" />
     <property name="node.js.path.for.package.prettier" value="project" />
     <property name="node.js.selected.package.prettier" value="" />
@@ -264,15 +329,15 @@
     <property name="nodejs_package_manager_path" value="npm" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\GITHUP\PawnVN\swagger-ui\doc-api\model" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\nodeproject\PawnVN\public" />
+      <recent name="D:\nodeproject\PawnVN" />
       <recent name="D:\nodeproject\PawnVN\swagger-ui\api_docs\components\notification" />
       <recent name="D:\nodeproject\PawnVN\swagger-ui\api_docs\paths" />
       <recent name="D:\nodeproject\PawnVN\swagger-ui\api_docs\components" />
-      <recent name="D:\nodeproject\PawnVN\controllers" />
-      <recent name="D:\nodeproject\PawnVN\models" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\GITHUP\PawnVN\swagger-ui\doc-api\model" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -352,53 +417,55 @@
       <workItem from="1533909378312" duration="825000" />
       <workItem from="1533951045540" duration="63000" />
       <workItem from="1533953428844" duration="1232000" />
+      <workItem from="1534135232831" duration="1894000" />
+      <workItem from="1534147224463" duration="3130000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="359061000" />
+    <option name="totallyTimeSpent" value="364085000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <frame x="-8" y="-8" width="1456" height="876" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49731183" visible="true" weight="0.18377976" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.50070524" side_tool="true" weight="0.2926491" />
-      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49731183" visible="true" weight="0.1480959" />
       <window_info id="npm" order="1" sideWeight="0.50208044" side_tool="true" weight="0.219323" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.26213592" />
       <window_info id="Structure" order="2" sideWeight="0.50268817" side_tool="true" weight="0.2872024" />
-      <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.4992948" weight="0.29819694" />
       <window_info id="Favorites" order="3" side_tool="true" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.3293718" />
-    </layout>
-    <layout-to-restore>
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info id="npm" order="1" sideWeight="0.50208044" side_tool="true" weight="0.219323" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49731183" visible="true" weight="0.18406206" />
-      <window_info id="Structure" order="2" sideWeight="0.50268817" side_tool="true" weight="0.2872024" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.43876177" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.26213592" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.3293718" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.4992948" visible="true" weight="0.29819694" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.4992948" visible="true" weight="0.2974428" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.50070524" side_tool="true" weight="0.2926491" />
       <window_info anchor="bottom" id="Version Control" order="10" />
-      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout>
+    <layout-to-restore>
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49731183" visible="true" weight="0.1480959" />
+      <window_info id="npm" order="1" sideWeight="0.50208044" side_tool="true" weight="0.219323" />
+      <window_info id="Structure" order="2" sideWeight="0.50268817" side_tool="true" weight="0.2872024" />
       <window_info id="Favorites" order="3" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.3293718" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.26213592" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.4992948" weight="0.29819694" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.50070524" side_tool="true" weight="0.2926491" />
+      <window_info anchor="bottom" id="Version Control" order="10" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
     </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -420,25 +487,9 @@
           <option name="timeStamp" value="11" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="14" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/controllers/pawnController.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17697">
-          <caret line="1041" column="7" lean-forward="true" selection-start-line="1041" selection-start-column="7" selection-end-line="1041" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/build/.html" />
-    <entry file="file://$PROJECT_DIR$/swagger-ui/api_docs/paths/not_view_pawn.yaml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" selection-start-line="4" selection-end-line="4" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/views/build.ejs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="289">
@@ -571,13 +622,6 @@
         <state relative-caret-position="-112" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="16" selection-start-line="2" selection-end-line="16" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/node_modules/mongoose/lib/connection.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
@@ -690,13 +734,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1190">
-          <caret line="70" selection-start-line="70" selection-end-line="70" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/swagger-ui/api_docs/components/notification/notification_model.yaml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
@@ -704,10 +741,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/autodelete.js">
+    <entry file="file://$PROJECT_DIR$/controllers/userController.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="19" column="6" selection-start-line="19" selection-start-column="6" selection-end-line="19" selection-end-column="6" />
+        <state relative-caret-position="-238">
+          <caret line="328" column="10" lean-forward="true" selection-start-line="328" selection-start-column="10" selection-end-line="328" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/lib/JavaScriptLanguage.jar!/com/intellij/javascript/nodejs/library/node-globals-stub.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="51" column="4" selection-start-line="51" selection-start-column="4" selection-end-line="51" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/todoListRoutes.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1632">
+          <caret line="96" column="29" selection-start-line="96" selection-start-column="29" selection-end-line="96" selection-end-column="29" />
         </state>
       </provider>
     </entry>
@@ -725,31 +776,44 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/controllers/pawnController.js">
+    <entry file="file://$PROJECT_DIR$/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="504">
-          <caret line="723" lean-forward="true" selection-start-line="723" selection-end-line="723" />
+        <state relative-caret-position="1190">
+          <caret line="70" selection-start-line="70" selection-end-line="70" />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/autodelete.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="19" column="6" selection-start-line="19" selection-start-column="6" selection-end-line="19" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build/static/js/main.e95ed5cd.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build/static/js/main.90da367b.js">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/routes/socket.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="884">
-          <caret line="52" column="13" lean-forward="true" selection-start-line="52" selection-start-column="13" selection-end-line="52" selection-end-column="13" />
+        <state relative-caret-position="318">
+          <caret line="103" column="41" selection-start-line="103" selection-start-column="41" selection-end-line="103" selection-end-column="41" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/todoListRoutes.js">
+    <entry file="file://$PROJECT_DIR$/config.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="186">
-          <caret line="96" column="29" selection-start-line="96" selection-start-column="29" selection-end-line="96" selection-end-column="29" />
+        <state relative-caret-position="272">
+          <caret line="16" selection-start-line="16" selection-end-line="16" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/controllers/userController.js">
+    <entry file="file://$PROJECT_DIR$/controllers/pawnController.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-535">
-          <caret line="319" selection-start-line="319" selection-end-line="319" />
+        <state relative-caret-position="212">
+          <caret line="1117" column="24" lean-forward="true" selection-start-line="1117" selection-start-column="24" selection-end-line="1117" selection-end-column="24" />
         </state>
       </provider>
     </entry>

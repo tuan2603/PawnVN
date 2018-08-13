@@ -1044,12 +1044,16 @@ exports.notify_choose_auction = (obj) => {
 };
 // yêu cầu xác thực giải ngân
 exports.request_disbursement_verify = (obj) => {
-    let { io } = obj;
+    let { io, socket } = obj;
     let { from_id, pawn_id, to_id } = obj.info;
+    if (from_id === undefined || pawn_id === undefined || to_id === undefined ) {
+        socket.emit("request-disbursement-verify", {err:" không tìm thấy params"});
+        return;
+    }
     User.FindOneUserObj({ _id: from_id })
         .then(userf => {
             if (userf) {
-                FindOnePawn({ _id: pawn_id })
+                FindOnePawn({ _id: pawn_id, accountID:to_id })
                     .then(pawnf => {
                         if (pawnf) {
                             // lưu thông báo người dùng
@@ -1060,6 +1064,7 @@ exports.request_disbursement_verify = (obj) => {
                                 categories: 'pawn',
                                 detail_id: pawn_id,
                             }).then(nt => {
+                                socket.emit("request-disbursement-verify", nt);
                                 User.FindOneUserObj({ _id: to_id })
                                     .then(userr => {
                                         if (userr.offlineTime > 0) {
@@ -1084,6 +1089,8 @@ exports.request_disbursement_verify = (obj) => {
 
                                     });
                             });
+                        }else{
+                            socket.emit("request-disbursement-verify", {err: "không tìm thấy pawn"});
                         }
                     },
                         err => {
@@ -1100,8 +1107,13 @@ exports.request_disbursement_verify = (obj) => {
 
 //xác thực đã giải ngân
 exports.disbursement_verify = (obj) => {
-    let { io } = obj;
+    let { io ,socket} = obj;
     let { from_id, pawn_id, to_id } = obj.info;
+    if (from_id === undefined || pawn_id === undefined || to_id === undefined ) {
+        socket.emit("request-disbursement-verify", {err:" không tìm thấy params"});
+        return;
+    }
+
     User.FindOneUserObj({ _id: from_id })
         .then(userf => {
             if (userf) {
@@ -1116,6 +1128,7 @@ exports.disbursement_verify = (obj) => {
                                 categories: 'pawn',
                                 detail_id: pawn_id,
                             }).then(nt => {
+                                socket.emit("disbursement-verify", nt);
                                 User.FindOneUserObj({ _id: to_id })
                                     .then(userr => {
                                         if (userr.offlineTime > 0) {
@@ -1141,11 +1154,16 @@ exports.disbursement_verify = (obj) => {
                                     });
                             });
                         }
+                        else{
+                            socket.emit("request-disbursement-verify", {err: "không tìm thấy pawn"});
+                        }
                     },
                         err => {
                             console.log("disbursement-verify", err)
                         }
                     )
+            }else{
+                socket.emit("request-disbursement-verify", {err: "không tìm thấy pawn"});
             }
         },
             err => {

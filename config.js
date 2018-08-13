@@ -4,7 +4,7 @@ module.exports = {
     'secret': process.env.SECRET,
     'bearer': process.env.BEARER,
     'database': process.env.MONGO_URL_PAWN,
-    'AUrl': process.env.port || 8080,
+    'AUrl': process.env.port || 80,
     'API_KEY': process.env.NEXMO_API_KEY,
     'API_SECRET': process.env.NEXMO_API_SECRET,
     'API_SECRET_SPEEDSMS': process.env.SPEEDSMS_API_SECRET,
@@ -12,5 +12,5 @@ module.exports = {
     'folder_temp': path.join(__dirname, 'public', 'temps'),
     'folder_uploads': path.join(__dirname, 'public', 'uploads'),
     'distance_config': 20.0,
-    'server_socket': 'http://localhost:8080',
+    'server_socket': 'http://localhost:80',
 };

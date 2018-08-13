@@ -101,7 +101,7 @@ module.exports = function (server) {
                 info = JSON.parse(JSON.stringify(data));
             }
             if (info) {
-                Pawn.request_disbursement_verify({io, info});
+                Pawn.request_disbursement_verify({io, socket, info});
             }
         });
 
@@ -114,7 +114,7 @@ module.exports = function (server) {
                 info = JSON.parse(JSON.stringify(data));
             }
             if (info) {
-                Pawn.disbursement_verify({io, info});
+                Pawn.disbursement_verify({io, socket, info});
             }
         });
 
