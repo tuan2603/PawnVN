@@ -54,9 +54,7 @@ const PawnSchema = new mongoose.Schema({
         type:String,
         lowercase:true,
     },
-    categorizeID:{ // _id loại, nhóm sản phẩm
-        type:String,
-        lowercase:true,
+    category:{ // gói vay
     },
     price:{ // giá đấu ban đầu
         type:Number,

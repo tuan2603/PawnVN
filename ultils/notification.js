@@ -4,4 +4,5 @@ module.exports = {
     'auction_choose': 'vừa chọn bạn là người thế chấp sản phẩm của họ',
     'request_disbursement': ' gửi một yêu cầu xác thực đến bạn đến bạn',
     'disbursement_verify': ' đã xác thực giải ngân',
+    'undisbursement_verify': ' không đồng ý xác thực giải ngân',
 };

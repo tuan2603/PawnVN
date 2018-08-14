@@ -13,9 +13,8 @@ properties:
   pawn_image:
     type: string
     example: //hình ảnh sản phẩm đấu giá
-  categorizeID:
-    type: string
-    example: // _id loại, nhóm sản phẩm
+  category:
+    type: object
   price:
     type: number
     example: // giá đấu ban đầu

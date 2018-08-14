@@ -16,9 +16,6 @@ properties:
   period:
     type: string
     example: kỳ hạn đóng lãi
-  price:
-    type: number
-    example: "giá đấu ban đầu"
   created_at:
     type: number
     format: double
