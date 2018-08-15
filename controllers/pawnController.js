@@ -1113,7 +1113,7 @@ exports.disbursement_verify = (obj) => {
         socket.emit("disbursement-verify", {err:" không tìm thấy params"});
         return;
     }
-    if (status < 3) {
+    if (status < 2) {
         socket.emit("disbursement-verify", {err:"truyền sai giá trị biến status"});
         return;
     }
@@ -1127,7 +1127,7 @@ exports.disbursement_verify = (obj) => {
                             Notify.CreateNotify({
                                 author: userf,
                                 to_id: to_id,
-                                content: pawnup.status === 3 ?  `${userf.fullName} ${notification.undisbursement_verify}` :  `${userf.fullName} ${notification.disbursement_verify}`,
+                                content: pawnup.status === 2 ?  `${userf.fullName} ${notification.undisbursement_verify}` :  `${userf.fullName} ${notification.disbursement_verify}`,
                                 categories: 'pawn',
                                 detail_id: pawn_id,
                             }).then(nt => {
@@ -1140,7 +1140,7 @@ exports.disbursement_verify = (obj) => {
                                                     if (userOneL.length > 0) {
                                                         userOneL.map((uonl) => {
                                                             console.log("online", uonl.socket_id);
-                                                            if (pawnup.status === 3) {
+                                                            if (pawnup.status === 2) {
                                                                 io.to(uonl.socket_id).emit("undisbursement-verify", nt);
                                                             }else{
                                                                 io.to(uonl.socket_id).emit("disbursement-verify", nt);
@@ -1154,7 +1154,7 @@ exports.disbursement_verify = (obj) => {
                                             Ios.sendNotifyIOSOwner({
                                                 device_token: userr.device_token,
                                                 countMes: 1,
-                                                content_text:  pawnup.status === 3 ?  `${userf.fullName} ${notification.undisbursement_verify}` :  `${userf.fullName} ${notification.disbursement_verify}`,
+                                                content_text:  pawnup.status === 2 ?  `${userf.fullName} ${notification.undisbursement_verify}` :  `${userf.fullName} ${notification.disbursement_verify}`,
                                             });
                                         }
 
