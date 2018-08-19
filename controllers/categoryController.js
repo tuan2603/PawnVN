@@ -321,6 +321,6 @@ exports.list_categories = function (req, res) {
             response: true,
             value: categories,
         })
-    })
+    }).sort({label:1})
 };
 
