@@ -1,8 +1,8 @@
 'use strict';
 const mongoose = require('mongoose'),
     bcrypt = require('bcryptjs'),
-    async = require('async'),
-     app = require('../index'),
+    Async = require('async'),
+    app = require('../index'),
     saltRounds = 10,
     jwt = require('jsonwebtoken'),
     User = mongoose.model('User'),
@@ -92,7 +92,7 @@ let UpdateUserSocketID = (obj) => {
         });
     });
 }
-let UpdateUser = (condition,obj) => {
+let UpdateUser = (condition, obj) => {
     return new Promise((resolve, reject) => {
         User.findOneAndUpdate(condition, obj, {new: true}, function (err, User) {
             if (err) return reject(err);
@@ -417,12 +417,12 @@ exports.register_old = function (req, res) {
         return res.send({
             value: 1,
             message: 'Minimum length 8, ' +
-            'Maximum length 100, ' +
-            'Must have uppercase letters, ' +
-            'Must have lowercase letters, ' +
-            'Must have digits, ' +
-            'Must have symbols, ' +
-            'Should not have spaces'
+                'Maximum length 100, ' +
+                'Must have uppercase letters, ' +
+                'Must have lowercase letters, ' +
+                'Must have digits, ' +
+                'Must have symbols, ' +
+                'Should not have spaces'
         });
     }
     findUserPhone(req.body.phone)
@@ -505,12 +505,12 @@ exports.register_user_pass = function (req, res) {
         return res.send({
             value: 1,
             message: 'Minimum length 8, ' +
-            'Maximum length 100, ' +
-            'Must have uppercase letters, ' +
-            'Must have lowercase letters, ' +
-            'Must have digits, ' +
-            'Must have symbols, ' +
-            'Should not have spaces'
+                'Maximum length 100, ' +
+                'Must have uppercase letters, ' +
+                'Must have lowercase letters, ' +
+                'Must have digits, ' +
+                'Must have symbols, ' +
+                'Should not have spaces'
         });
     }
     findUserPhone(req.body.phone)
@@ -646,12 +646,12 @@ exports.update_password = function (req, res) {
     if (!checkPass.validate(password)) {
         return res.send({
             value: 'Minimum length 8, ' +
-            'Maximum length 100, ' +
-            'Must have uppercase letters, ' +
-            'Must have lowercase letters, ' +
-            'Must have digits, ' +
-            'Must have symbols, ' +
-            'Should not have spaces',
+                'Maximum length 100, ' +
+                'Must have uppercase letters, ' +
+                'Must have lowercase letters, ' +
+                'Must have digits, ' +
+                'Must have symbols, ' +
+                'Should not have spaces',
             response: false,
         });
     }
@@ -778,10 +778,10 @@ let FindAllInfoUser = (obj) => {
 // dung để
 // update thông tin user
 exports.update_userboth = (req, res) => {
-    let { id }  = req.body;
+    let {id} = req.body;
     let {phone} = req.user;
     console.log(req.body);
-    if (id === undefined || phone === undefined ) {
+    if (id === undefined || phone === undefined) {
         return res.send({
             "response": false,
             "value": "not found id",
@@ -846,7 +846,7 @@ exports.update_identityCardFront = function (req, res) {
                     }
                     switch (req.body.expression) {
                         case 'identityCardFront':
-                                                       // update and move avatar from folder tepms to folder user( phone number)
+                            // update and move avatar from folder tepms to folder user( phone number)
                             UpdateUserObj({_id: req.body.id}, {identityCardFront: req.file.filename})
                                 .then(useru => {
                                     fsextra.moveSync(
@@ -865,7 +865,7 @@ exports.update_identityCardFront = function (req, res) {
                                 });
                             break;
                         case 'identityCardBehind':
-                                                       // update and move avatar from folder tepms to folder user( phone number)
+                            // update and move avatar from folder tepms to folder user( phone number)
                             UpdateUserObj({_id: req.body.id}, {identityCardBehind: req.file.filename})
                                 .then(useru => {
                                     fsextra.moveSync(
@@ -884,7 +884,7 @@ exports.update_identityCardFront = function (req, res) {
                                 });
                             break;
                         case 'licenseeImageFront':
-                                                       // update and move avatar from folder tepms to folder user( phone number)
+                            // update and move avatar from folder tepms to folder user( phone number)
                             UpdateUserObj({_id: req.body.id}, {licenseeImageFront: req.file.filename})
                                 .then(useru => {
                                     fsextra.moveSync(
@@ -1212,13 +1212,13 @@ exports.insert_comment = (req, res) => {
             "value": "not find params "
         });
     }
-    FindOneUserObj({ phone })
+    FindOneUserObj({phone})
         .then(userf => {
                 if (userf) {
                     FindOneUserObj({_id})
                         .then(ownerf => {
                                 if (ownerf) {
-                                    ownerf.comments.push({accountID: userf._id, rating_star, body });
+                                    ownerf.comments.push({accountID: userf._id, rating_star, body});
                                     ownerf.save(function (err, userud) {
                                         if (err) return res.send({
                                             "response": false,
@@ -1257,6 +1257,123 @@ exports.insert_comment = (req, res) => {
                 });
             }
         )
+}
+
+// get all comment
+exports.get_all_comment = (req, res) => {
+    let {phone} = req.user;
+    if (phone === undefined) {
+        return res.send({
+            "response": false,
+            "value": "not find params "
+        });
+    }
+    FindOneUserObj({phone})
+        .then(userf => {
+                if (userf) {
+                    if (userf.roleType !== 0) {
+                        return res.send({
+                            "response": false,
+                            "value": "user is not allowed to view this content"
+                        });
+                    }
+                    findManyUserObj({"comments": {$ne: null}})
+                        .then(userfcomment => {
+                            let comments = [];
+                            Async.forEachOf(userfcomment, function (usercm, key, callback) {
+                                comments.push(...usercm.comments);
+                                callback();
+                            }, function (err) {
+                                if (err) return res.send({
+                                    "response": false,
+                                    "value": err
+                                });
+                                res.send({
+                                    "response": true,
+                                    "value": comments,
+                                });
+                            });
+
+                        }, err => {
+                            console.log(err);
+                            return res.send({
+                                "response": false,
+                                "value": "err find comments"
+                            });
+                        })
+                } else {
+                    return res.send({
+                        "response": false,
+                        "value": "token is not master onwe"
+                    });
+                }
+            },
+            err => {
+                return res.send({
+                    "response": false,
+                    "value": err
+                });
+            }
+        );
+}
+
+let FindCommentStatus = () => {
+  return new  Promise((resolve, reject) => {
+        findManyUserObj({"comments": {$ne: null}})
+            .then(userfcomment => {
+                let comments = [];
+                Async.forEachOf(userfcomment, function (usercm, key, callback) {
+                    comments.push(...usercm.comments);
+                    callback();
+                }, function (err) {
+                    if (err) return reject(err);
+                    let comstatus = [];
+                    Async.forEachOf(comments, function (comment, key, callback) {
+                        if (comment.status === 1) {
+                            comstatus.push(comment);
+                        }
+                        callback();
+                    }, function (err) {
+                        if (err) return reject(err);
+                        resolve(comstatus);
+                    });
+                });
+            }, err => {
+                reject(err);
+            })
+    });
+}
+
+// get all comment da duyet
+exports.get_all_comment_status = (req, res) => {
+    let { page, limit } = req.params;
+    if (page === undefined || limit === undefined) {
+        return res.send({
+            "response": false,
+            "value": "not find params "
+        });
+    }
+    FindCommentStatus()
+        .then(commets => {
+            if (commets.length > 0) {
+                return res.send({
+                    "response": true,
+                    "value": commets.slice((0 + page - 1) * limit, page * limit),
+                    "pages": Math.round(commets.length/limit*1),
+                });
+            } else {
+                return res.send({
+                    "response": false,
+                    "value": "không tìm thấy comments"
+                });
+            }
+        }, err => {
+            console.log(err);
+            return res.send({
+                "response": false,
+                "value": "Lỗi tìm kiếm comments"
+            });
+        })
 }
 
 exports.FindOneUserObj = FindOneUserObj;

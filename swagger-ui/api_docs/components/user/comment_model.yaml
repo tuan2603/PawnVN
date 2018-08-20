@@ -1,0 +1,17 @@
+properties:
+  _id:
+    type: string
+  accountID:
+    type: string
+  status:
+    type: integer
+  rating_star:
+    type: integer
+  body:
+    type: string
+  create_at:
+    type: number
+    format: double
+  updated_at:
+    type: number
+    format: double

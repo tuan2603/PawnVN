@@ -121,7 +121,11 @@ module.exports = function (app) {
     app.route('/api/auth/delete')
         .post(userHandles.loginRequired, userHandles.delete_one_user_by_id);
 
+    app.route('/api/auth/comment/:page/:limit')
+        .get(userHandles.get_all_comment_status);
+
     app.route('/api/auth/comment')
+        .get(userHandles.loginRequired, userHandles.get_all_comment)
         .post(userHandles.loginRequired, userHandles.insert_comment);
 
     app.route('/api/pawn/image')

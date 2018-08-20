@@ -1,3 +1,5 @@
 # /paths/user_comment.yaml
 post:
   $ref: '../components/user/user_comment.yaml'
+get:
+  $ref: '../components/user/get_all_comment.yaml'

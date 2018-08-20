@@ -456,13 +456,13 @@ input:-webkit-autofill:focus {
     background-position: center center;
     background-size: cover;
     margin-top: 70px;
-    margin-bottom: 100px;
+    margin-bottom: 70px;
     color: #ffffff;
 }
 
 .download-area .mobile-image {
-    margin-top: -106px;
-    margin-bottom: -200px;
+    margin-top: -64px;
+    margin-bottom: -192px;
 }
 
 /*-- 15. Price-Area --*/
