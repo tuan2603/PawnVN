@@ -2,39 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c76d89b5-0984-4f1a-87c1-813aa64b54b2" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/build/static/css/main.6e645189.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/static/css/main.6e645189.css.map" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/static/js/main.14814a69.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/static/js/main.14814a69.js.map" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/swagger-ui/api_docs/components/user/comment_model.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/swagger-ui/api_docs/components/user/get_all_comment.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/asset-manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/build/asset-manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/css/animate.css" beforeDir="false" afterPath="$PROJECT_DIR$/build/css/animate.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/css/bootstrap.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/build/css/bootstrap.min.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/css/linearicons.css" beforeDir="false" afterPath="$PROJECT_DIR$/build/css/linearicons.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/css/magnific-popup.css" beforeDir="false" afterPath="$PROJECT_DIR$/build/css/magnific-popup.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/css/normalize.css" beforeDir="false" afterPath="$PROJECT_DIR$/build/css/normalize.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/css/owl.carousel.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/build/css/owl.carousel.min.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/css/owl.theme.default.css" beforeDir="false" afterPath="$PROJECT_DIR$/build/css/owl.theme.default.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/fonts/Linearicons-Free.svg" beforeDir="false" afterPath="$PROJECT_DIR$/build/fonts/Linearicons-Free.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/js/ajaxchimp.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/js/ajaxchimp.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/js/chosen.jquery.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/js/chosen.jquery.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/js/contact-form.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/js/contact-form.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/js/magnific-popup.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/js/magnific-popup.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/js/owl.carousel.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/js/owl.carousel.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/js/scrollUp.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/js/scrollUp.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/js/vendor/bootstrap.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/js/vendor/bootstrap.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/js/vendor/jquery-1.12.4.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/js/vendor/jquery-1.12.4.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/js/vendor/jquery-ui.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/js/vendor/jquery-ui.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/js/vendor/modernizr-2.8.3.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/js/vendor/modernizr-2.8.3.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/js/wow.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/js/wow.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/service-worker.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/service-worker.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/build/style.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controllers/userController.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/userController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/todoListRoutes.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/todoListRoutes.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/swagger-ui/api_docs/paths/user_comment.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/swagger-ui/api_docs/paths/user_comment.yaml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -49,12 +18,13 @@
     <session id="540240785">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="3" />
+          <entry key="project.closed" value="5" />
           <entry key="project.open.time.1" value="1" />
-          <entry key="project.open.time.2" value="1" />
+          <entry key="project.open.time.2" value="2" />
           <entry key="project.open.time.3" value="1" />
+          <entry key="project.open.time.35" value="1" />
           <entry key="project.open.time.4" value="1" />
-          <entry key="project.opened" value="4" />
+          <entry key="project.opened" value="6" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -71,13 +41,13 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="js" value="895" />
+          <entry key="js" value="899" />
           <entry key="yaml" value="92" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JavaScript" value="895" />
+          <entry key="JavaScript" value="899" />
           <entry key="YAML" value="92" />
         </counts>
       </usages-collector>
@@ -127,8 +97,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/todoListRoutes.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="425">
-              <caret line="124" column="49" lean-forward="true" selection-start-line="124" selection-start-column="49" selection-end-line="124" selection-end-column="49" />
+            <state relative-caret-position="2108">
+              <caret line="124" column="49" selection-start-line="124" selection-start-column="49" selection-end-line="124" selection-end-column="49" />
             </state>
           </provider>
         </entry>
@@ -136,7 +106,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/swagger-ui/api_docs/swagger.yaml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="199">
+            <state relative-caret-position="1122">
               <caret line="66" column="24" selection-start-line="66" selection-start-column="24" selection-end-line="66" selection-end-column="24" />
             </state>
           </provider>
@@ -146,7 +116,7 @@
         <entry file="file://$PROJECT_DIR$/swagger-ui/api_docs/paths/user_comment.yaml">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="85">
-              <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
+              <caret line="5" selection-start-line="5" selection-end-line="5" />
             </state>
           </provider>
         </entry>
@@ -173,7 +143,7 @@
         <entry file="file://$PROJECT_DIR$/controllers/pawnController.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="357">
-              <caret line="21" column="29" lean-forward="true" selection-start-line="21" selection-start-column="3" selection-end-line="21" selection-end-column="29" />
+              <caret line="21" column="29" selection-start-line="21" selection-start-column="3" selection-end-line="21" selection-end-column="29" />
             </state>
           </provider>
         </entry>
@@ -181,8 +151,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/controllers/userController.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="352">
-              <caret line="1335" column="39" lean-forward="true" selection-start-line="1335" selection-start-column="39" selection-end-line="1335" selection-end-column="39" />
+            <state relative-caret-position="369">
+              <caret line="1357" column="37" lean-forward="true" selection-start-line="1357" selection-start-column="37" selection-end-line="1357" selection-end-column="37" />
             </state>
           </provider>
         </entry>
@@ -533,11 +503,13 @@
       <workItem from="1534658719104" duration="394000" />
       <workItem from="1534697816438" duration="229000" />
       <workItem from="1534734879113" duration="10300000" />
+      <workItem from="1534813945052" duration="644000" />
+      <workItem from="1534844849411" duration="599000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="379951000" />
+    <option name="totallyTimeSpent" value="381194000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1456" height="876" extended-state="6" />
@@ -554,7 +526,7 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.4992948" weight="0.29475102" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="8" sideWeight="0.4992948" visible="true" weight="0.29475102" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.50070524" side_tool="true" weight="0.2926491" />
       <window_info anchor="bottom" id="Version Control" order="10" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -815,13 +787,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
           <caret line="11" selection-start-line="11" selection-end-line="11" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#input#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -829,27 +794,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="539">
           <caret line="323" column="6" selection-start-line="323" selection-start-column="6" selection-end-line="323" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/models/categoryModel.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="9" selection-start-line="4" selection-start-column="4" selection-end-line="4" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/swagger-ui/api_docs/swagger.yaml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="199">
-          <caret line="66" column="24" selection-start-line="66" selection-start-column="24" selection-end-line="66" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/swagger-ui/api_docs/paths/user_comment.yaml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
         </state>
       </provider>
     </entry>
@@ -863,10 +807,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/swagger-ui/api_docs/components/user/avatar.yaml">
+    <entry file="file://$PROJECT_DIR$/routes/todoListRoutes.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" selection-start-line="1" selection-end-line="2" selection-end-column="8" />
+        <state relative-caret-position="2108">
+          <caret line="124" column="49" selection-start-line="124" selection-start-column="49" selection-end-line="124" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/swagger-ui/api_docs/swagger.yaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1122">
+          <caret line="66" column="24" selection-start-line="66" selection-start-column="24" selection-end-line="66" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/swagger-ui/api_docs/paths/user_comment.yaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" selection-start-line="5" selection-end-line="5" />
         </state>
       </provider>
     </entry>
@@ -874,13 +832,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="323">
           <caret line="19" column="25" lean-forward="true" selection-start-line="19" selection-start-column="25" selection-end-line="19" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/models/userModel.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" column="8" selection-start-line="17" selection-start-column="4" selection-end-line="17" selection-end-column="8" />
         </state>
       </provider>
     </entry>
@@ -894,21 +845,35 @@
     <entry file="file://$PROJECT_DIR$/controllers/pawnController.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="357">
-          <caret line="21" column="29" lean-forward="true" selection-start-line="21" selection-start-column="3" selection-end-line="21" selection-end-column="29" />
+          <caret line="21" column="29" selection-start-line="21" selection-start-column="3" selection-end-line="21" selection-end-column="29" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/todoListRoutes.js">
+    <entry file="file://$PROJECT_DIR$/swagger-ui/api_docs/components/user/avatar.yaml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="124" column="49" lean-forward="true" selection-start-line="124" selection-start-column="49" selection-end-line="124" selection-end-column="49" />
+        <state relative-caret-position="17">
+          <caret line="1" selection-start-line="1" selection-end-line="2" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/userModel.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="17" column="8" selection-start-line="17" selection-start-column="4" selection-end-line="17" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/categoryModel.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="9" selection-start-line="4" selection-start-column="4" selection-end-line="4" selection-end-column="9" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/controllers/userController.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="1335" column="39" lean-forward="true" selection-start-line="1335" selection-start-column="39" selection-end-line="1335" selection-end-column="39" />
+        <state relative-caret-position="369">
+          <caret line="1357" column="37" lean-forward="true" selection-start-line="1357" selection-start-column="37" selection-end-line="1357" selection-end-column="37" />
         </state>
       </provider>
     </entry>

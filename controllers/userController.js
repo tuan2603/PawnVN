@@ -1359,7 +1359,7 @@ exports.get_all_comment_status = (req, res) => {
                 return res.send({
                     "response": true,
                     "value": commets.slice((0 + page - 1) * limit, page * limit),
-                    "pages": Math.round(commets.length/limit*1),
+                    "pages": Math.round(commets.length/limit*1+0.5),
                 });
             } else {
                 return res.send({
