@@ -1,0 +1,6 @@
+# /paths/maket.yaml
+post:
+  $ref: '../components/maket/create_maket.yaml'
+get:
+  $ref: '../components/maket/get_maket.yaml'
+

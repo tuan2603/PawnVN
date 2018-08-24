@@ -1,0 +1,14 @@
+tags:
+  - Makets
+summary: Get all List Maket
+description: ''
+operationId: get all list Pawn
+produces:
+  - application/json
+responses:
+  'true':
+    description: successful return array value
+    schema:
+      $ref: 'maket_model.yaml'
+  'false':
+    description: Invalid price supplied

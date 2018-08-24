@@ -1,0 +1,32 @@
+#../components/maket/create_maket.yaml
+tags:
+- Makets
+security:
+- Bearer: []
+summary: Add a new Maket
+description: ''
+operationId: addNewMaket
+consumes:
+- application/x-www-form-urlencoded
+produces:
+- application/json
+parameters:
+- name: "price"
+  type: number
+  description: gia ban
+  required: true
+  in: formData
+- name: "pawn"
+  type: object
+  in: formData
+  description: pawn can update
+responses:
+  'true':
+    description: insert success
+    schema:
+      $ref: 'maket_model.yaml'
+  'false':
+    description: Create service maket fail
+    schema:
+      type: "string"
+      example: "value: ...."

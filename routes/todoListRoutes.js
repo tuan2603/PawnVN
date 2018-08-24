@@ -13,18 +13,38 @@ module.exports = function (app) {
     let terms = require('../controllers/termsController');
     let socketController = require('../controllers/socketController');
     let notify = require('../controllers/notifyController');
+    let advertise = require('../controllers/advertiseController');
+    let maket = require('../controllers/maketController');
+
+
+    // update quang cao
+    app.route('/api/maket')
+        .get(maket.list_maket)
+        .post(userHandles.loginRequired, maket.insert_one);
+
+    // update quang cao
+    app.route('/api/advertise')
+        .get(advertise.list_advertise);
+    app.route('/api/advertise/insert')
+        .post(userHandles.loginRequired, advertise.insert_one);
+    app.route('/api/advertise/delete')
+        .post(userHandles.loginRequired, advertise.delete_adver);
+    app.route('/api/advertise/update')
+        .post(userHandles.loginRequired, advertise.update_advertises);
+    app.route('/api/advertise/updateimage')
+        .post(userHandles.loginRequired, advertise.update_advertise_image);
 
     // insert document socket
     app.route('/api/get-notification-one-user')
-        .post( userHandles.loginRequired, notify.get_all_notification_for_one_user);
+        .post(userHandles.loginRequired, notify.get_all_notification_for_one_user);
     app.route('/api/update-view-notification-for-one-user')
-        .get( userHandles.loginRequired, notify.update_view_notification_for_one_user);
+        .get(userHandles.loginRequired, notify.update_view_notification_for_one_user);
     app.route('/api/update-one-notification-for-one-user')
-        .get( userHandles.loginRequired, notify.update_one_notification_for_one_user);
+        .get(userHandles.loginRequired, notify.update_one_notification_for_one_user);
 
     // insert document socket
     app.route('/api/insert-tutorial-socket')
-        .post( socketController.insert_one);
+        .post(socketController.insert_one);
 
     //get wallet user
     app.route('/api/insert-terms')
@@ -32,11 +52,11 @@ module.exports = function (app) {
     app.route('/api/update-terms')
         .post(userHandles.loginRequired, terms.update_terms);
     app.route('/api/get-terms')
-        .post( terms.get_one_tems);
+        .post(terms.get_one_tems);
     app.route('/api/get-all-pages')
         .get(terms.get_all_term);
     app.route('/api/delete-page')
-        .post(userHandles.loginRequired,terms.delete_page);
+        .post(userHandles.loginRequired, terms.delete_page);
 
     //get wallet user
     app.route('/api/history/get')

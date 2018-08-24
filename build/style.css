@@ -380,13 +380,13 @@ input:-webkit-autofill:focus {
 
 /*-- 11. Service-Box --*/
 
-.service-box {
+.testimonial-area .service-box {
     position: relative;
     padding-left: 100px;
 }
 
-.team-slide  .owl-nav > div,
-.service-box .box-icon {
+.testimonial-area .team-slide  .owl-nav > div,
+.testimonial-area .service-box .box-icon {
     position: absolute;
     left: 0;
     top: 0;
@@ -416,13 +416,13 @@ input:-webkit-autofill:focus {
     box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.2);
 }
 
-.team-slide  .owl-nav > div:hover,
-.service-box:hover .box-icon {
+.testimonial-area .team-slide  .owl-nav > div:hover,
+.testimonial-area .service-box:hover .box-icon {
     color: #ffffff;
 }
 
-.team-slide  .owl-nav > div:before,
-.service-box .box-icon:before {
+.testimonial-area .team-slide  .owl-nav > div:before,
+.testimonial-area .service-box .box-icon:before {
     content: '';
     position: absolute;
     left: 0;
@@ -437,8 +437,8 @@ input:-webkit-autofill:focus {
     opacity: 1;
 }
 
-.team-slide  .owl-nav > div:hover:before,
-.service-box:hover .box-icon:before {
+.testimonial-area .team-slide  .owl-nav > div:hover:before,
+.testimonial-area .service-box:hover .box-icon:before {
     opacity: 0;
 }
 

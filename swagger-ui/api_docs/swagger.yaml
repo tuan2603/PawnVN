@@ -34,6 +34,8 @@ tags:
   description: Everything about category pawn
 - name: Notification
   description: Everything about notification
+- name: Makets
+  description: Everything about maket
 paths:
   '/api/insert-tutorial-socket':
     $ref: 'paths/socket.yaml'
@@ -99,3 +101,5 @@ paths:
       $ref: 'paths/update_view_notification.yaml'
   '/api/update-one-notification-for-one-user':
       $ref: 'paths/update_one_notification.yaml'
+  '/api/maket':
+      $ref: 'paths/maket.yaml'

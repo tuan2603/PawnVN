@@ -1,0 +1,15 @@
+properties:
+  _id:
+    type: string
+  price:
+    type: number
+  status:
+    type: number
+  pawn:
+    type: object
+  created_at:
+    type: number
+    format: double
+  updated_at:
+    type: number
+    format: double
