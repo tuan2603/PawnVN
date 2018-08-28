@@ -20,7 +20,7 @@ let FindAllAdvertise = (obj) => {
         advertise.find(obj, function (err, adv) {
             if (err) return reject(err);
             resolve(adv);
-        });
+        }).sort({status: 1, create_at: 1});
     });
 };
 
@@ -320,7 +320,22 @@ exports.delete_adver = function (req, res) {
 };
 
 
-exports.list_advertise = function (req, res) {
+exports.list_all_advertise = function (req, res) {
+    FindAllAdvertise({})
+        .then(advs => {
+            res.send({
+                response: true,
+                value: advs,
+            })
+        }, (err) => {
+            return res.send({
+                response: false,
+                value: err,
+            })
+        });
+};
+
+exports.list_advertise_active = function (req, res) {
     FindAllAdvertise({status: 1})
         .then(advs => {
             res.send({

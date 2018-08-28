@@ -24,7 +24,9 @@ module.exports = function (app) {
 
     // update quang cao
     app.route('/api/advertise')
-        .get(advertise.list_advertise);
+        .get(advertise.list_advertise_active);
+    app.route('/api/all-advertise')
+        .get(advertise.list_all_advertise);
     app.route('/api/advertise/insert')
         .post(userHandles.loginRequired, advertise.insert_one);
     app.route('/api/advertise/delete')
