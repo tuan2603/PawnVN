@@ -23,6 +23,10 @@ const AuctionPawnSchema = new mongoose.Schema({
         type:Number,
         default:0,
     },
+    pawn_fee:{ //phí trả cho pawn
+        type:Number,
+        default:0,
+    },
     create_at: {
         type: Number,
         default: Date.now

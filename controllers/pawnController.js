@@ -12,7 +12,10 @@ const Pawn = require('../models/pawnModel'),
     UserOnline = require("../controllers/onlineController"),
     Notify = require("../controllers/notifyController"),
     Ios = require("../controllers/notifyIOSController"),
+    Wallets = require("../controllers/walletsController"),
+    tradeHistory = require('../controllers/tradeHistoryController'),
     Distance = require("../ultils/distance"),
+    Pawn_fee = require("../ultils/pawn_fee"),
     notification = require("../ultils/notification"),
     path = require('path'),
     multer = require('multer'),
@@ -33,7 +36,7 @@ let DeleteOnePawn = (obj) => {
 //delete on Pawn include image
 let delete_one_pawn = (obj) => {
     return new Promise((resolve, reject) => {
-        deleteImage({ id: obj._id })
+        deleteImage({id: obj._id})
             .then(result => {
                 if (result) {
                     DeleteOnePawn(obj)
@@ -61,7 +64,7 @@ exports.delete_one_pawn = delete_one_pawn;
 * */
 let UpdatePawnObj = (Obj) => {
     return new Promise((resolve, reject) => {
-        Pawn.findOneAndUpdate({ _id: Obj._id }, Obj, { new: true }, function (err, pawn) {
+        Pawn.findOneAndUpdate({_id: Obj._id}, Obj, {new: true}, function (err, pawn) {
             if (err) reject(err);
             resolve(pawn);
         });
@@ -71,7 +74,7 @@ exports.update_pawn_obj = UpdatePawnObj;
 
 let UpdatePawnOne = (condition, update) => {
     return new Promise((resolve, reject) => {
-        Pawn.findOneAndUpdate(condition, update, { new: true }, function (err, pawn) {
+        Pawn.findOneAndUpdate(condition, update, {new: true}, function (err, pawn) {
             if (err) reject(err);
             resolve(pawn);
         });
@@ -148,7 +151,7 @@ exports.get_list_all = function (req, res) {
 * */
 let FindPawn = (id) => {
     return new Promise((resolve, reject) => {
-        Pawn.find({ accountID: id }, function (err, Pawn) {
+        Pawn.find({accountID: id}, function (err, Pawn) {
             if (err) return reject(err);
             resolve(Pawn);
         });
@@ -157,10 +160,10 @@ let FindPawn = (id) => {
 
 //delete all pawn follow user id
 let DeleteAllPawnForUser = (obj) => {
-    Pawn.find({ accountID: obj._id }, function (err, pawnall) {
+    Pawn.find({accountID: obj._id}, function (err, pawnall) {
         if (err) return console.log(err);
         pawnall.map((pawndl, index) => {
-            delete_one_pawn({ _id: pawndl._id })
+            delete_one_pawn({_id: pawndl._id})
                 .then(
                     pawndlted => console.log(pawndlted),
                     err => console.log(err)
@@ -186,7 +189,7 @@ let FindPawnDdeleted = (obj) => {
 * */
 let FindOnePawn = (id) => {
     return new Promise((resolve, reject) => {
-        Pawn.findOne({ _id: id }, function (err, Pawn) {
+        Pawn.findOne({_id: id}, function (err, Pawn) {
             if (err) return reject(err);
             resolve(Pawn);
         });
@@ -218,7 +221,7 @@ exports.get_list = function (req, res) {
             response: false
         });
     }
-    FindPawnDdeleted({ accountID: req.body.id, deleted: false })
+    FindPawnDdeleted({accountID: req.body.id, deleted: false})
         .then(
             Pawn => {
                 if (Pawn) {
@@ -282,7 +285,7 @@ exports.get_one = function (req, res) {
 * */
 let deleteImage = (body) => {
     return new Promise((resolve, reject) => {
-        Pawn.findOne({ _id: body.id }, function (err, pawn) {
+        Pawn.findOne({_id: body.id}, function (err, pawn) {
             if (err) reject(err);
             if (pawn) {
                 try {
@@ -317,7 +320,7 @@ let deleteImageNew = (filename) => {
 * */
 let updatePawn = (body, filename) => {
     return new Promise((resolve, reject) => {
-        Pawn.findOneAndUpdate({ _id: body.id }, { pawn_image: filename }, { new: true }, function (err, shipping) {
+        Pawn.findOneAndUpdate({_id: body.id}, {pawn_image: filename}, {new: true}, function (err, shipping) {
             if (err) reject(err);
             resolve(shipping);
         });
@@ -427,17 +430,17 @@ exports.insert_image = function (req, res) {
                                         console.error(err)
                                     }
                                 }
-                                UpdatePawnObj({ _id: req.body.id, pawn_image: url_image })
+                                UpdatePawnObj({_id: req.body.id, pawn_image: url_image})
                                     .then(pawnup => {
-                                        fsextra.moveSync(
-                                            path.join(`${config.folder_temp}`, `${req.file.filename}`),
-                                            path.join(`${config.folder_uploads}`, `${req.user.phone}`, `${req.file.filename}`),
-                                            { overwrite: true });
-                                        return res.json({
-                                            "response": true,
-                                            "value": pawnup
-                                        });
-                                    },
+                                            fsextra.moveSync(
+                                                path.join(`${config.folder_temp}`, `${req.file.filename}`),
+                                                path.join(`${config.folder_uploads}`, `${req.user.phone}`, `${req.file.filename}`),
+                                                {overwrite: true});
+                                            return res.json({
+                                                "response": true,
+                                                "value": pawnup
+                                            });
+                                        },
                                         err => {
                                             return res.json({
                                                 "response": false,
@@ -489,7 +492,7 @@ let createNewPawn = (obj, res) => {
                     fsextra.moveSync(
                         path.join(`${config.folder_temp}`, `${obj.filename}`),
                         path.join(`${config.folder_uploads}`, `${obj.url_image}`),
-                        { overwrite: true });
+                        {overwrite: true});
                     return res.json({
                         "response": true,
                         "value": pawnc
@@ -533,7 +536,7 @@ exports.insert_doc = function (req, res) {
             .then(
                 pawn => {
                     if (pawn) {
-                        Pawn.findOneAndUpdate({ _id: req.body.id }, req.body, { new: true }, function (err, pawn) {
+                        Pawn.findOneAndUpdate({_id: req.body.id}, req.body, {new: true}, function (err, pawn) {
                             if (err) return res.json({
                                 "response": false,
                                 "value": err
@@ -542,7 +545,7 @@ exports.insert_doc = function (req, res) {
                                 //pawn.status = undefined;
                                 if (pawn.deleted === true) {
                                     send_notify_bussiness(pawn);
-                                    Pawn.findOneAndUpdate({ _id: req.body.id }, { deleted: false }, { new: true }, function (err) {
+                                    Pawn.findOneAndUpdate({_id: req.body.id}, {deleted: false}, {new: true}, function (err) {
                                         console.log(err);
                                     });
                                 }
@@ -608,7 +611,7 @@ let send_notify_bussiness = (pawn) => {
 }
 
 exports.notify = (obj) => {
-    let { io, pawn } = obj;
+    let {io, pawn} = obj;
     User.findUserId(pawn.accountID)
         .then(
             usersend => {
@@ -621,9 +624,9 @@ exports.notify = (obj) => {
                                         let distance = Distance.distance(usk.latitude, usk.longitude, pawn.latitude, pawn.longitude, "K");
                                         if (distance <= config.distance_config) {
                                             // người dùng đang online
-                                            FindPawnOneObj({ _id: pawn._id })
+                                            FindPawnOneObj({_id: pawn._id})
                                                 .then(pawnf => {
-                                                    pawnf.reciver.push({ _id: usk._id });
+                                                    pawnf.reciver.push({_id: usk._id});
                                                     pawnf.save(function (err) {
                                                         if (err) {
                                                             console.log("pawn.reciver.push", err);
@@ -638,7 +641,7 @@ exports.notify = (obj) => {
                                                             detail_id: pawnf._id,
                                                         }).then(nt => {
                                                             if (usk.offlineTime > 0) {
-                                                                UserOnline.FindAllUserOnline({ user_id: usk._id })
+                                                                UserOnline.FindAllUserOnline({user_id: usk._id})
                                                                     .then(userOneL => {
                                                                         if (userOneL.length > 0) {
                                                                             userOneL.map((uonl) => {
@@ -675,17 +678,17 @@ exports.notify = (obj) => {
 };
 
 exports.update_track_pawnowner_lat = (io, obj) => {
-    let { _id, accountID, track_pawnowner_lat, track_pawnowner_long } = obj;
+    let {_id, accountID, track_pawnowner_lat, track_pawnowner_long} = obj;
     User.findUserId(accountID)
         .then(
             user => {
                 if (user) {
-                    UpdatePawnOne({ _id }, { track_pawnowner_lat, track_pawnowner_long })
+                    UpdatePawnOne({_id}, {track_pawnowner_lat, track_pawnowner_long})
                         .then(
                             pawnup => {
                                 if (pawnup) {
                                     if (user.offlineTime > 0) {
-                                        UserOnline.FindAllUserOnline({ user_id: user._id })
+                                        UserOnline.FindAllUserOnline({user_id: user._id})
                                             .then(userOneL => {
                                                 if (userOneL.length > 0) {
                                                     userOneL.map((uonl) => {
@@ -724,25 +727,28 @@ exports.update_track_pawnowner_lat = (io, obj) => {
 };
 
 exports.update_start_comming = (obj) => {
-    let { io, socket } = obj;
-    let { start_comming, pawn_id, from_id, to_id } = obj.info;
-    UpdatePawnOne({ _id: pawn_id }, { start_comming })
+    let {io, socket} = obj;
+    let {start_comming, pawn_id, from_id, to_id} = obj.info;
+    UpdatePawnOne({_id: pawn_id}, {start_comming})
         .then(
             pawnup => {
                 if (pawnup) {
-                    socket.emit("update-start-comming", { pawn: pawnup });
-                    User.FindOneUserObj({ _id: to_id })
+                    socket.emit("update-start-comming", {pawn: pawnup});
+                    User.FindOneUserObj({_id: to_id})
                         .then(userf => {
-                            User.FindOneUserObj({ _id: from_id })
+                            User.FindOneUserObj({_id: from_id})
                                 .then(usersend => {
                                     if (usersend) {
                                         if (userf.offlineTime > 0) {
-                                            UserOnline.FindAllUserOnline({ user_id: to_id })
+                                            UserOnline.FindAllUserOnline({user_id: to_id})
                                                 .then(userOneL => {
                                                     if (userOneL.length > 0) {
                                                         userOneL.map((uonl) => {
                                                             console.log("uonl", uonl);
-                                                            io.to(uonl.socket_id).emit("update-start-comming", { pawn: pawnup, author: usersend });
+                                                            io.to(uonl.socket_id).emit("update-start-comming", {
+                                                                pawn: pawnup,
+                                                                author: usersend
+                                                            });
                                                         })
                                                     }
                                                 })
@@ -765,28 +771,29 @@ exports.update_start_comming = (obj) => {
         );
 };
 exports.delete_all_pawn_trash = () => {
-    FindPawnAllObj({ deleted: true })
+    FindPawnAllObj({deleted: true})
         .then(pawnsf => {
-            if (!pawnsf) return;
-            pawnsf.map((pawnd, index) => {
-                delete_one_pawn({ _id: pawnd._id })
-                    .then(
-                        pawndl => console.log(pawndl),
-                        err => console.log(err)
-                    )
-            })
-        },
+                if (!pawnsf) return;
+                pawnsf.map((pawnd, index) => {
+                    delete_one_pawn({_id: pawnd._id})
+                        .then(
+                            pawndl => console.log(pawndl),
+                            err => console.log(err)
+                        )
+                })
+            },
             err => console.log(err)
         );
 }
 
 // inser auction pawn new for business
 exports.insert_pawn_auction = (req, res) => {
-    let { accountID, pawnID, price, interest_rate } = req.body;
-    let { phone } = req.user;
+    let {accountID, pawnID, price, interest_rate, period} = req.body;
+    let {phone} = req.user;
     if (accountID === undefined ||
         pawnID === undefined ||
         price === undefined ||
+        period === undefined ||
         interest_rate === undefined ||
         phone === undefined) {
         return res.send({
@@ -795,47 +802,109 @@ exports.insert_pawn_auction = (req, res) => {
         });
     }
 
-    User.FindOneUserObj({ _id: accountID, phone: phone, roleType: 2 })
+    User.FindOneUserObj({_id: accountID, phone: phone, roleType: 2})
         .then(userf => {
-            if (userf) {
-                FindPawnOneObj({ _id: pawnID })
-                    .then(pawnf => {
-                        if (pawnf) {
-                            pawnf.auction.push(req.body);
-                            pawnf.reciver.id(accountID).remove();
-                            pawnf.save(function (err, pawns) {
-                                if (err) return res.send({
+                if (userf) {
+                    FindPawnOneObj({_id: pawnID})
+                        .then(pawnf => {
+                                if (pawnf) {
+                                    Wallets.FindWalletsOne({accountID, phone})
+                                        .then(wallet => {
+                                            if (wallet) {
+                                                // tổng tiền lãi = giá đấu * lãi xuất * lãi 30 ngày(số ngày vay / 30)
+                                                // tiền pawn thu = tổng tiền lãi * 20% / số ngày vay/ kỳ hạn nộp lãi
+                                                let pawn_fee = Pawn_fee.pawn_fee(price, interest_rate / 100, pawnf.date_time, period);
+                                                if (wallet.balance >= pawn_fee) {
+                                                    Wallets.updateWallets({
+                                                        accountID,
+                                                        balance: wallet.balance - (pawn_fee * pawnf.date_time * period)
+                                                    })
+                                                        .then(
+                                                            wlupd => {
+                                                                if (wlupd) {
+                                                                    tradeHistory.CreateTradeHistory({
+                                                                        pricepay: pawn_fee * (-1),
+                                                                        accountID: accountID,
+                                                                        description: notification.wallet_auction_update,
+                                                                    });
+                                                                    pawnf.auction.push({
+                                                                        accountID,
+                                                                        pawnID,
+                                                                        price,
+                                                                        interest_rate,
+                                                                        period,
+                                                                        pawn_fee
+                                                                    });
+                                                                    pawnf.reciver.id(accountID).remove();
+                                                                    pawnf.save(function (err, pawns) {
+                                                                        if (err) return res.send({
+                                                                            "response": false,
+                                                                            "value": err
+                                                                        });
+                                                                        require('socket.io-client')(config.server_socket)
+                                                                            .emit("notify-insert-pawn-auction", JSON.stringify({
+                                                                                pawn: pawns,
+                                                                                usersend: userf
+                                                                            }));
+                                                                        res.send({
+                                                                            "response": true,
+                                                                            "value": pawns
+                                                                        });
+                                                                    });
+                                                                } else {
+                                                                    return res.json({
+                                                                        response: false,
+                                                                        value: "update wallet false"
+                                                                    })
+                                                                }
+                                                            },
+                                                            err => {
+                                                                return res.json({
+                                                                    response: false,
+                                                                    value: err,
+                                                                })
+                                                            }
+                                                        )
+                                                } else {
+                                                    return res.send({
+                                                        "response": false,
+                                                        "value": "không đủ tiền để hực thiện đấu giá"
+                                                    });
+                                                }
+                                            } else {
+                                                return res.send({
+                                                    "response": false,
+                                                    "value": "not find wallet"
+                                                });
+                                            }
+                                        }, err => {
+                                            return res.send({
+                                                "response": false,
+                                                "value": "error find wallet"
+                                            });
+                                        })
+
+                                } else {
+                                    return res.send({
+                                        "response": false,
+                                        "value": "not find pawn"
+                                    });
+                                }
+                            },
+                            err => {
+                                return res.send({
                                     "response": false,
                                     "value": err
                                 });
-                                require('socket.io-client')(config.server_socket)
-                                    .emit("notify-insert-pawn-auction", JSON.stringify({ pawn: pawns, usersend: userf }));
-                                res.send({
-                                    "response": true,
-                                    "value": pawns
-                                });
-                            });
-                        } else {
-                            return res.send({
-                                "response": false,
-                                "value": "not find pawn"
-                            });
-                        }
-                    },
-                        err => {
-                            return res.send({
-                                "response": false,
-                                "value": err
-                            });
-                        }
-                    )
-            } else {
-                return res.send({
-                    "response": false,
-                    "value": "can't auction so user is not business , token is not master onwe"
-                });
-            }
-        },
+                            }
+                        )
+                } else {
+                    return res.send({
+                        "response": false,
+                        "value": "can't auction so user is not business , token is not master onwe"
+                    });
+                }
+            },
             err => {
                 return res.send({
                     "response": false,
@@ -846,8 +915,8 @@ exports.insert_pawn_auction = (req, res) => {
 }
 
 exports.notify_insert_auction = (obj) => {
-    let { io } = obj;
-    let { pawn, usersend } = obj.info;
+    let {io} = obj;
+    let {pawn, usersend} = obj.info;
     // lưu thông báo người dùng
     Notify.CreateNotify({
         author: usersend,
@@ -856,10 +925,10 @@ exports.notify_insert_auction = (obj) => {
         categories: 'pawn',
         detail_id: pawn._id,
     }).then(nt => {
-        User.FindOneUserObj({ _id: pawn.accountID })
+        User.FindOneUserObj({_id: pawn.accountID})
             .then(userr => {
                 if (userr.offlineTime > 0) {
-                    UserOnline.FindAllUserOnline({ user_id: userr._id })
+                    UserOnline.FindAllUserOnline({user_id: userr._id})
                         .then(userOneL => {
                             if (userOneL.length > 0) {
                                 userOneL.map((uonl) => {
@@ -884,8 +953,8 @@ exports.notify_insert_auction = (obj) => {
 
 // hủy đấu giá hay bỏ qua
 exports.not_view_pawn = (req, res) => {
-    let { accountID, pawnID } = req.body;
-    let { phone } = req.user;
+    let {accountID, pawnID} = req.body;
+    let {phone} = req.user;
     if (accountID === undefined ||
         pawnID === undefined ||
         phone === undefined) {
@@ -894,44 +963,44 @@ exports.not_view_pawn = (req, res) => {
             "value": "not find params "
         });
     }
-    User.FindOneUserObj({ _id: accountID, phone: phone, roleType: 2 })
+    User.FindOneUserObj({_id: accountID, phone: phone, roleType: 2})
         .then(userf => {
-            if (userf) {
-                FindPawnOneObj({ _id: pawnID })
-                    .then(pawnf => {
-                        if (pawnf) {
-                            pawnf.reciver.id(accountID).remove();
-                            pawnf.save(function (err, pawns) {
-                                if (err) return res.send({
+                if (userf) {
+                    FindPawnOneObj({_id: pawnID})
+                        .then(pawnf => {
+                                if (pawnf) {
+                                    pawnf.reciver.id(accountID).remove();
+                                    pawnf.save(function (err, pawns) {
+                                        if (err) return res.send({
+                                            "response": false,
+                                            "value": err
+                                        });
+                                        return res.send({
+                                            "response": true,
+                                            "value": pawns
+                                        });
+                                    });
+                                } else {
+                                    return res.send({
+                                        "response": false,
+                                        "value": "not find pawn"
+                                    });
+                                }
+                            },
+                            err => {
+                                return res.send({
                                     "response": false,
                                     "value": err
                                 });
-                                return res.send({
-                                    "response": true,
-                                    "value": pawns
-                                });
-                            });
-                        } else {
-                            return res.send({
-                                "response": false,
-                                "value": "not find pawn"
-                            });
-                        }
-                    },
-                        err => {
-                            return res.send({
-                                "response": false,
-                                "value": err
-                            });
-                        }
-                    )
-            } else {
-                return res.send({
-                    "response": false,
-                    "value": "can't auction so user is not business , token is not master onwe"
-                });
-            }
-        },
+                            }
+                        )
+                } else {
+                    return res.send({
+                        "response": false,
+                        "value": "can't auction so user is not business , token is not master onwe"
+                    });
+                }
+            },
             err => {
                 return res.send({
                     "response": false,
@@ -942,8 +1011,8 @@ exports.not_view_pawn = (req, res) => {
 }
 
 exports.choose_pawn_auction = (req, res) => {
-    let { pawnID, auctionID, status } = req.body;
-    let { phone } = req.user;
+    let {pawnID, auctionID, status} = req.body;
+    let {phone} = req.user;
     if (
         auctionID === undefined ||
         status === undefined ||
@@ -954,48 +1023,88 @@ exports.choose_pawn_auction = (req, res) => {
             "value": "not find params "
         });
     }
-    User.FindOneUserObj({ phone })
+    User.FindOneUserObj({phone})
         .then(userf => {
-            if (userf) {
-                UpdatePawnOne({ _id: pawnID, accountID: userf._id }, { status })
-                    .then(pawnup => {
-                        if (pawnup) {
-                            let choose = pawnup.auction.id(auctionID);
-                            pawnup.reciver = [];
-                            pawnup.auction = [choose];
-                            pawnup.save(function (err, pawns) {
-                                if (err) return res.send({
+                if (userf) {
+                    UpdatePawnOne({_id: pawnID, accountID: userf._id}, {status})
+                        .then(pawnup => {
+                                if (pawnup) {
+                                    let choose = pawnup.auction.id(auctionID);
+                                    Async.forEachOf(pawnup.auction, function (aucton, key, callback) {
+                                        if (aucton._id !== auctionID) {
+                                            Wallets.FindWalletsOne({accountID: aucton._id})
+                                                .then(wallet => {
+                                                    if (wallet) {
+                                                        Wallets.updateWallets({
+                                                            accountID: aucton._id,
+                                                            balance: wallet.balance + aucton.pawn_fee
+                                                        }).then(
+                                                            wlupd => {
+                                                                if (wlupd) {
+                                                                    tradeHistory.CreateTradeHistory({
+                                                                        pricepay: aucton.pawn_fee,
+                                                                        accountID: aucton._id,
+                                                                        description: notification.wallet_not_choose_update,
+                                                                    });
+                                                                    callback();
+                                                                }
+                                                            },
+                                                            err => {
+                                                                console.log(err)
+                                                                callback(err);
+                                                            }
+                                                        )
+                                                    }
+                                                }, err => {
+                                                    callback(err);
+                                                })
+                                        }
+                                    }, function (err) {
+                                        if (err) return res.send({
+                                            "response": false,
+                                            "value": "update wallets for user not choose faild"
+                                        });
+
+                                        pawnup.reciver = [];
+                                        pawnup.auction = [choose];
+                                        pawnup.save(function (err, pawns) {
+                                            if (err) return res.send({
+                                                "response": false,
+                                                "value": err
+                                            });
+                                            require('socket.io-client')(config.server_socket)
+                                                .emit("notify-choose-pawn-auction", JSON.stringify({
+                                                    pawn: pawns,
+                                                    usersend: userf,
+                                                    to_id: auctionID
+                                                }));
+                                            res.send({
+                                                "response": true,
+                                                "value": pawns
+                                            });
+                                        });
+                                    });
+                                } else {
+                                    return res.send({
+                                        "response": false,
+                                        "value": "not found pawn or token not master onwe"
+                                    });
+                                }
+                            },
+                            err => {
+                                return res.send({
                                     "response": false,
                                     "value": err
                                 });
-                                require('socket.io-client')(config.server_socket)
-                                    .emit("notify-choose-pawn-auction", JSON.stringify({ pawn: pawns, usersend: userf, to_id: auctionID }));
-                                res.send({
-                                    "response": true,
-                                    "value": pawns
-                                });
-                            });
-                        } else {
-                            return res.send({
-                                "response": false,
-                                "value": "not found pawn or token not master onwe"
-                            });
-                        }
-                    },
-                        err => {
-                            return res.send({
-                                "response": false,
-                                "value": err
-                            });
-                        }
-                    )
-            } else {
-                return res.send({
-                    "response": false,
-                    "value": "user is not exits"
-                });
-            }
-        },
+                            }
+                        )
+                } else {
+                    return res.send({
+                        "response": false,
+                        "value": "user is not exits"
+                    });
+                }
+            },
             err => {
                 return res.send({
                     "response": false,
@@ -1006,8 +1115,8 @@ exports.choose_pawn_auction = (req, res) => {
 }
 
 exports.notify_choose_auction = (obj) => {
-    let { io } = obj;
-    let { pawn, usersend, to_id } = obj.info;
+    let {io} = obj;
+    let {pawn, usersend, to_id} = obj.info;
 
     // lưu thông báo người dùng
     Notify.CreateNotify({
@@ -1017,10 +1126,10 @@ exports.notify_choose_auction = (obj) => {
         categories: 'pawn',
         detail_id: pawn._id,
     }).then(nt => {
-        User.FindOneUserObj({ _id: to_id })
+        User.FindOneUserObj({_id: to_id})
             .then(userr => {
                 if (userr.offlineTime > 0) {
-                    UserOnline.FindAllUserOnline({ user_id: userr._id })
+                    UserOnline.FindAllUserOnline({user_id: userr._id})
                         .then(userOneL => {
                             if (userOneL.length > 0) {
                                 userOneL.map((uonl) => {
@@ -1044,61 +1153,61 @@ exports.notify_choose_auction = (obj) => {
 };
 // yêu cầu xác thực giải ngân
 exports.request_disbursement_verify = (obj) => {
-    let { io, socket } = obj;
-    let { from_id, pawn_id, to_id } = obj.info;
-    if (from_id === undefined || pawn_id === undefined || to_id === undefined ) {
-        socket.emit("request-disbursement-verify", {err:" không tìm thấy params"});
+    let {io, socket} = obj;
+    let {from_id, pawn_id, to_id} = obj.info;
+    if (from_id === undefined || pawn_id === undefined || to_id === undefined) {
+        socket.emit("request-disbursement-verify", {err: " không tìm thấy params"});
         return;
     }
-    User.FindOneUserObj({ _id: from_id })
+    User.FindOneUserObj({_id: from_id})
         .then(userf => {
-            if (userf) {
-                UpdatePawnOne({ _id: pawn_id, accountID: to_id }, { status: 3 })
-                    .then(pawnf => {
-                        if (pawnf) {
-                            // lưu thông báo người dùng
-                            Notify.CreateNotify({
-                                author: userf,
-                                to_id: to_id,
-                                content: `${userf.fullName} ${notification.request_disbursement}`,
-                                categories: 'pawn',
-                                detail_id: pawn_id,
-                            }).then(nt => {
-                                socket.emit("request-disbursement-verify", nt);
-                                User.FindOneUserObj({ _id: to_id })
-                                    .then(userr => {
-                                        if (userr.offlineTime > 0) {
-                                            UserOnline.FindAllUserOnline({ user_id: userr._id })
-                                                .then(userOneL => {
-                                                    if (userOneL.length > 0) {
-                                                        userOneL.map((uonl) => {
-                                                            console.log("online", uonl.socket_id)
-                                                            io.to(uonl.socket_id).emit("request-disbursement-verify", nt);
+                if (userf) {
+                    UpdatePawnOne({_id: pawn_id, accountID: to_id}, {status: 3})
+                        .then(pawnf => {
+                                if (pawnf) {
+                                    // lưu thông báo người dùng
+                                    Notify.CreateNotify({
+                                        author: userf,
+                                        to_id: to_id,
+                                        content: `${userf.fullName} ${notification.request_disbursement}`,
+                                        categories: 'pawn',
+                                        detail_id: pawn_id,
+                                    }).then(nt => {
+                                        socket.emit("request-disbursement-verify", nt);
+                                        User.FindOneUserObj({_id: to_id})
+                                            .then(userr => {
+                                                if (userr.offlineTime > 0) {
+                                                    UserOnline.FindAllUserOnline({user_id: userr._id})
+                                                        .then(userOneL => {
+                                                            if (userOneL.length > 0) {
+                                                                userOneL.map((uonl) => {
+                                                                    console.log("online", uonl.socket_id)
+                                                                    io.to(uonl.socket_id).emit("request-disbursement-verify", nt);
+                                                                })
+                                                            }
                                                         })
-                                                    }
-                                                })
-                                        } else if (userr.isPlatform === 0 && userr.device_token !== "") {
-                                            // người dùng offline, kiểm tra người dùng có dùng ios không
-                                            console.log("offline", userr.device_token);
-                                            Ios.sendNotifyIOS({
-                                                device_token: userr.device_token,
-                                                countMes: 1,
-                                                content_text: `${userf.fullName} ${notification.request_disbursement}`,
-                                            });
-                                        }
+                                                } else if (userr.isPlatform === 0 && userr.device_token !== "") {
+                                                    // người dùng offline, kiểm tra người dùng có dùng ios không
+                                                    console.log("offline", userr.device_token);
+                                                    Ios.sendNotifyIOS({
+                                                        device_token: userr.device_token,
+                                                        countMes: 1,
+                                                        content_text: `${userf.fullName} ${notification.request_disbursement}`,
+                                                    });
+                                                }
 
+                                            });
                                     });
-                            });
-                        }else{
-                            socket.emit("request-disbursement-verify", {err: "không tìm thấy pawn"});
-                        }
-                    },
-                        err => {
-                            console.log("request_disbursement_verify", err)
-                        }
-                    )
-            }
-        },
+                                } else {
+                                    socket.emit("request-disbursement-verify", {err: "không tìm thấy pawn"});
+                                }
+                            },
+                            err => {
+                                console.log("request_disbursement_verify", err)
+                            }
+                        )
+                }
+            },
             err => {
                 console.log("request_disbursement_verify", err)
             }
@@ -1107,72 +1216,72 @@ exports.request_disbursement_verify = (obj) => {
 
 //xác thực đã giải ngân
 exports.disbursement_verify = (obj) => {
-    let { io ,socket} = obj;
-    let { from_id, pawn_id, to_id, status } = obj.info;
+    let {io, socket} = obj;
+    let {from_id, pawn_id, to_id, status} = obj.info;
     if (from_id === undefined || pawn_id === undefined || to_id === undefined || status === undefined) {
-        socket.emit("disbursement-verify", {err:" không tìm thấy params"});
+        socket.emit("disbursement-verify", {err: " không tìm thấy params"});
         return;
     }
     if (status < 2) {
-        socket.emit("disbursement-verify", {err:"truyền sai giá trị biến status"});
+        socket.emit("disbursement-verify", {err: "truyền sai giá trị biến status"});
         return;
     }
-    User.FindOneUserObj({ _id: from_id })
+    User.FindOneUserObj({_id: from_id})
         .then(userf => {
-            if (userf) {
-                UpdatePawnOne({ _id: pawn_id, accountID: from_id }, { status: status })
-                    .then(pawnup => {
-                        if (pawnup) {
-                            // lưu thông báo người dùng
-                            Notify.CreateNotify({
-                                author: userf,
-                                to_id: to_id,
-                                content: pawnup.status === 2 ?  `${userf.fullName} ${notification.undisbursement_verify}` :  `${userf.fullName} ${notification.disbursement_verify}`,
-                                categories: 'pawn',
-                                detail_id: pawn_id,
-                            }).then(nt => {
-                                socket.emit("disbursement-verify", nt);
-                                User.FindOneUserObj({ _id: to_id })
-                                    .then(userr => {
-                                        if (userr.offlineTime > 0) {
-                                            UserOnline.FindAllUserOnline({ user_id: userr._id })
-                                                .then(userOneL => {
-                                                    if (userOneL.length > 0) {
-                                                        userOneL.map((uonl) => {
-                                                            console.log("online", uonl.socket_id);
-                                                            if (pawnup.status === 2) {
-                                                                io.to(uonl.socket_id).emit("undisbursement-verify", nt);
-                                                            }else{
-                                                                io.to(uonl.socket_id).emit("disbursement-verify", nt);
+                if (userf) {
+                    UpdatePawnOne({_id: pawn_id, accountID: from_id}, {status: status})
+                        .then(pawnup => {
+                                if (pawnup) {
+                                    // lưu thông báo người dùng
+                                    Notify.CreateNotify({
+                                        author: userf,
+                                        to_id: to_id,
+                                        content: pawnup.status === 2 ? `${userf.fullName} ${notification.undisbursement_verify}` : `${userf.fullName} ${notification.disbursement_verify}`,
+                                        categories: 'pawn',
+                                        detail_id: pawn_id,
+                                    }).then(nt => {
+                                        socket.emit("disbursement-verify", nt);
+                                        User.FindOneUserObj({_id: to_id})
+                                            .then(userr => {
+                                                if (userr.offlineTime > 0) {
+                                                    UserOnline.FindAllUserOnline({user_id: userr._id})
+                                                        .then(userOneL => {
+                                                            if (userOneL.length > 0) {
+                                                                userOneL.map((uonl) => {
+                                                                    console.log("online", uonl.socket_id);
+                                                                    if (pawnup.status === 2) {
+                                                                        io.to(uonl.socket_id).emit("undisbursement-verify", nt);
+                                                                    } else {
+                                                                        io.to(uonl.socket_id).emit("disbursement-verify", nt);
+                                                                    }
+                                                                })
                                                             }
                                                         })
-                                                    }
-                                                })
-                                        } else if (userr.isPlatform === 0 && userr.device_token !== "") {
-                                            // người dùng offline, kiểm tra người dùng có dùng ios không
-                                            console.log("offline", userr.device_token);
-                                            Ios.sendNotifyIOSOwner({
-                                                device_token: userr.device_token,
-                                                countMes: 1,
-                                                content_text:  pawnup.status === 2 ?  `${userf.fullName} ${notification.undisbursement_verify}` :  `${userf.fullName} ${notification.disbursement_verify}`,
-                                            });
-                                        }
+                                                } else if (userr.isPlatform === 0 && userr.device_token !== "") {
+                                                    // người dùng offline, kiểm tra người dùng có dùng ios không
+                                                    console.log("offline", userr.device_token);
+                                                    Ios.sendNotifyIOSOwner({
+                                                        device_token: userr.device_token,
+                                                        countMes: 1,
+                                                        content_text: pawnup.status === 2 ? `${userf.fullName} ${notification.undisbursement_verify}` : `${userf.fullName} ${notification.disbursement_verify}`,
+                                                    });
+                                                }
 
+                                            });
                                     });
-                            });
-                        }
-                        else{
-                            socket.emit("disbursement-verify", {err: "không tìm thấy pawn"});
-                        }
-                    },
-                        err => {
-                            console.log("disbursement-verify", err)
-                        }
-                    )
-            }else{
-                socket.emit("disbursement-verify", {err: "không tìm thấy pawn"});
-            }
-        },
+                                }
+                                else {
+                                    socket.emit("disbursement-verify", {err: "không tìm thấy pawn"});
+                                }
+                            },
+                            err => {
+                                console.log("disbursement-verify", err)
+                            }
+                        )
+                } else {
+                    socket.emit("disbursement-verify", {err: "không tìm thấy pawn"});
+                }
+            },
             err => {
                 console.log("disbursement-verify", err)
             }
@@ -1180,44 +1289,44 @@ exports.disbursement_verify = (obj) => {
 };
 
 exports.get_pawn_auction_for_business = (req, res) => {
-    let { phone } = req.user;
+    let {phone} = req.user;
     if (phone === undefined) {
         return res.send({
             "response": false,
             "value": "not find user "
         });
     }
-    User.FindOneUserObj({ phone })
+    User.FindOneUserObj({phone})
         .then(userf => {
-            if (userf) {
-                FindPawnAllObj({ status: 1, "reciver._id": userf._id })
-                    .then(pawnfs => {
-                        if (pawnfs) {
-                            return res.send({
-                                "response": true,
-                                "value": pawnfs
-                            });
-                        } else {
-                            return res.send({
-                                "response": false,
-                                "value": "pawn is not exits"
-                            });
-                        }
-                    },
-                        err => {
-                            return res.send({
-                                "response": false,
-                                "value": err
-                            });
-                        }
-                    )
-            } else {
-                return res.send({
-                    "response": false,
-                    "value": "user is not exits"
-                });
-            }
-        },
+                if (userf) {
+                    FindPawnAllObj({status: 1, "reciver._id": userf._id})
+                        .then(pawnfs => {
+                                if (pawnfs) {
+                                    return res.send({
+                                        "response": true,
+                                        "value": pawnfs
+                                    });
+                                } else {
+                                    return res.send({
+                                        "response": false,
+                                        "value": "pawn is not exits"
+                                    });
+                                }
+                            },
+                            err => {
+                                return res.send({
+                                    "response": false,
+                                    "value": err
+                                });
+                            }
+                        )
+                } else {
+                    return res.send({
+                        "response": false,
+                        "value": "user is not exits"
+                    });
+                }
+            },
             err => {
                 return res.send({
                     "response": false,
@@ -1228,44 +1337,44 @@ exports.get_pawn_auction_for_business = (req, res) => {
 }
 
 exports.list_was_auctioned = (req, res) => {
-    let { phone } = req.user;
+    let {phone} = req.user;
     if (phone === undefined) {
         return res.send({
             "response": false,
             "value": "not find user "
         });
     }
-    User.FindOneUserObj({ phone })
+    User.FindOneUserObj({phone})
         .then(userf => {
-            if (userf) {
-                FindPawnAllObj({ "auction.accountID": userf._id })
-                    .then(pawnfs => {
-                        if (pawnfs) {
-                            res.send({
-                                "response": true,
-                                "value": pawnfs
-                            });
-                        } else {
-                            return res.send({
-                                "response": false,
-                                "value": "pawn is not exits"
-                            });
-                        }
-                    },
-                        err => {
-                            return res.send({
-                                "response": false,
-                                "value": err
-                            });
-                        }
-                    )
-            } else {
-                return res.send({
-                    "response": false,
-                    "value": "user is not exits"
-                });
-            }
-        },
+                if (userf) {
+                    FindPawnAllObj({"auction.accountID": userf._id})
+                        .then(pawnfs => {
+                                if (pawnfs) {
+                                    res.send({
+                                        "response": true,
+                                        "value": pawnfs
+                                    });
+                                } else {
+                                    return res.send({
+                                        "response": false,
+                                        "value": "pawn is not exits"
+                                    });
+                                }
+                            },
+                            err => {
+                                return res.send({
+                                    "response": false,
+                                    "value": err
+                                });
+                            }
+                        )
+                } else {
+                    return res.send({
+                        "response": false,
+                        "value": "user is not exits"
+                    });
+                }
+            },
             err => {
                 return res.send({
                     "response": false,
@@ -1276,44 +1385,44 @@ exports.list_was_auctioned = (req, res) => {
 }
 
 exports.list_pawn_auction_selected = (req, res) => {
-    let { phone } = req.user;
+    let {phone} = req.user;
     if (phone === undefined) {
         return res.send({
             "response": false,
             "value": "not find user "
         });
     }
-    User.FindOneUserObj({ phone })
+    User.FindOneUserObj({phone})
         .then(userf => {
-            if (userf) {
-                FindPawnAllObj({ status: { $gt: 1 }, "auction.accountID": userf._id })
-                    .then(pawnfs => {
-                        if (pawnfs) {
-                            res.send({
-                                "response": true,
-                                "value": pawnfs
-                            });
-                        } else {
-                            return res.send({
-                                "response": false,
-                                "value": "pawn is not exits"
-                            });
-                        }
-                    },
-                        err => {
-                            return res.send({
-                                "response": false,
-                                "value": err
-                            });
-                        }
-                    )
-            } else {
-                return res.send({
-                    "response": false,
-                    "value": "user is not exits"
-                });
-            }
-        },
+                if (userf) {
+                    FindPawnAllObj({status: {$gt: 1}, "auction.accountID": userf._id})
+                        .then(pawnfs => {
+                                if (pawnfs) {
+                                    res.send({
+                                        "response": true,
+                                        "value": pawnfs
+                                    });
+                                } else {
+                                    return res.send({
+                                        "response": false,
+                                        "value": "pawn is not exits"
+                                    });
+                                }
+                            },
+                            err => {
+                                return res.send({
+                                    "response": false,
+                                    "value": err
+                                });
+                            }
+                        )
+                } else {
+                    return res.send({
+                        "response": false,
+                        "value": "user is not exits"
+                    });
+                }
+            },
             err => {
                 return res.send({
                     "response": false,
@@ -1324,62 +1433,62 @@ exports.list_pawn_auction_selected = (req, res) => {
 }
 
 exports.list_auction_of_pawn = (req, res) => {
-    let { _id } = req.body;
-    let { phone } = req.user;
+    let {_id} = req.body;
+    let {phone} = req.user;
     if (phone === undefined) {
         return res.send({
             "response": false,
             "value": "not find user "
         });
     }
-    User.FindOneUserObj({ phone })
+    User.FindOneUserObj({phone})
         .then(userf => {
-            if (userf) {
-                FindPawnOneObj({ accountID: userf._id, _id })
-                    .then(pawnf => {
-                        if (!pawnf) {
-                            return res.send({
-                                "response": false,
-                                "value": "pawn is not exits"
-                            });
-                        }
-
-                        let allauction = [];
-                        Async.forEachOf(pawnf.auction, function (aucton, key, callback) {
-                            User.FindOneUserObj({ _id: aucton.accountID })
-                                .then(userf => {
-                                    allauction.push(Object.assign(JSON.parse(JSON.stringify(userf)), JSON.parse(JSON.stringify(aucton))));
-                                    callback();
-                                }, err => {
-                                    callback(err);
+                if (userf) {
+                    FindPawnOneObj({accountID: userf._id, _id})
+                        .then(pawnf => {
+                                if (!pawnf) {
+                                    return res.send({
+                                        "response": false,
+                                        "value": "pawn is not exits"
+                                    });
                                 }
-                                )
-                        }, function (err) {
-                            if (err) return res.send({
-                                "response": false,
-                                "value": err
-                            });
-                            res.send({
-                                "response": true,
-                                "value": allauction
-                            });
-                        });
 
-                    },
-                        err => {
-                            return res.send({
-                                "response": false,
-                                "value": err
-                            });
-                        }
-                    )
-            } else {
-                return res.send({
-                    "response": false,
-                    "value": "user is not exits"
-                });
-            }
-        },
+                                let allauction = [];
+                                Async.forEachOf(pawnf.auction, function (aucton, key, callback) {
+                                    User.FindOneUserObj({_id: aucton.accountID})
+                                        .then(userf => {
+                                                allauction.push(Object.assign(JSON.parse(JSON.stringify(userf)), JSON.parse(JSON.stringify(aucton))));
+                                                callback();
+                                            }, err => {
+                                                callback(err);
+                                            }
+                                        )
+                                }, function (err) {
+                                    if (err) return res.send({
+                                        "response": false,
+                                        "value": err
+                                    });
+                                    res.send({
+                                        "response": true,
+                                        "value": allauction
+                                    });
+                                });
+
+                            },
+                            err => {
+                                return res.send({
+                                    "response": false,
+                                    "value": err
+                                });
+                            }
+                        )
+                } else {
+                    return res.send({
+                        "response": false,
+                        "value": "user is not exits"
+                    });
+                }
+            },
             err => {
                 return res.send({
                     "response": false,

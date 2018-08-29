@@ -1,13 +1,14 @@
 'use strict';
 const Wallets = require('../models/walletsModel');
 const tradeHistory = require('../controllers/tradeHistoryController');
+const notification = require('../ultils/notification');
 
 /*
 * tìm giá theo accountID and phone
 * */
-let FindWalletsID = (accountID, phone) => {
+let FindWalletsID = (obj) => {
     return new Promise((resolve, reject) => {
-        Wallets.findOne({accountID: accountID, phone: phone}, function (err, Pawn) {
+        Wallets.findOne({accountID: obj.accountID, phone: obj.phone}, function (err, Pawn) {
             if (err) return reject(err);
             resolve(Pawn);
         });
@@ -38,7 +39,7 @@ let createWallets = (wl) => {
         });
     });
 };
-exports.createWallets = createWallets;
+
 /*
 *  function tạo update wallet qua accountID
 * */
@@ -52,7 +53,7 @@ let updateWallets = (obj) => {
         });
     });
 }
-exports.updateWallets = updateWallets;
+
 
 // delete wallet
 let DeleteOneWallet = (obj) => {
@@ -63,7 +64,7 @@ let DeleteOneWallet = (obj) => {
         });
     });
 };
-exports.DeleteOneWallet = DeleteOneWallet;
+
 /*
 *  api get wallet find user
 * */
@@ -136,7 +137,7 @@ exports.update_wallet_user = function (req, res) {
                                     tradeHistory.CreateTradeHistory({
                                         pricepay:balancenew,
                                         accountID:accountID,
-                                        description:" Tài khoản của bạn vừa mới được cộng thêm ",
+                                        description: notification.update_wallet,
                                     });
                                     return res.json({
                                         response: true,
@@ -166,7 +167,7 @@ exports.update_wallet_user = function (req, res) {
                             tradeHistory.CreateTradeHistory({
                                 pricepay:balance,
                                 accountID:accountID,
-                                description:" Tài khoản của bạn vừa mới được cộng thêm ",
+                                description: notification.update_wallet,
                             });
                             return res.json({
                                 response: true,
@@ -190,3 +191,9 @@ exports.update_wallet_user = function (req, res) {
             }
         )
 }
+
+exports.FindWallets = FindWalletsID;
+exports.FindWalletsOne = FindWalletsOne;
+exports.createWallets = createWallets;
+exports.updateWallets = updateWallets;
+exports.DeleteOneWallet = DeleteOneWallet;
