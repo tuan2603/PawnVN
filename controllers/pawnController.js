@@ -14,6 +14,7 @@ const Pawn = require('../models/pawnModel'),
     Ios = require("../controllers/notifyIOSController"),
     Wallets = require("../controllers/walletsController"),
     tradeHistory = require('../controllers/tradeHistoryController'),
+    Contract = require('../controllers/contractControllers'),
     Distance = require("../ultils/distance"),
     Pawn_fee = require("../ultils/pawn_fee"),
     notification = require("../ultils/notification"),
@@ -808,12 +809,12 @@ exports.insert_pawn_auction = (req, res) => {
                     FindPawnOneObj({_id: pawnID})
                         .then(pawnf => {
                                 if (pawnf) {
+                                    // tổng tiền lãi = giá đấu * lãi xuất * lãi 30 ngày(số ngày vay / 30)
+                                    // tiền pawn thu = tổng tiền lãi * 20% / số ngày vay/ kỳ hạn nộp lãi
+                                    let pawn_fee = Pawn_fee.pawn_fee(price, interest_rate / 100, pawnf.date_time, period);
                                     Wallets.FindWalletsOne({accountID, phone})
                                         .then(wallet => {
                                             if (wallet) {
-                                                // tổng tiền lãi = giá đấu * lãi xuất * lãi 30 ngày(số ngày vay / 30)
-                                                // tiền pawn thu = tổng tiền lãi * 20% / số ngày vay/ kỳ hạn nộp lãi
-                                                let pawn_fee = Pawn_fee.pawn_fee(price, interest_rate / 100, pawnf.date_time, period);
                                                 if (wallet.balance >= pawn_fee) {
                                                     Wallets.updateWallets({
                                                         accountID,
@@ -1241,6 +1242,12 @@ exports.disbursement_verify = (obj) => {
                                         detail_id: pawn_id,
                                     }).then(nt => {
                                         socket.emit("disbursement-verify", nt);
+                                        //create contract payment
+                                        //tạo bảng hợp đồng nếu xác thưc giải ngân
+                                        if (pawnup.status !== 2) {
+                                            Contract.create_new_contract({pawn_info:pawnup, customer_id: from_id, owner_id:to_id});
+                                        }
+
                                         User.FindOneUserObj({_id: to_id})
                                             .then(userr => {
                                                 if (userr.offlineTime > 0) {

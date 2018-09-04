@@ -23,7 +23,7 @@ const AuctionPawnSchema = new mongoose.Schema({
         type:Number,
         default:0,
     },
-    pawn_fee:{ //phí trả cho pawn
+    pawn_fee:{ //phí trả cho pawnk
         type:Number,
         default:0,
     },
