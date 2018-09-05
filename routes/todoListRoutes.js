@@ -15,7 +15,18 @@ module.exports = function (app) {
     let notify = require('../controllers/notifyController');
     let advertise = require('../controllers/advertiseController');
     let maket = require('../controllers/maketController');
+    let contract = require('../controllers/contractControllers');
 
+
+    // danh sach cho vay
+    app.route('/api/contract-lender')
+        .get(userHandles.loginRequired, contract.find_contract_lender);
+    // danh sách nguoi vay
+    app.route('/api/contract-borrower')
+        .get(userHandles.loginRequired, contract.find_contract_borrower);
+    // đóng lãi
+    app.route('/api/contract')
+        .post(userHandles.loginRequired, contract.insert_payment);
 
     // update quang cao
     app.route('/api/maket')
@@ -159,24 +170,20 @@ module.exports = function (app) {
         .get(pawn.get_list_all);
     app.route('/api/pawn/one')
         .post(userHandles.loginRequired, pawn.get_one);
-
+    app.route('/api/pawn/follow-id')
+        .post(userHandles.loginRequired, pawn.get_one_pawn);
     app.route('/api/pawn/get-info-auction-user')
         .post(userHandles.loginRequired, pawn.list_auction_of_pawn);
-
     app.route('/api/pawn/not-view-pawn')
         .post(userHandles.loginRequired, pawn.not_view_pawn);
-
     //choose auction pawn
     app.route('/api/choose-auction-pawn')
         .post(userHandles.loginRequired, pawn.choose_pawn_auction);
-
     app.route('/api/auction-pawn')
         .post(userHandles.loginRequired, pawn.insert_pawn_auction)
         .get(userHandles.loginRequired, pawn.get_pawn_auction_for_business);
-
     app.route('/api/list-was-auctioned')
         .get(userHandles.loginRequired, pawn.list_was_auctioned);
-
     app.route('/api/list-pawn-auction-selected')
         .get(userHandles.loginRequired, pawn.list_pawn_auction_selected);
 

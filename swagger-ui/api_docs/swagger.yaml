@@ -36,6 +36,8 @@ tags:
   description: Everything about notification
 - name: Makets
   description: Everything about maket
+- name: Contracts
+  description: Everything about Contracts
 paths:
   '/api/insert-tutorial-socket':
     $ref: 'paths/socket.yaml'
@@ -69,6 +71,8 @@ paths:
     $ref: 'paths/user_comment.yaml'
   '/api/pawn/doc':
     $ref: 'paths/pawn.yaml'
+  '/api/pawn/follow-id':
+    $ref: 'paths/pawn_one.yaml'
   '/api/pawn/list':
     $ref: 'paths/pawn_list.yaml'
   '/api/auction-pawn':
@@ -103,3 +107,9 @@ paths:
       $ref: 'paths/update_one_notification.yaml'
   '/api/maket':
       $ref: 'paths/maket.yaml'
+  '/api/contract':
+      $ref: 'paths/contract.yaml'
+  '/api/contract-borrower':
+      $ref: 'paths/contract_borrower.yaml'
+  '/api/contract-lender':
+      $ref: 'paths/contract_lender.yaml'

@@ -1,0 +1,23 @@
+properties:
+  _id:
+    type: string
+  pawn_info:
+    type: object
+  customer_id:
+    type: string
+  owner_id:
+    type: string
+  status:
+    type: number
+  sign_day:
+    type: number
+  list_payment:
+    type: array
+  history_payment:
+    type: array
+  created_at:
+    type: number
+    format: double
+  updated_at:
+    type: number
+    format: double

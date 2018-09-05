@@ -20,6 +20,7 @@ const ListPaymentSchema = new mongoose.Schema({
 const HistoryPaymentSchema = new mongoose.Schema({
     payment_date:{ //ngày đóng lãi
         type:Number,
+        default: Date.now
     },
     payment:{ //số tiền đã đóng
         type:Number,
@@ -44,7 +45,7 @@ const ContractSchema = new mongoose.Schema({
     },
     status:{//0 chưa hoạt động, 1 hoạt động, 2 ngừng hoạt động
         type:Number,
-        default:0,
+        default:1,
     },
     sign_day: { // ngày ký hợp đồng
         type: Number,

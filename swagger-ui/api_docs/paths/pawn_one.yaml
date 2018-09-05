@@ -1,0 +1,4 @@
+#//path/pawn_one.yaml
+
+post:
+  $ref: '../components/pawn/get_pawn_id.yaml'

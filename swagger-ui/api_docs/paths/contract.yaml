@@ -1,0 +1,4 @@
+# /paths/contract.yaml
+post:
+  $ref: '../components/contract/insert_payment.yaml'
+

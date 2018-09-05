@@ -8,4 +8,5 @@ module.exports = {
     'update_wallet': ' Tài khoản đã được cộng thêm ',
     'wallet_auction_update': ' Tài khoản đã bị trừ đấu giá cầm đồ, số tiền này được hoàn lại nếu bạn không được chọn',
     'wallet_not_choose_update': ' Tài khoản đã được hoàn lại số tiền mà bạn đã đấu giá ',
+    'wallet_payment': ' Khoản thanh toán lãi vay ',
 };

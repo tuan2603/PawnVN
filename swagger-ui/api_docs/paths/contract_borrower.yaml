@@ -1,0 +1,4 @@
+# /paths/contract_borrower.yaml
+get:
+  $ref: '../components/contract/get_contract_borrower.yaml'
+

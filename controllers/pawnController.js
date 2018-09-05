@@ -246,6 +246,38 @@ exports.get_list = function (req, res) {
         );
 };
 
+exports.get_one_pawn = function (req, res) {
+    let {_id} = req.body;
+    if (_id === undefined) {
+        return res.json({
+            value: "Not find id",
+            response: false
+        });
+    }
+    FindPawnOneObj({_id, deleted: false})
+        .then(
+            Pawnf => {
+                if (Pawnf) {
+                    return res.json({
+                        value: Pawnf,
+                        response: true
+                    });
+                } else {
+                    return res.json({
+                        value: "Not find",
+                        response: false
+                    });
+                }
+            },
+            err => {
+                return res.json({
+                    value: "Not find",
+                    response: false
+                });
+            }
+        );
+};
+
 /*
 *  function tìm và xuất ra 1 document cầm đồ đúng với id mà người dùng càn tìm
 * Api: /api/pawn/one

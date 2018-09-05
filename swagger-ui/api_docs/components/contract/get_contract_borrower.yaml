@@ -1,0 +1,17 @@
+#../components/contract/get_contract_borrower.yaml
+tags:
+  - Contracts
+security:
+  - Bearer: []
+summary: "Get contract borrower"
+description: ''
+operationId: "get all list contract borrower"
+produces:
+  - application/json
+responses:
+  'true':
+    description: successful return array value
+    schema:
+      $ref: 'contract_model.yaml'
+  'false':
+    description: get list contract fail

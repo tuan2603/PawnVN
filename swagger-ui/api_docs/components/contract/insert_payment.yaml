@@ -1,0 +1,32 @@
+#../components/contract/insert_payment.yaml
+tags:
+- Contracts
+security:
+- Bearer: []
+summary: Add a new payment in contract
+description: ''
+operationId: addNewPaymentInContract
+consumes:
+- application/x-www-form-urlencoded
+produces:
+- application/json
+parameters:
+- name: "_id"
+  type: number
+  description: "_id hợp đồng"
+  required: true
+  in: formData
+- name: "payment"
+  type: object
+  in: formData
+  description: "số tiền cần đóng"
+responses:
+  'true':
+    description: insert success
+    schema:
+      $ref: 'contract_model.yaml'
+  'false':
+    description: insert payment in contract fail
+    schema:
+      type: "string"
+      example: "value: ...."
