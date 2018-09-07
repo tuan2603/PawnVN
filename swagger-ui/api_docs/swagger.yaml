@@ -38,6 +38,10 @@ tags:
   description: Everything about maket
 - name: Contracts
   description: Everything about Contracts
+- name: Contracts
+  description: Everything about Contracts
+- name: Advertises
+  description: Everything about Advertises
 paths:
   '/api/insert-tutorial-socket':
     $ref: 'paths/socket.yaml'
@@ -113,3 +117,5 @@ paths:
       $ref: 'paths/contract_borrower.yaml'
   '/api/contract-lender':
       $ref: 'paths/contract_lender.yaml'
+  '/api/advertise/insert':
+      $ref: 'paths/advertise.yaml'

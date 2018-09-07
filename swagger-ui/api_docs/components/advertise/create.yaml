@@ -1,0 +1,35 @@
+#../components/advertise/create.yaml
+tags:
+- Advertises
+security:
+- Bearer: []
+summary: Add a new Advertises
+description: ''
+operationId: addNewAdvertises
+consumes:
+ - application/json
+produces:
+ - application/json
+parameters:
+- name: "title"
+  type: string
+  in: formData
+- name: "content"
+  type: string
+  in: formData
+- name: "image"
+  in: "formData"
+  description: "file to upload"
+  required: false
+  type: "file"
+responses:
+  'true':
+    description: insert success
+    schema:
+      $ref: 'advertise_model.yaml'
+  'false':
+    description: Create service banner fail
+    schema:
+        type: string
+        example: " error"
+

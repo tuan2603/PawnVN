@@ -53,7 +53,7 @@ module.exports = function (app) {
     app.route('/api/update-view-notification-for-one-user')
         .get(userHandles.loginRequired, notify.update_view_notification_for_one_user);
     app.route('/api/update-one-notification-for-one-user')
-        .get(userHandles.loginRequired, notify.update_one_notification_for_one_user);
+        .post(userHandles.loginRequired, notify.update_one_notification_for_one_user);
 
     // insert document socket
     app.route('/api/insert-tutorial-socket')

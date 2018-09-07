@@ -1,0 +1,15 @@
+properties:
+  _id:
+    type: string
+  title:
+    type: string
+  content:
+    type: string
+  url_image:
+    type: string
+  created_at:
+    type: number
+    format: double
+  updated_at:
+    type: number
+    format: double

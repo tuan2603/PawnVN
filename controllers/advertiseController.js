@@ -20,7 +20,7 @@ let FindAllAdvertise = (obj) => {
         advertise.find(obj, function (err, adv) {
             if (err) return reject(err);
             resolve(adv);
-        }).sort({status: 1, create_at: 1});
+        }).sort({status: -1, create_at: -1});
     });
 };
 
@@ -77,7 +77,7 @@ let upload = multer({
     limits: {
         fileSize: 6000000
     }
-}).single('file'); //Field name and max count
+}).single('image'); //Field name and max count
 
 exports.insert_one = function (req, res) {
     upload(req, res, function (err) {

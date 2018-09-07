@@ -1,0 +1,5 @@
+# /paths/advertise.yaml
+post:
+  $ref: '../components/advertise/create.yaml'
+# gỉa sử trong UsersController có thêm action khác ví dụ như index thì mình sẽ khai báo thêm ở đây
+

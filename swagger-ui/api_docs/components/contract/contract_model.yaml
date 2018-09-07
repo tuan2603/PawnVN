@@ -1,20 +1,41 @@
 properties:
   _id:
     type: string
-  pawn_info:
-    type: object
   customer_id:
     type: string
+    example: _id người vay
   owner_id:
     type: string
+    example: _id người cho vay
   status:
     type: number
+    format: double
   sign_day:
     type: number
+    format: double
+    example: gày ký hợp đồng
   list_payment:
     type: array
+    items:
+      type: object
+      properties:
+        arrival_date:
+          type: number
+          example: ngày đến hạng
+        payment:
+          type: number
+          example: số tiền cần đóng mỗi kỳ
   history_payment:
     type: array
+    items:
+      type: object
+      properties:
+        payment_date:
+          type: number
+          example: ngày đóng lãi
+        payment:
+          type: number
+          example: số tiền đã đóng
   created_at:
     type: number
     format: double
