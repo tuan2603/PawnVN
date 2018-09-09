@@ -27,7 +27,8 @@ module.exports = function (app) {
     // đóng lãi
     app.route('/api/contract')
         .post(userHandles.loginRequired, contract.insert_payment);
-
+    app.route('/api/contract/:_id')
+        .get(userHandles.loginRequired, contract.find_contract_id);
     // update quang cao
     app.route('/api/maket')
         .get(maket.list_maket)

@@ -42,8 +42,8 @@ let createContract = (obj) => {
 }
 
 let create_new_contract = (obj) => {
-    let {pawn_info} = obj;
-    let contract = new Contract(obj);
+    let {pawn_info, customer_id, owner_id} = obj;
+    let contract = new Contract({_id:pawn_info._id, pawn_info, customer_id, owner_id});
     if (pawn_info) {
         let auction = pawn_info.auction[0];
         let tong_tien_lai = (auction.price * (auction.interest_rate / 100) * (pawn_info.date_time / 30));
@@ -254,6 +254,53 @@ exports.find_contract_lender = (req, res) => {
                     FindContractAll({owner_id:userf._id})
                         .then(contractsf => {
                             if (contractsf.length > 0) {
+                                return res.send({
+                                    "response": true,
+                                    "value": contractsf
+                                });
+                            } else {
+                                return res.send({
+                                    "response": false,
+                                    "value": "not found contract"
+                                });
+                            }
+                        }, err => {
+                            return res.send({
+                                "response": false,
+                                "value": "not found contract"
+                            });
+                        });
+
+                } else {
+                    return res.send({
+                        "response": false,
+                        "value": "not find user"
+                    });
+                }
+            },
+            err => {
+                return res.send({
+                    "response": false,
+                    "value": "not find user"
+                });
+            })
+}
+
+exports.find_contract_id = (req, res) => {
+    let {_id} = req.params;
+    let {phone} = req.user;
+    if (phone === undefined || _id === undefined ) {
+        return res.send({
+            "response": false,
+            "value": "not find params "
+        });
+    }
+    User.FindOneUserObj({phone})
+        .then(userf => {
+                if (userf) {
+                    FindContractOneObj({_id})
+                        .then(contractsf => {
+                            if (contractsf) {
                                 return res.send({
                                     "response": true,
                                     "value": contractsf

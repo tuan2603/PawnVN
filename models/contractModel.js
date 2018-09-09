@@ -36,6 +36,7 @@ const HistoryPaymentSchema = new mongoose.Schema({
 
 
 const ContractSchema = new mongoose.Schema({
+    _id: String,
     pawn_info:{}, //thông tin pawn
     customer_id:{ // id người vay
         type:String,

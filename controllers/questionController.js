@@ -1,50 +1,43 @@
 'use strict';
-const advertise = require('../models/advertiseModel'),
-    user = require('../controllers/userController'),
-    path = require('path'),
-    multer = require('multer'),
-    fsextra = require('fs-extra'),
+const questions = require('../models/questionModel'),
+    users = require('../controllers/userController'),
     config = require('../config');
 
-let FindOneAdvertise = (obj) => {
+let FindOneQuestion = (obj) => {
     return new Promise((resolve, reject) => {
-        advertise.findOne(obj, function (err, adv) {
+        questions.findOne(obj, function (err, question) {
             if (err) return reject(err);
-            resolve(adv);
+            resolve(question);
         });
     });
 };
 
-let FindAllAdvertise = (obj) => {
+let FindAllQuestion = (obj) => {
     return new Promise((resolve, reject) => {
-        advertise.find(obj, function (err, adv) {
+        questions.find(obj, function (err, question) {
             if (err) return reject(err);
-            resolve(adv);
-        }).sort({status: 1, create_at: -1});
+            resolve(question);
+        });
     });
 };
 
-let UpdateAdvertise = (condition, Obj) => {
+let UpdateQuestion = (condition, Obj) => {
     return new Promise((resolve, reject) => {
-        advertise.findOneAndUpdate(condition, Obj, {new: true}, function (err, adv) {
+        questions.findOneAndUpdate(condition, Obj, {new: true}, function (err, question) {
             if (err) reject(err);
-            resolve(adv);
+            resolve(question);
         });
     });
 };
 
-//delete on Advertise
-let DeleteOneAdvertise = (obj) => {
+//delete on Question
+let DeleteOneQuestion = (obj) => {
     return new Promise((resolve, reject) => {
-        advertise.findOneAndRemove(obj, function (err, adv) {
+        questions.findOneAndRemove(obj, function (err, question) {
             if (err) return reject(err);
             //remove icon old
-            try {
-                fsextra.remove(path.join(`${config.folder_uploads}`, `advertises`, `${adv.url_image}`));
-                resolve(adv);
-            } catch (err) {
-                return reject(err);
-            }
+             resolve(question);
+
         });
     });
 }

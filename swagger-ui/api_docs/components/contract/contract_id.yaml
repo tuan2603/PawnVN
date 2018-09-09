@@ -1,0 +1,24 @@
+tags:
+- "Contracts"
+security:
+- Bearer: []
+summary: "get contract info follow by _id"
+description: "trả về thông tin của một hợp đồng"
+operationId: "getContractById"
+produces:
+- "application/json"
+parameters:
+- name: "_id"
+  in: "path"
+  description: "_id of contract or _id pawn"
+  required: true
+  type: "string"
+responses:
+  true:
+    description: "successful operation"
+    schema:
+      $ref: "contract_model.yaml"
+  false:
+    description: "Invalid ID supplied"
+    type: "string"
+    example: "Error..."

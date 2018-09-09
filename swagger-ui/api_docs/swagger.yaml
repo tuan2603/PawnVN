@@ -117,5 +117,7 @@ paths:
       $ref: 'paths/contract_borrower.yaml'
   '/api/contract-lender':
       $ref: 'paths/contract_lender.yaml'
+  '/api/contract/{_id}':
+        $ref: 'paths/contract_id.yaml'
   '/api/advertise/insert':
       $ref: 'paths/advertise.yaml'
