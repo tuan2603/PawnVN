@@ -2,6 +2,7 @@
 const express = require('express'),
     app = express(),
     cors = require('cors'),
+    fs = require('fs'),
     mongoose = require('mongoose'),
     Task = require('./models/todoListModel'),
     User = require('./models/userModel'),
@@ -15,22 +16,32 @@ const express = require('express'),
     {removeOnline} = require('./controllers/onlineController'),
     jsonwebtoken = require("jsonwebtoken");
 
-const http = require('http');
-const server = http.createServer(app);
+const https = require('https');
+const config = require("./config");
+//const ca = fs.readFileSync(__dirname +'ssl/COMODORSADomainValidationSecureServerCA.crt', 'utf8');
+const credentials = {
+    key: fs.readFileSync(__dirname +'/ssl/key.pem'),
+    cert: fs.readFileSync(__dirname +'/ssl/cert.pem'),
+    // ca: [fs.readFileSync(__dirname +'/ssl/ca.pem')],
+};
+
+// var httpServer = http.createServer(app);
+const httpsServer = https.createServer(credentials, app);
+
 const passport = require('passport');
 const flash    = require('connect-flash');
 const morgan       = require('morgan');
 const cookieParser = require('cookie-parser');
 const session      = require('express-session');
 
-const config = require("./config");
-const port = config.AUrl;
+
 mongoose.Promise = global.Promise;
 mongoose.connect(config.database, { useNewUrlParser: true });
 app.set('uploads','./public/uploads');
 app.use(express.static('public'));
 // app.use(express.static('build'));
 //swagger
+// app.use(helmet()); // Add Helmet as a middleware
 app.use(express.static('swagger-ui'));
 app.use(bodyParser.json({limit: "20mb"}));
 app.use(bodyParser.urlencoded({limit: "20mb", extended: true, cookie: { maxAge: 86400000 }}));
@@ -67,7 +78,7 @@ const routes = require('./routes/todoListRoutes');
 routes(app);
 
 // socket
-require('./routes/socket')(server);
+require('./routes/socket')(httpsServer);
 
 //reactjs
 app.use(express.static(path.join(__dirname, 'build')));
@@ -78,18 +89,13 @@ app.get('/*', function (req, res) {
 app.use(function(req, res) {
     res.status(404).send({ url: req.originalUrl + ' not found' })
 });
-
-
 // goi ham tự đọng xóa có hẹn giờ
 autoruntime();
 
-// app.listen(port, function(){
-// 	console.log('todo list RESTful API server started on: ' + port);
-// });
-
-server.listen(port, () =>{
-    console.log(`todo list RESTful API server started on: ${port}`)
+httpsServer.listen(config.AUrl, () =>{
+    console.log(`todo list RESTful API server started on: ${config.AUrl}`);
     removeOnline();
 });
 
 module.exports = app;
+
