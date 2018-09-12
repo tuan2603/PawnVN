@@ -16,6 +16,7 @@ module.exports = function (app) {
     let advertise = require('../controllers/advertiseController');
     let maket = require('../controllers/maketController');
     let contract = require('../controllers/contractControllers');
+    let question = require('../controllers/questionController');
 
 
     // danh sach cho vay
@@ -35,6 +36,18 @@ module.exports = function (app) {
         .post(userHandles.loginRequired, maket.insert_one);
 
     // update quang cao
+    app.route('/api/question')
+        .get(question.list_question_active);
+    app.route('/api/all-question')
+        .get(question.list_all_question);
+    app.route('/api/question/insert')
+        .post(userHandles.loginRequired, question.insert_one);
+    app.route('/api/question/delete')
+        .post(userHandles.loginRequired, question.delete_question);
+    app.route('/api/question/update')
+        .post(userHandles.loginRequired, question.update_question);
+
+    // cau hoi
     app.route('/api/advertise')
         .get(advertise.list_advertise_active);
     app.route('/api/all-advertise')
