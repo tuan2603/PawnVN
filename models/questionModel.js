@@ -4,6 +4,7 @@ const QuestionSchema = new mongoose.Schema({
     question_group: String,
     title_question: String,
     content_question: String,
+    no: Number,
     status: {
         type: Number,
         default: 0,

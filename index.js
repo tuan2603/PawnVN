@@ -1,6 +1,7 @@
 'use strict';
 const express = require('express'),
     app = express(),
+    httpApp = express(),
     cors = require('cors'),
     fs = require('fs'),
     mongoose = require('mongoose'),
@@ -16,42 +17,50 @@ const express = require('express'),
     {removeOnline} = require('./controllers/onlineController'),
     jsonwebtoken = require("jsonwebtoken");
 
+const http = require('http');
 const https = require('https');
 const config = require("./config");
 //const ca = fs.readFileSync(__dirname +'ssl/COMODORSADomainValidationSecureServerCA.crt', 'utf8');
 const credentials = {
-    key: fs.readFileSync(__dirname +'/ssl/key.pem'),
-    cert: fs.readFileSync(__dirname +'/ssl/cert.pem'),
+    key: fs.readFileSync(__dirname + '/ssl/key.pem'),
+    cert: fs.readFileSync(__dirname + '/ssl/cert.pem'),
     // ca: [fs.readFileSync(__dirname +'/ssl/ca.pem')],
 };
 
-// var httpServer = http.createServer(app);
+httpApp.set('port', process.env.PORT || 80);
+httpApp.get("*", function (req, res, next) {
+    res.redirect("https://" + req.headers.host + req.path);
+});
+
+const httpServer = http.createServer(httpApp);
 const httpsServer = https.createServer(credentials, app);
 
 const passport = require('passport');
-const flash    = require('connect-flash');
-const morgan       = require('morgan');
+const flash = require('connect-flash');
+const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
-const session      = require('express-session');
+const session = require('express-session');
 
 
 mongoose.Promise = global.Promise;
-mongoose.connect(config.database, { useNewUrlParser: true });
-app.set('uploads','./public/uploads');
+mongoose.connect(config.database, {useNewUrlParser: true});
+app.set('port', process.env.PORT || 443);
+app.set('host', process.env.HOST || '');
+app.enable('trust proxy');
+app.set('uploads', './public/uploads');
 app.use(express.static('public'));
-// app.use(express.static('build'));
-//swagger
-// app.use(helmet()); // Add Helmet as a middleware
 app.use(express.static('swagger-ui'));
+app.use(express.static('admin'));
+
 app.use(bodyParser.json({limit: "20mb"}));
-app.use(bodyParser.urlencoded({limit: "20mb", extended: true, cookie: { maxAge: 86400000 }}));
+app.use(bodyParser.urlencoded({limit: "20mb", extended: true, cookie: {maxAge: 86400000}}));
 // set up our express application
 app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)
 app.set('view engine', 'ejs'); // set up ejs for templating
 app.set('views', './views'); // set up ejs for templating
 // required for passport
-app.use(session({ secret: config.secret ,resave :true, saveUninitialized: true})); // session secret
+app.use(session({secret: config.secret, resave: true, saveUninitialized: true})); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
@@ -60,9 +69,18 @@ require('./config/passport')(passport); // pass passport for configuration
 require('./routes/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
 // uncomment this line
 app.use(cors());
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
+    if (req.protocol === 'https') {
+        console.log(req.protocol, req.secure);
+        next();
+    } else {
+        console.log('redirected');
+        res.redirect('https://' + req.headers.host + req.url);
+    }
+});
+app.use(function (req, res, next) {
     if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === config.bearer) {
-        jsonwebtoken.verify(req.headers.authorization.split(' ')[1], config.secret, function(err, decode) {
+        jsonwebtoken.verify(req.headers.authorization.split(' ')[1], config.secret, function (err, decode) {
             if (err) req.user = undefined;
             req.user = decode;
             next();
@@ -74,27 +92,33 @@ app.use(function(req, res, next) {
 });
 
 // routes api
-const routes = require('./routes/todoListRoutes');
-routes(app);
+require('./routes/todoListRoutes')(app);
+
 
 // socket
 require('./routes/socket')(httpsServer);
 
-//reactjs
+
+
+//reactjs front end
 app.use(express.static(path.join(__dirname, 'build')));
 app.get('/*', function (req, res) {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
-app.use(function(req, res) {
-    res.status(404).send({ url: req.originalUrl + ' not found' })
+
+app.use(function (req, res) {
+    res.status(404).send({url: req.originalUrl + ' not found'})
 });
 // goi ham tự đọng xóa có hẹn giờ
 autoruntime();
 
-httpsServer.listen(config.AUrl, () =>{
-    console.log(`todo list RESTful API server started on: ${config.AUrl}`);
-    removeOnline();
+httpServer.listen(httpApp.get('port'), function () {
+    console.log('Express HTTP server listening on port ' + httpApp.get('port'));
+});
+
+httpsServer.listen(app.get('port'), app.get('host'), function () {
+    console.log('Express HTTPS server listening on port ' + app.get('port'));
 });
 
 module.exports = app;

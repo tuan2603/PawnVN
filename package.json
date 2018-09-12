@@ -14,9 +14,9 @@
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/trantuan26/serverGrap/issues"
+    "url": "https://pawnvietnam.vn/"
   },
-  "homepage": "https://github.com/trantuan26/serverGrap#readme",
+  "homepage": "https://pawnvietnam.vn/",
   "dependencies": {
     "apn": "^2.2.0",
     "async": "^2.6.1",

@@ -21,6 +21,10 @@ module.exports = function(app, passport) {
         res.render('swaggers.ejs'); // load the index.ejs file
     });
 
+    app.get('/admin',  function(req, res) {
+        res.render('admin.ejs'); // load the index.ejs file
+    });
+
     // =====================================
     // LOGIN ===============================
     // =====================================
