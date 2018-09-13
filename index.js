@@ -50,7 +50,7 @@ app.enable('trust proxy');
 app.set('uploads', './public/uploads');
 app.use(express.static('public'));
 app.use(express.static('swagger-ui'));
-app.use(express.static('admin'));
+
 
 app.use(bodyParser.json({limit: "20mb"}));
 app.use(bodyParser.urlencoded({limit: "20mb", extended: true, cookie: {maxAge: 86400000}}));
@@ -69,15 +69,7 @@ require('./config/passport')(passport); // pass passport for configuration
 require('./routes/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
 // uncomment this line
 app.use(cors());
-app.use(function (req, res, next) {
-    if (req.protocol === 'https') {
-        console.log(req.protocol, req.secure);
-        next();
-    } else {
-        console.log('redirected');
-        res.redirect('https://' + req.headers.host + req.url);
-    }
-});
+
 app.use(function (req, res, next) {
     if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === config.bearer) {
         jsonwebtoken.verify(req.headers.authorization.split(' ')[1], config.secret, function (err, decode) {
@@ -101,10 +93,17 @@ require('./routes/socket')(httpsServer);
 
 
 //reactjs front end
-app.use(express.static(path.join(__dirname, 'build')));
-app.get('/*', function (req, res) {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+app.use(express.static(path.join(__dirname, 'pawnvnadmin')));
+app.get('/admin', function (req, res) {
+    res.sendFile(path.join(__dirname, 'pawnvnadmin', 'pawnvnadmin.html'));
 });
+
+app.use(express.static(path.join(__dirname, 'pawnvn')));
+app.get('/*', function (req, res) {
+    res.sendFile(path.join(__dirname, 'pawnvn', 'index.html'));
+});
+
+
 
 
 app.use(function (req, res) {

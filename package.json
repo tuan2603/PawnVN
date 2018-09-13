@@ -14,9 +14,9 @@
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://pawnvietnam.vn/"
+    "url": "https://pawnvietnam.vn"
   },
-  "homepage": "https://pawnvietnam.vn/",
+  "homepage": "https://pawnvietnam.vn",
   "dependencies": {
     "apn": "^2.2.0",
     "async": "^2.6.1",
