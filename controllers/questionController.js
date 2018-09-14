@@ -1,7 +1,6 @@
 'use strict';
 const questions = require('../models/questionModel'),
-    users = require('../controllers/userController'),
-    config = require('../config');
+    users = require('../controllers/userController');
 
 let FindOneQuestion = (obj) => {
     return new Promise((resolve, reject) => {
@@ -17,7 +16,7 @@ let FindAllQuestion = (obj) => {
         questions.find(obj, function (err, question) {
             if (err) return reject(err);
             resolve(question);
-        }).sort({no:1,question_group:1});
+        }).sort({question_group:1, no:1});
     });
 };
 
