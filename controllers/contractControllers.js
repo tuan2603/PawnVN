@@ -333,6 +333,41 @@ exports.find_contract_id = (req, res) => {
             })
 }
 
+exports.total_amount_disbursed = (req, res) => {
+    FindContractAll({})
+        .then(contractall =>{
+            if (contractall.length === 0) {
+                return res.send({
+                    "response": true,
+                    "value": {no_contract: 0, imoney: 0}
+                });
+            }
+            let imoney = 0;
+            let no_contract = 0;
+            Async.forEachOf(contractall, function (contract, key, callback) {
+               imoney = imoney + contract.pawn_info.auction[0].price*1;
+                no_contract++;
+            }, function (err) {
+                if (err) {
+                    return res.send({
+                        "response": true,
+                        "value": {no_contract: 0, imoney: 0}
+                    });
+                }
+
+                return res.send({
+                    "response": true,
+                    "value": {no_contract: 0, imoney: 0}
+                });
+            })
+    }, err=> {
+            return res.send({
+                "response": true,
+                "value": {no_contract: 0, imoney: 0}
+            });
+        })
+}
+
 exports.UpdateContractOne = UpdateContractOne;
 exports.FindContractOneObj = FindContractOneObj;
 exports.createContract = createContract;

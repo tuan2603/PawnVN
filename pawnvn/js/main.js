@@ -2,7 +2,11 @@
 
     "use strict";
     $(".carousel-inner .item:first-child").addClass("active");
-
+    /* Mobile menu click then remove
+    ==========================*/
+    $(".mainmenu-area #primary_menu li a").on("click", function () {
+        $(".navbar-collapse").removeClass("in");
+    });
     /* Scroll to top
     ===================*/
     $.scrollUp({
@@ -13,8 +17,13 @@
     });
 
     $(".toggole-boxs").accordion();
+    /*---------------------------
+    MICHIMP INTEGRATION
+    -----------------------------*/
 
-
+    /*--------------------
+       MAGNIFIC POPUP JS
+       ----------------------*/
     var magnifPopup = function () {
         $('.popup').magnificPopup({
             type: 'iframe',

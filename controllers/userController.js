@@ -2,7 +2,6 @@
 const mongoose = require('mongoose'),
     bcrypt = require('bcryptjs'),
     Async = require('async'),
-    app = require('../index'),
     saltRounds = 10,
     jwt = require('jsonwebtoken'),
     User = mongoose.model('User'),
@@ -1218,7 +1217,7 @@ exports.insert_comment = (req, res) => {
                     FindOneUserObj({_id})
                         .then(ownerf => {
                                 if (ownerf) {
-                                    ownerf.comments.push({accountID: userf._id, rating_star, body});
+                                    ownerf.comments.push({accountID: userf._id,phone:userf.phone,fullName:userf.fullName,sex:userf.sex,avatarLink:userf.avatarLink, rating_star, body});
                                     ownerf.save(function (err, userud) {
                                         if (err) return res.send({
                                             "response": false,
@@ -1374,6 +1373,120 @@ exports.get_all_comment_status = (req, res) => {
                 "value": "Lỗi tìm kiếm comments"
             });
         })
+}
+
+// update status comment
+exports.update_comment_status = (req, res) => {
+    let {_id} = req.body;
+    let {phone} = req.user;
+    if (phone === undefined  || _id === undefined) {
+        return res.send({
+            "response": false,
+            "value": "not find params "
+        });
+    }
+    FindOneUserObj({phone})
+        .then(userf => {
+                if (userf) {
+                    if (userf.roleType !== 0) {
+                        return res.send({
+                            "response": false,
+                            "value": "user is not allowed to view this content"
+                        });
+                    }
+                    User.findOne({"comments._id": _id}, function (err, usercomment) {
+                        if (err || !usercomment) return res.send({
+                            "response": false,
+                            "value": "not find user comment"
+                        });
+
+                        let indexP = usercomment.comments.findIndex(comment => comment._id+"" === _id+"");
+
+                        if (indexP < 0) {
+                            return res.send({
+                                "response": false,
+                                "value": "not find index comment"
+                            });
+                        }
+                        usercomment.comments[indexP].status = !usercomment.comments[indexP].status;
+                        usercomment.save(function (err, usercommentupdate) {
+                            if (err) return res.send({
+                                "response": false,
+                                "value": "errors update comment"
+                            });
+                            return res.send({
+                                "response": true,
+                                "value": usercommentupdate.comments[indexP]
+                            });
+                        });
+                    })
+                } else {
+                    return res.send({
+                        "response": false,
+                        "value": "token is not master onwe"
+                    });
+                }
+            },
+            err => {
+                return res.send({
+                    "response": false,
+                    "value": "not find user"
+                });
+            }
+        );
+}
+
+// delete comment
+exports.delete_comments = (req, res) => {
+    let {_id} = req.body;
+    let {phone} = req.user;
+    if (phone === undefined  || _id === undefined) {
+        return res.send({
+            "response": false,
+            "value": "not find params "
+        });
+    }
+    FindOneUserObj({phone})
+        .then(userf => {
+                if (userf) {
+                    if (userf.roleType !== 0) {
+                        return res.send({
+                            "response": false,
+                            "value": "user is not allowed to view this content"
+                        });
+                    }
+                    User.findOne({"comments._id": _id}, function (err, usercomment) {
+                        if (err || !usercomment) return res.send({
+                            "response": false,
+                            "value": "not find user comment"
+                        });
+                        let commentde = usercomment.comments.id(_id).remove();
+                        // Equivalent to `parent.child = null`
+                        usercomment.save(function (err) {
+                            if (err)if (err) return res.send({
+                                "response": false,
+                                "value": "errors delete comment"
+                            });
+                            return res.send({
+                                "response": true,
+                                "value": commentde
+                            });
+                        });
+                    })
+                } else {
+                    return res.send({
+                        "response": false,
+                        "value": "token is not master onwe"
+                    });
+                }
+            },
+            err => {
+                return res.send({
+                    "response": false,
+                    "value": "not find user"
+                });
+            }
+        );
 }
 
 exports.FindOneUserObj = FindOneUserObj;

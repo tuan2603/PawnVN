@@ -62,10 +62,10 @@
     .testimonial-area {
         padding: 100px 0;
     }
-    .team-slide  .owl-nav {
+    .team-slide .owl-controls .owl-nav {
         text-align: center;
     }
-    .team-slide .owl-nav > div {
+    .team-slide .owl-controls .owl-nav > div {
         position: static;
         display: inline-block;
         margin: 30px 15px 15px 15px;
@@ -110,10 +110,10 @@
     .video-photo {
         margin-bottom: 60px;
     }
-    .team-slide  .owl-nav {
+    .team-slide .owl-controls .owl-nav {
         text-align: center;
     }
-    .team-slide .owl-nav > div {
+    .team-slide .owl-controls .owl-nav > div {
         position: static;
         display: inline-block;
         margin: 30px 15px 15px 15px;
@@ -179,7 +179,7 @@
     .mainmenu-area #primary_menu ul.nav.navbar-nav li.active a,
     .mainmenu-area #primary_menu ul.nav.navbar-nav li a:hover {
         background-color: #ffffff;
-        color: #0d2e5b;
+        color: #5e88fc;
     }
     /*-- Home-Area --*/
     .home-area {
@@ -214,7 +214,7 @@
     .gallery-slide .item {
         margin: 85px 25px 90px 30px;
     }
-    .gallery-slide .owl-nav {
+    .gallery-slide .owl-controls {
         position: static;
         margin-top: 30px;
         width: 100%;

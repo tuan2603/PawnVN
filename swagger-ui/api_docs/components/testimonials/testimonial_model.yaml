@@ -1,0 +1,17 @@
+properties:
+  _id:
+    type: string
+  full_name:
+    type: string
+  avatarLink:
+    type: string
+  status:
+    type: string
+  content:
+    type: string
+  created_at:
+    type: number
+    format: double
+  updated_at:
+    type: number
+    format: double

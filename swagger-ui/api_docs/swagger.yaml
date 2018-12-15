@@ -6,6 +6,7 @@ info:
 host:
 basePath:
 schemes:
+  - https
   - http
 securityDefinitions:
  Bearer:
@@ -24,6 +25,8 @@ tags:
   description: Everything about Document Socket
 - name: User
   description: Everything about User
+- name: Testimonials
+  description: Everything about Testimonials
 - name: Wallet
   description: Everything about Wallet
 - name: History
@@ -47,6 +50,8 @@ paths:
     $ref: 'paths/socket.yaml'
   '/api/auth/sign-in-pass-word':
     $ref: 'paths/login.yaml'
+  '/api/testimonial/update':
+    $ref: 'components/testimonials/update.yaml'
   '/api/auth/sign-in-admin':
     $ref: 'paths/login_admin.yaml'
   '/api/auth/change-password':
@@ -121,3 +126,5 @@ paths:
         $ref: 'paths/contract_id.yaml'
   '/api/advertise/insert':
       $ref: 'paths/advertise.yaml'
+  '/api/contract/total_amount_disbursed':
+      $ref: 'components/contract/get_total_amount_disbursed.yaml'

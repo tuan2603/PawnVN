@@ -1,0 +1,30 @@
+#/components/contract/get_total_amount_disbursed.yaml
+get:  
+  tags:
+    - Contracts
+  security:
+    - Bearer: []
+  summary: "Get total amount disbursed"
+  description: ''
+  operationId: "get_total_amount_disbursed"
+  produces:
+    - application/json
+  responses:
+     schema:
+      $ref: "#/definitions/res"
+definitions:
+  res:
+    type: "object"
+    properties:
+      response:
+        type: "boolean"
+      value: 
+        $ref: '#/definitions/DeviceData'
+  DeviceData:
+    type: object
+    properties:
+      no_contract: 
+        type: number
+      imoney: 
+        type: number
+  additionalProperties: true

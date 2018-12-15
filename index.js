@@ -22,7 +22,7 @@ const https = require('https');
 const config = require("./config");
 //const ca = fs.readFileSync(__dirname +'ssl/COMODORSADomainValidationSecureServerCA.crt', 'utf8');
 const credentials = {
-    key: fs.readFileSync(__dirname + '/ssl/key.pem'),
+    //key: fs.readFileSync(__dirname + '/ssl/key.pem'),
     cert: fs.readFileSync(__dirname + '/ssl/cert.pem'),
     // ca: [fs.readFileSync(__dirname +'/ssl/ca.pem')],
 };

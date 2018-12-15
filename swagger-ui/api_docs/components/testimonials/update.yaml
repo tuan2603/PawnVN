@@ -1,0 +1,29 @@
+#../components/testimonials/update.yaml
+post:
+  tags:
+  - Testimonials
+  security:
+  - Bearer: []
+  summary: update info testimonials
+  description: ''
+  operationId: updateTestimonials
+  consumes:
+  - application/x-www-form-urlencoded
+  - application/json
+  produces:
+  - application/json
+  parameters:
+  - name: "_id"
+    type: string
+    in: formData
+  - name: "status"
+    type: string
+    in: formData
+  responses:
+    'true':
+      description: insert success
+      schema:
+        $ref: 'testimonial_model.yaml'
+    'false':
+      description: Create service banner fail
+

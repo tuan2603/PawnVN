@@ -5,6 +5,21 @@ const Comments = new mongoose.Schema({
     accountID: {
         type: String,
     },
+    phone: {
+        type: Number,
+    },
+    fullName: {
+        type: String,
+        trim: true,
+        default: "",
+    },
+    sex: { // giới tính
+        type: String, // 0 nam, 1 nữ, 2 khác
+    },
+    avatarLink: {
+        type: String,
+        lowercase: true
+    },
     status: {
         type: Number,
         default: 0,

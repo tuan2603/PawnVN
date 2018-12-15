@@ -17,6 +17,7 @@ module.exports = function (app) {
     let maket = require('../controllers/maketController');
     let contract = require('../controllers/contractControllers');
     let question = require('../controllers/questionController');
+    let testimonial = require('../controllers/TestimonialController');
 
     // update cau hoi
     app.route('/api/question')
@@ -46,8 +47,11 @@ module.exports = function (app) {
     // đóng lãi
     app.route('/api/contract')
         .post(userHandles.loginRequired, contract.insert_payment);
+    app.route('/api/contract/total_amount_disbursed')
+        .get(contract.total_amount_disbursed);
     app.route('/api/contract/:_id')
         .get(userHandles.loginRequired, contract.find_contract_id);
+
     // update quang cao
     app.route('/api/maket')
         .get(maket.list_maket)
@@ -130,56 +134,44 @@ module.exports = function (app) {
 
     app.route('/api/auth/sign-in-pass-word')
         .post(userHandles.sign_in);
-
     app.route('/api/auth/sign-in-admin')
         .post(userHandles.sign_in_admin);
-
     app.route('/api/auth/get-info')
         .get(userHandles.loginRequired, userHandles.get_info);
-
     app.route('/api/auth/register-web')
         .post(userHandles.register_old);
-
     app.route('/api/auth/register-user-pass')
         .post(userHandles.register_user_pass);
-
     app.route('/api/auth/sendsms')
         .post(userHandles.send_code_again);
-
     app.route('/api/auth/verify')
         .post(userHandles.verify);
-
     app.route('/api/auth/avatar')
         .post(userHandles.loginRequired, userHandles.update_avatar);
-
     app.route('/api/auth/business')
         .get(userHandles.get_all_business);
-
     app.route('/api/auth/card')
         .post(userHandles.loginRequired, userHandles.update_identityCardFront);
-
     app.route('/api/auth/doccumentboth')
         .post(userHandles.loginRequired, userHandles.update_userboth);
-
     app.route('/api/auth/change-password')
         .post(userHandles.loginRequired, userHandles.update_password);
-
     app.route('/api/auth/:email')
         .put(userHandles.update_active);
-
     app.route('/api/auth/profile/:id')
         .put(userHandles.loginRequired, userHandles.update_profile)
         .get(userHandles.loginRequired, userHandles.profile);
-
     app.route('/api/auth/delete')
         .post(userHandles.loginRequired, userHandles.delete_one_user_by_id);
-
     app.route('/api/auth/comment/:page/:limit')
         .get(userHandles.get_all_comment_status);
-
     app.route('/api/auth/comment')
         .get(userHandles.loginRequired, userHandles.get_all_comment)
         .post(userHandles.loginRequired, userHandles.insert_comment);
+    app.route('/api/auth/update_comment_status')
+        .post(userHandles.loginRequired, userHandles.update_comment_status);
+    app.route('/api/auth/delete_comment')
+        .post(userHandles.loginRequired, userHandles.delete_comments);
 
     app.route('/api/pawn/image')
         .post(userHandles.loginRequired, pawn.insert_image);
@@ -212,5 +204,18 @@ module.exports = function (app) {
         .get(userHandles.loginRequired, userHandles.get_all_user_business_follow);
     app.route('/api/user-business-following')
         .get(userHandles.loginRequired, userHandles.get_all_user_business_following);
+
+
+    app.route('/api/testimonial')
+        .get(userHandles.loginRequired, testimonial.get_all_testimonials)
+        .post(userHandles.loginRequired, testimonial.insert_testimonial);
+    app.route('/api/testimonial/active')
+        .get(testimonial.get_all_testimonials_active);
+    app.route('/api/testimonial/update')
+        .post(userHandles.loginRequired, testimonial.update_testimonial);
+    app.route('/api/testimonial/update/image')
+        .post(userHandles.loginRequired, testimonial.update_testimonial_image);
+    app.route('/api/testimonial/delete')
+        .post(userHandles.loginRequired, testimonial.delete_testimonial);
 
 };
