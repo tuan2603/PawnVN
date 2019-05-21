@@ -17,7 +17,8 @@ module.exports = function(app, passport) {
     // =====================================
     // HOME PAGE (with login links) ========
     // =====================================
-    app.get('/swaggers',isLoggedIn,  function(req, res) {
+    // app.get('/swaggers',isLoggedIn,  function(req, res) {
+    app.get('/swaggers',  function(req, res) {
         res.render('swaggers.ejs'); // load the index.ejs file
     });
     
@@ -72,7 +73,8 @@ module.exports = function(app, passport) {
     // =====================================
     // we will want this protected so you have to be logged in to visit
     // we will use route middleware to verify this (the isLoggedIn function)
-    app.get('/socket', isLoggedIn, function(req, res) {
+    // app.get('/socket', isLoggedIn, function(req, res) {
+    app.get('/socket', function(req, res) {
         socketdoc.findAllSocket()
             .then(sks=>{
                 res.render('socket.ejs', {
